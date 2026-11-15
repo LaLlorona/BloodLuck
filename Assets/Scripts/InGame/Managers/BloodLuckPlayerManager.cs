@@ -32,7 +32,8 @@ namespace InGame.Managers
 
         public void WireContextAfterInit(BloodLuckContextMap contextMap)
         {
-            return;
+            var updateLoopManager = contextMap.GetRegisteredInstance<BloodLuckGameUpdateLoopManager>();
+            updateLoopManager.RegisterUpdatable(this);
         }
     }
 }
