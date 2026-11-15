@@ -47,9 +47,9 @@ namespace InGame.EditorTools
             var leaveButton = CreateButton(panel.transform, "LeaveShopButton", "LEAVE SHOP", new Color(.38f, .13f, .25f, 1));
             Place(leaveButton.GetComponent<RectTransform>(), new Vector2(1, 0), new Vector2(1, 0), new Vector2(-105, 58), new Vector2(190, 62));
 
-            var diceDisplay = GameObject.Find("DiceRollDisplay");
             var diceRoot = GameObject.Find("DiceRollRoot");
             var dice = diceRoot != null && diceRoot.transform.childCount > 0 ? diceRoot.transform.GetChild(0) : null;
+            ConfigureDiceRendering(diceRoot);
             // The main gameplay camera owns audio. DiceCamera is render-texture-only.
             var diceCamera = GameObject.Find("DiceCamera");
             if (diceCamera != null)
@@ -57,6 +57,7 @@ namespace InGame.EditorTools
                 var listener = diceCamera.GetComponent<AudioListener>();
                 if (listener != null) listener.enabled = false;
             }
+            var overlay = CreateDiceOverlay(canvas.transform, out var diceDisplay, out var rollButton, out var returnButton);
             TMP_Text rewardLabel = null;
             if (diceDisplay != null)
             {
@@ -67,8 +68,6 @@ namespace InGame.EditorTools
                     Place(rewardLabel.rectTransform, new Vector2(.5f, 0), new Vector2(.5f, 0), new Vector2(0, -35), new Vector2(500, 50));
                 }
             }
-            var overlay = CreateDiceOverlay(canvas.transform, diceDisplay, out var rollButton, out var returnButton);
-
             Set(shop, "shopPanel", panel);
             Set(shop, "cardButtons", cards);
             Set(shop, "diceButton", diceButton.GetComponent<Button>());
@@ -156,10 +155,10 @@ namespace InGame.EditorTools
             return go;
         }
 
-        private static GameObject CreateDiceOverlay(Transform canvas, GameObject diceDisplay, out Button rollButton, out Button returnButton)
+        private static GameObject CreateDiceOverlay(Transform canvas, out GameObject diceDisplay, out Button rollButton, out Button returnButton)
         {
-            if (diceDisplay != null && diceDisplay.transform.parent != canvas)
-                diceDisplay.transform.SetParent(canvas, false);
+            var existingDisplay = FindOrCreateDiceDisplay(canvas);
+            if (existingDisplay.transform.parent != canvas) existingDisplay.transform.SetParent(canvas, false);
             DeleteChild(canvas, "DiceOverlay");
             var overlay = new GameObject("DiceOverlay", typeof(RectTransform), typeof(Image)); overlay.transform.SetParent(canvas, false);
             overlay.GetComponent<Image>().color = new Color(.015f, .008f, .02f, 1f);
@@ -175,17 +174,56 @@ namespace InGame.EditorTools
             var board = new GameObject("RollBoard", typeof(RectTransform), typeof(Image)); board.transform.SetParent(overlay.transform, false);
             board.GetComponent<Image>().color = new Color(.105f, .055f, .035f, 1f);
             Place(board.GetComponent<RectTransform>(), new Vector2(.5f,.5f), new Vector2(.5f,.5f), new Vector2(0,100), new Vector2(660, 390));
-            if (diceDisplay != null)
-            {
-                diceDisplay.transform.SetParent(overlay.transform, false);
-                Place(diceDisplay.GetComponent<RectTransform>(), new Vector2(.5f,.5f), new Vector2(.5f,.5f), new Vector2(0,100), new Vector2(460,460));
-                diceDisplay.SetActive(false);
-            }
+            diceDisplay = existingDisplay;
+            diceDisplay.transform.SetParent(overlay.transform, false);
+            Place(diceDisplay.GetComponent<RectTransform>(), new Vector2(.5f,.5f), new Vector2(.5f,.5f), new Vector2(0,100), new Vector2(460,460));
+            diceDisplay.SetActive(false);
             var heading = Text(overlay.transform, "Heading", "BLOODY DICE", 44, Gold); Place(heading.rectTransform, new Vector2(.5f,1), new Vector2(.5f,1), new Vector2(0,-80), new Vector2(600,60));
             var instruction = Text(overlay.transform, "Instruction", "Your Bloodwrought reward has been chosen. Roll to reveal it.", 24, Color.white); Place(instruction.rectTransform, new Vector2(.5f,.5f), new Vector2(.5f,.5f), new Vector2(0,-210), new Vector2(900,50));
             var roll = CreateButton(overlay.transform, "RollButton", "ROLL", Gold); Place(roll.GetComponent<RectTransform>(), new Vector2(.5f,0), new Vector2(.5f,0), new Vector2(-150,100), new Vector2(240,65));
             var back = CreateButton(overlay.transform, "ReturnButton", "RETURN TO SHOP", new Color(.38f,.13f,.25f,1)); Place(back.GetComponent<RectTransform>(), new Vector2(.5f,0), new Vector2(.5f,0), new Vector2(150,100), new Vector2(240,65));
             overlay.SetActive(false); rollButton = roll.GetComponent<Button>(); returnButton = back.GetComponent<Button>(); return overlay;
+        }
+
+        private static void ConfigureDiceRendering(GameObject diceRoot)
+        {
+            const int diceLayer = 6; // DiceUI
+            if (diceRoot == null) return;
+
+            // DiceCamera looks at world origin. Keeping the roll root there makes the camera and animation agree.
+            diceRoot.transform.localPosition = Vector3.zero;
+            SetLayerRecursively(diceRoot, diceLayer);
+
+            var diceCameraObject = GameObject.Find("DiceCamera");
+            var diceCamera = diceCameraObject != null ? diceCameraObject.GetComponent<Camera>() : null;
+            if (diceCamera != null)
+            {
+                diceCamera.cullingMask = 1 << diceLayer;
+                diceCamera.targetTexture = AssetDatabase.LoadAssetAtPath<RenderTexture>("Assets/Art/Dice/DiceRenderTExture.renderTexture");
+            }
+
+            var mainCamera = Camera.main;
+            if (mainCamera != null) mainCamera.cullingMask &= ~(1 << diceLayer);
+        }
+
+        private static GameObject FindOrCreateDiceDisplay(Transform canvas)
+        {
+            foreach (var transform in Object.FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+                if (transform.name == "DiceRollDisplay" && transform.gameObject.scene == EditorSceneManager.GetActiveScene())
+                    return transform.gameObject;
+
+            var display = new GameObject("DiceRollDisplay", typeof(RectTransform), typeof(RawImage));
+            display.transform.SetParent(canvas, false);
+            var image = display.GetComponent<RawImage>();
+            image.texture = AssetDatabase.LoadAssetAtPath<RenderTexture>("Assets/Art/Dice/DiceRenderTExture.renderTexture");
+            image.raycastTarget = false;
+            return display;
+        }
+
+        private static void SetLayerRecursively(GameObject gameObject, int layer)
+        {
+            gameObject.layer = layer;
+            foreach (Transform child in gameObject.transform) SetLayerRecursively(child.gameObject, layer);
         }
 
         private static GameObject CreateButton(Transform parent, string name, string label, Color color)
