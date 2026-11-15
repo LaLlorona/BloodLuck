@@ -84,7 +84,7 @@ namespace InGame.EditorTools
             Set(diceRoll, "dice", dice);
             Set(diceRoll, "rewardLabel", rewardLabel);
 
-            var opener = Object.FindFirstObjectByType<ShopOpen>();
+            var opener = Object.FindAnyObjectByType<ShopOpen>();
             if (opener == null) opener = system.AddComponent<ShopOpen>();
             Set(opener, "shop", shop);
 
@@ -118,7 +118,7 @@ namespace InGame.EditorTools
 
         private static Canvas FindOrCreateCanvas()
         {
-            var existing = Object.FindFirstObjectByType<Canvas>();
+            var existing = Object.FindAnyObjectByType<Canvas>();
             if (existing != null) return existing;
             var go = new GameObject("UICanvas", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
             go.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
@@ -208,7 +208,7 @@ namespace InGame.EditorTools
 
         private static GameObject FindOrCreateDiceDisplay(Transform canvas)
         {
-            foreach (var transform in Object.FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            foreach (var transform in Object.FindObjectsByType<Transform>(FindObjectsInactive.Include))
                 if (transform.name == "DiceRollDisplay" && transform.gameObject.scene == EditorSceneManager.GetActiveScene())
                     return transform.gameObject;
 
