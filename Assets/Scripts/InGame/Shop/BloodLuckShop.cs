@@ -16,6 +16,9 @@ namespace BloodLuck
         [SerializeField] private InfusionCardView[] cardViews = new InfusionCardView[3];
         [SerializeField] private ShopWalletView walletView;
         [SerializeField] private BloodyDiceRoll diceRoll;
+        [SerializeField] private GameObject diceOverlay;
+        [SerializeField] private Button diceRollButton;
+        [SerializeField] private Button diceReturnButton;
 
         [Header("Shop Data")]
         [SerializeField] private SlotPullWallet wallet;
@@ -28,6 +31,8 @@ namespace BloodLuck
         private readonly List<InfusionDefinition> offers = new List<InfusionDefinition>();
         private readonly HashSet<InfusionDefinition> owned = new HashSet<InfusionDefinition>();
         private bool diceRolling;
+        private bool diceHasRolled;
+        private InfusionDefinition pendingDiceReward;
 
         private void Awake()
         {
@@ -55,13 +60,19 @@ namespace BloodLuck
             }
             diceButton.onClick.AddListener(BuyDice);
             if (leaveButton != null) leaveButton.onClick.AddListener(CloseShop);
+            if (diceRollButton != null) diceRollButton.onClick.AddListener(RollPreparedDice);
+            if (diceReturnButton != null) diceReturnButton.onClick.AddListener(ReturnFromDice);
             if (walletView != null) walletView.Bind(wallet);
+            if (diceOverlay != null) diceOverlay.SetActive(false);
         }
 
         public void OpenShop()
         {
             if (!enabled || shopPanel.activeSelf || diceRolling) return;
             offers.Clear();
+            pendingDiceReward = null;
+            diceRolling = false;
+            diceHasRolled = false;
             var available = AvailableInfusions();
             while (offers.Count < cardButtons.Length && available.Count > 0)
             {
@@ -84,6 +95,10 @@ namespace BloodLuck
         {
             owned.Clear();
             offers.Clear();
+            pendingDiceReward = null;
+            diceRolling = false;
+            diceHasRolled = false;
+            if (diceOverlay != null) diceOverlay.SetActive(false);
             shopPanel.SetActive(false);
         }
 
@@ -132,21 +147,50 @@ namespace BloodLuck
 
             var reward = mythics[UnityEngine.Random.Range(0, mythics.Count)];
             diceRolling = true;
+            diceHasRolled = false;
+            pendingDiceReward = reward;
             RefreshButtons();
-            if (diceRoll == null)
+            if (diceOverlay != null)
             {
-                CompleteDicePurchase(reward);
-                return;
+                diceOverlay.SetActive(true);
+                if (diceRoll != null) diceRoll.ShowDice();
+                if (diceRollButton != null) diceRollButton.interactable = true;
+                if (diceReturnButton != null) diceReturnButton.interactable = false;
             }
-            diceRoll.Roll(reward, () => CompleteDicePurchase(reward));
+            else
+            {
+                // Safe fallback for scenes that have not yet added the optional overlay UI.
+                RollPreparedDice();
+            }
         }
 
-        private void CompleteDicePurchase(InfusionDefinition reward)
+        private void RollPreparedDice()
         {
-            Grant(reward);
+            if (!diceRolling || diceHasRolled || pendingDiceReward == null) return;
+            diceHasRolled = true;
+            if (diceRollButton != null) diceRollButton.interactable = false;
+            if (diceRoll == null) { CompleteDicePurchase(); return; }
+            diceRoll.Roll(pendingDiceReward, CompleteDicePurchase, false);
+        }
+
+        private void CompleteDicePurchase()
+        {
+            if (pendingDiceReward == null) return;
+            Grant(pendingDiceReward);
             for (int i = 0; i < offers.Count; i++)
-                if (offers[i] == reward) offers[i] = null;
+                if (offers[i] == pendingDiceReward) offers[i] = null;
+            if (diceOverlay != null && diceReturnButton != null) diceReturnButton.interactable = true;
+            else ReturnFromDice();
+        }
+
+        private void ReturnFromDice()
+        {
+            if (!diceHasRolled || pendingDiceReward == null) return;
+            if (diceOverlay != null) diceOverlay.SetActive(false);
+            if (diceRoll != null) diceRoll.HideDice();
+            pendingDiceReward = null;
             diceRolling = false;
+            diceHasRolled = false;
             RefreshButtons();
         }
 

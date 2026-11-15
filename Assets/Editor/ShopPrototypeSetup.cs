@@ -28,7 +28,7 @@ namespace InGame.EditorTools
             var shop = system.GetComponent<BloodLuckShop>() ?? system.AddComponent<BloodLuckShop>();
             var diceRoll = system.GetComponent<BloodyDiceRoll>() ?? system.AddComponent<BloodyDiceRoll>();
 
-            var panel = CreatePanel(canvas.transform, "ShopPanel", new Vector2(1320, 730));
+            var panel = CreatePanel(canvas.transform, "ShopPanel", new Vector2(1680, 730));
             var title = Text(panel.transform, "Title", "BLOOD MARKET", 48, Gold);
             Place(title.rectTransform, new Vector2(0.5f, 1), new Vector2(0.5f, 1), new Vector2(0, -48), new Vector2(700, 70));
             var pullLabel = Text(panel.transform, "PullCounter", "PULLS: 6", 28, Color.white);
@@ -40,11 +40,10 @@ namespace InGame.EditorTools
             var cardViews = new InfusionCardView[3];
             for (int i = 0; i < 3; i++)
             {
-                var card = CreateCard(panel.transform, i, out cardViews[i]);
+                var card = CreateCard(panel.transform, i, -600 + i * 400, out cardViews[i]);
                 cards[i] = card.GetComponent<Button>();
             }
-            var diceButton = CreateButton(panel.transform, "BloodyDiceButton", "ROLL BLOODY DICE  •  2 PULLS", Gold);
-            Place(diceButton.GetComponent<RectTransform>(), new Vector2(.5f, 0), new Vector2(.5f, 0), new Vector2(-220, 58), new Vector2(420, 62));
+            var diceButton = CreateDiceCard(panel.transform, 600);
             var leaveButton = CreateButton(panel.transform, "LeaveShopButton", "LEAVE SHOP", new Color(.38f, .13f, .25f, 1));
             Place(leaveButton.GetComponent<RectTransform>(), new Vector2(1, 0), new Vector2(1, 0), new Vector2(-105, 58), new Vector2(190, 62));
 
@@ -68,6 +67,7 @@ namespace InGame.EditorTools
                     Place(rewardLabel.rectTransform, new Vector2(.5f, 0), new Vector2(.5f, 0), new Vector2(0, -35), new Vector2(500, 50));
                 }
             }
+            var overlay = CreateDiceOverlay(canvas.transform, diceDisplay, out var rollButton, out var returnButton);
 
             Set(shop, "shopPanel", panel);
             Set(shop, "cardButtons", cards);
@@ -76,6 +76,9 @@ namespace InGame.EditorTools
             Set(shop, "cardViews", cardViews);
             Set(shop, "walletView", walletView);
             Set(shop, "diceRoll", diceRoll);
+            Set(shop, "diceOverlay", overlay);
+            Set(shop, "diceRollButton", rollButton);
+            Set(shop, "diceReturnButton", returnButton);
             Set(shop, "wallet", wallet);
             Set(shop, "infusionPool", infusions);
             Set(diceRoll, "rollDisplay", diceDisplay);
@@ -130,15 +133,47 @@ namespace InGame.EditorTools
             go.GetComponent<Image>().color = PanelColor; Place(go.GetComponent<RectTransform>(), new Vector2(.5f,.5f), new Vector2(.5f,.5f), Vector2.zero, size); return go;
         }
 
-        private static GameObject CreateCard(Transform parent, int index, out InfusionCardView view)
+        private static GameObject CreateCard(Transform parent, int index, float xPosition, out InfusionCardView view)
         {
             var go = new GameObject("UpgradeCard" + (index + 1), typeof(RectTransform), typeof(Image), typeof(Button), typeof(InfusionCardView)); go.transform.SetParent(parent, false);
-            go.GetComponent<Image>().color = CardColor; Place(go.GetComponent<RectTransform>(), new Vector2(0, .5f), new Vector2(0, .5f), new Vector2(230 + index * 430, 30), new Vector2(390, 390));
+            go.GetComponent<Image>().color = CardColor; Place(go.GetComponent<RectTransform>(), new Vector2(.5f, .5f), new Vector2(.5f, .5f), new Vector2(xPosition, 30), new Vector2(370, 390));
             var title = Text(go.transform, "Name", "", 29, Gold); Place(title.rectTransform, new Vector2(.5f,1), new Vector2(.5f,1), new Vector2(0,-40), new Vector2(350,45));
             var rarity = Text(go.transform, "Rarity", "", 20, Color.white); Place(rarity.rectTransform, new Vector2(.5f,1), new Vector2(.5f,1), new Vector2(0,-85), new Vector2(350,35));
             var description = Text(go.transform, "Description", "", 19, Color.white); description.alignment = TextAlignmentOptions.TopLeft; description.textWrappingMode = TextWrappingModes.Normal; Place(description.rectTransform, new Vector2(.5f,.5f), new Vector2(.5f,.5f), new Vector2(0,-20), new Vector2(330,150));
             var cost = Text(go.transform, "Cost", "", 24, Gold); Place(cost.rectTransform, new Vector2(.5f,0), new Vector2(.5f,0), new Vector2(0,35), new Vector2(330,45));
             view = go.GetComponent<InfusionCardView>(); Set(view,"title",title); Set(view,"rarity",rarity); Set(view,"description",description); Set(view,"cost",cost); Set(view,"contents",go); return go;
+        }
+
+        private static GameObject CreateDiceCard(Transform parent, float xPosition)
+        {
+            var go = new GameObject("BloodyDiceButton", typeof(RectTransform), typeof(Image), typeof(Button)); go.transform.SetParent(parent, false);
+            go.GetComponent<Image>().color = new Color(.46f, .08f, .07f, 1f);
+            Place(go.GetComponent<RectTransform>(), new Vector2(.5f,.5f), new Vector2(.5f,.5f), new Vector2(xPosition,30), new Vector2(370,390));
+            var title = Text(go.transform, "Name", "BLOODY DICE", 29, Gold); Place(title.rectTransform, new Vector2(.5f,1), new Vector2(.5f,1), new Vector2(0,-40), new Vector2(350,45));
+            var subtitle = Text(go.transform, "Special", "GUARANTEED BLOODWROUGHT", 18, new Color(1f,.72f,.55f)); Place(subtitle.rectTransform, new Vector2(.5f,1), new Vector2(.5f,1), new Vector2(0,-85), new Vector2(350,35));
+            var description = Text(go.transform, "Description", "Roll for a random guaranteed Bloodwrought infusion.", 19, Color.white); description.textWrappingMode = TextWrappingModes.Normal; Place(description.rectTransform, new Vector2(.5f,.5f), new Vector2(.5f,.5f), new Vector2(0,-20), new Vector2(330,150));
+            var cost = Text(go.transform, "Cost", "2 PULLS", 24, Gold); Place(cost.rectTransform, new Vector2(.5f,0), new Vector2(.5f,0), new Vector2(0,35), new Vector2(330,45));
+            return go;
+        }
+
+        private static GameObject CreateDiceOverlay(Transform canvas, GameObject diceDisplay, out Button rollButton, out Button returnButton)
+        {
+            if (diceDisplay != null && diceDisplay.transform.parent != canvas)
+                diceDisplay.transform.SetParent(canvas, false);
+            DeleteChild(canvas, "DiceOverlay");
+            var overlay = new GameObject("DiceOverlay", typeof(RectTransform), typeof(Image)); overlay.transform.SetParent(canvas, false);
+            overlay.GetComponent<Image>().color = new Color(0, 0, 0, .88f);
+            Place(overlay.GetComponent<RectTransform>(), Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            if (diceDisplay != null)
+            {
+                diceDisplay.transform.SetParent(overlay.transform, false);
+                Place(diceDisplay.GetComponent<RectTransform>(), new Vector2(.5f,.5f), new Vector2(.5f,.5f), new Vector2(0,100), new Vector2(460,460));
+            }
+            var heading = Text(overlay.transform, "Heading", "BLOODY DICE", 44, Gold); Place(heading.rectTransform, new Vector2(.5f,1), new Vector2(.5f,1), new Vector2(0,-80), new Vector2(600,60));
+            var instruction = Text(overlay.transform, "Instruction", "Your Bloodwrought reward has been chosen. Roll to reveal it.", 24, Color.white); Place(instruction.rectTransform, new Vector2(.5f,.5f), new Vector2(.5f,.5f), new Vector2(0,-210), new Vector2(900,50));
+            var roll = CreateButton(overlay.transform, "RollButton", "ROLL", Gold); Place(roll.GetComponent<RectTransform>(), new Vector2(.5f,0), new Vector2(.5f,0), new Vector2(-150,100), new Vector2(240,65));
+            var back = CreateButton(overlay.transform, "ReturnButton", "RETURN TO SHOP", new Color(.38f,.13f,.25f,1)); Place(back.GetComponent<RectTransform>(), new Vector2(.5f,0), new Vector2(.5f,0), new Vector2(150,100), new Vector2(240,65));
+            overlay.SetActive(false); rollButton = roll.GetComponent<Button>(); returnButton = back.GetComponent<Button>(); return overlay;
         }
 
         private static GameObject CreateButton(Transform parent, string name, string label, Color color)

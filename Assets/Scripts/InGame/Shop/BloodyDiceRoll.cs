@@ -40,17 +40,28 @@ namespace BloodLuck
             if (rollDisplay != null) rollDisplay.SetActive(false);
         }
 
-        public void Roll(InfusionDefinition reward, Action completed)
+        public void ShowDice()
+        {
+            if (rollDisplay != null) rollDisplay.SetActive(true);
+            if (rewardLabel != null) rewardLabel.text = string.Empty;
+        }
+
+        public void HideDice()
+        {
+            if (rollDisplay != null) rollDisplay.SetActive(false);
+        }
+
+        public void Roll(InfusionDefinition reward, Action completed, bool hideDisplayAfterReveal = true)
         {
             if (IsRolling || reward == null)
             {
                 completed?.Invoke();
                 return;
             }
-            StartCoroutine(RollRoutine(reward, completed));
+            StartCoroutine(RollRoutine(reward, completed, hideDisplayAfterReveal));
         }
 
-        private IEnumerator RollRoutine(InfusionDefinition reward, Action completed)
+        private IEnumerator RollRoutine(InfusionDefinition reward, Action completed, bool hideDisplayAfterReveal)
         {
             IsRolling = true;
             if (rollDisplay != null) rollDisplay.SetActive(true);
@@ -95,7 +106,7 @@ namespace BloodLuck
             if (rewardLabel != null) rewardLabel.text = reward.displayName;
             onRewardRevealed?.Invoke();
             yield return new WaitForSecondsRealtime(revealDuration);
-            if (rollDisplay != null) rollDisplay.SetActive(false);
+            if (hideDisplayAfterReveal && rollDisplay != null) rollDisplay.SetActive(false);
             Finish(completed);
         }
 
