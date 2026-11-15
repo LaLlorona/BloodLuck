@@ -162,12 +162,24 @@ namespace InGame.EditorTools
                 diceDisplay.transform.SetParent(canvas, false);
             DeleteChild(canvas, "DiceOverlay");
             var overlay = new GameObject("DiceOverlay", typeof(RectTransform), typeof(Image)); overlay.transform.SetParent(canvas, false);
-            overlay.GetComponent<Image>().color = new Color(0, 0, 0, .88f);
+            overlay.GetComponent<Image>().color = new Color(.015f, .008f, .02f, 1f);
             Place(overlay.GetComponent<RectTransform>(), Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+
+            // A simple opaque panel and board keep the render-texture dice legible without a new 3D scene.
+            var panel = new GameObject("GothicPanel", typeof(RectTransform), typeof(Image)); panel.transform.SetParent(overlay.transform, false);
+            panel.GetComponent<Image>().color = new Color(.09f, .025f, .075f, 1f);
+            Place(panel.GetComponent<RectTransform>(), new Vector2(.5f,.5f), new Vector2(.5f,.5f), Vector2.zero, new Vector2(1200, 820));
+            var boardFrame = new GameObject("RollBoardFrame", typeof(RectTransform), typeof(Image)); boardFrame.transform.SetParent(overlay.transform, false);
+            boardFrame.GetComponent<Image>().color = new Color(.32f, .18f, .08f, 1f);
+            Place(boardFrame.GetComponent<RectTransform>(), new Vector2(.5f,.5f), new Vector2(.5f,.5f), new Vector2(0,100), new Vector2(700, 430));
+            var board = new GameObject("RollBoard", typeof(RectTransform), typeof(Image)); board.transform.SetParent(overlay.transform, false);
+            board.GetComponent<Image>().color = new Color(.105f, .055f, .035f, 1f);
+            Place(board.GetComponent<RectTransform>(), new Vector2(.5f,.5f), new Vector2(.5f,.5f), new Vector2(0,100), new Vector2(660, 390));
             if (diceDisplay != null)
             {
                 diceDisplay.transform.SetParent(overlay.transform, false);
                 Place(diceDisplay.GetComponent<RectTransform>(), new Vector2(.5f,.5f), new Vector2(.5f,.5f), new Vector2(0,100), new Vector2(460,460));
+                diceDisplay.SetActive(false);
             }
             var heading = Text(overlay.transform, "Heading", "BLOODY DICE", 44, Gold); Place(heading.rectTransform, new Vector2(.5f,1), new Vector2(.5f,1), new Vector2(0,-80), new Vector2(600,60));
             var instruction = Text(overlay.transform, "Instruction", "Your Bloodwrought reward has been chosen. Roll to reveal it.", 24, Color.white); Place(instruction.rectTransform, new Vector2(.5f,.5f), new Vector2(.5f,.5f), new Vector2(0,-210), new Vector2(900,50));
