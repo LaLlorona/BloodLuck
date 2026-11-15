@@ -26,6 +26,7 @@ namespace InGame.System
             _bloodLuckContext.Register(new BloodLuckPlayerStateManager(inGameParameter));
             _bloodLuckContext.Register(new BloodLuckUIManager(assetHolder));
             _bloodLuckContext.Register(new BloodLuckSlotMachineManager(assetHolder, inGameParameter));
+            _bloodLuckContext.Register(new BloodLuckShopManager(assetHolder));
             _bloodLuckContext.Register(new BloodLuckGameResultManager(assetHolder));
             _bloodLuckContext.Register(new BloodLuckCheatManager());
             _bloodLuckContext.Register(new BloodLuckPlayerManager(assetHolder));

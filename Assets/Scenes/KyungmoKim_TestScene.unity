@@ -578,7 +578,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 4294967231
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -829,6 +829,7 @@ MonoBehaviour:
   _projectilePrefab: {fileID: 841274627952102469, guid: 3c5431626b9d0a3428bb22373ce7dd36, type: 3}
   _slotMachineViewPrefab: {fileID: 7302083884087231852, guid: a6830c08dc29dc044bfbb0c1077ce4f3, type: 3}
   _gameResultViewPrefab: {fileID: 8882517846003980211, guid: 2b1b927274022af4db82215e0587231c, type: 3}
+  _shopViewPrefab: {fileID: 6421780111985712353, guid: 22a5738c87106ee44ad81d20960d9461, type: 3}
   _playerAttackComponent: {fileID: 42476100}
   _playerInputManagerComponent: {fileID: 42476098}
   _playerMovementComponent: {fileID: 42476097}
@@ -849,6 +850,7 @@ MonoBehaviour:
     _monsterSpawnCount: 10
     _monsterSpawnRadius: 5
     _monsterMoveSpeed: 2
+    _monsterMaxHp: 10
     _monsterAttackTriggerDistance: 2
     _monsterAttackChargeSeconds: 1.5
     _monsterAttackWaitSeconds: 1
@@ -863,7 +865,7 @@ MonoBehaviour:
     _monsterProjectileHitRadius: 0.4
     _monsterProjectileLifetime: 5
     _playerMaxHp: 100
-    _playerMaxPulls: 3
+    _playerMaxPulls: 6
     _playerAttack: 10
     _playerAttackSpeed: 1
     _slotJackpotChance: 0.2

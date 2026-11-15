@@ -16,6 +16,7 @@ namespace InGame.System
         private BloodLuckWaveManager _waveManager;
         private BloodLuckSlotMachineManager _slotMachineManager;
         private BloodLuckGameResultManager _gameResultManager;
+        private BloodLuckShopManager _shopManager;
         private bool _isSorted;
         private bool _isHandlingAsyncTask;
 
@@ -31,6 +32,7 @@ namespace InGame.System
             _waveManager = contextMap.GetRegisteredInstance<BloodLuckWaveManager>();
             _slotMachineManager = contextMap.GetRegisteredInstance<BloodLuckSlotMachineManager>();
             _gameResultManager = contextMap.GetRegisteredInstance<BloodLuckGameResultManager>();
+            _shopManager = contextMap.GetRegisteredInstance<BloodLuckShopManager>();
         }
 
         public void RegisterUpdatable(IBloodLuckPriorityUpdatable updatable)
@@ -119,8 +121,10 @@ namespace InGame.System
 
         private async UniTask HandleVisitingShop()
         {
-            Debug.Log("visiting shop");
-            await UniTask.CompletedTask;
+            _gameStateManager.PauseGame();
+            await _shopManager.ShowShopAsync();
+            _gameStateManager.ResumeGame();
+            _waveManager.OnWaveStarted();
         }
 
         private async UniTask HandleWaveFinishedAndSelectingPerk()

@@ -22,6 +22,8 @@ namespace InGame.System
 
         [SerializeField] private BloodLuckGameResultViewComponent _gameResultViewPrefab;
 
+        [SerializeField] private BloodLuck.BloodLuckShop _shopViewPrefab;
+
         [SerializeField] private PlayerAttack _playerAttackComponent;
 
         [SerializeField] private PlayerInputManager _playerInputManagerComponent;
@@ -35,6 +37,7 @@ namespace InGame.System
         public PerkSelectionViewComponent PerkSelectionViewPrefab => _perkSelectionViewPrefab;
         public SlotMachineViewComponent SlotMachineViewPrefab => _slotMachineViewPrefab;
         public BloodLuckGameResultViewComponent GameResultViewPrefab => _gameResultViewPrefab;
+        public BloodLuck.BloodLuckShop ShopViewPrefab => _shopViewPrefab;
         public PlayerAttack GetPlayerAttackComponent => _playerAttackComponent;
         public PlayerInputManager GetPlayerInputManagerComponent => _playerInputManagerComponent;
         public PlayerMovement GetPlayerMovementComponent => _playerMovementComponent;

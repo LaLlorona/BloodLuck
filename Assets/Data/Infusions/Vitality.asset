@@ -16,3 +16,6 @@ MonoBehaviour:
   description: Increase maximum health. (Test infusion)
   icon: {fileID: 0}
   rarity: 0
+  passiveKind: 1
+  operationMethod: 1
+  passiveValue: 20

@@ -7,9 +7,9 @@ namespace BloodLuck
     public class ShopWalletView : MonoBehaviour
     {
         [SerializeField] private TMP_Text label;
-        private SlotPullWallet wallet;
+        private IShopWallet wallet;
 
-        public void Bind(SlotPullWallet source)
+        public void Bind(IShopWallet source)
         {
             if (wallet != null) wallet.PullsChanged -= Refresh;
             wallet = source;

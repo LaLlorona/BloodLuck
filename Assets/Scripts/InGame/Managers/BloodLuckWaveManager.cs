@@ -30,7 +30,7 @@ namespace InGame.Managers
         {
             _currentWaveNumber++;
             _uiManager.RefreshHud();
-            if (_currentWaveNumber == BloodLuckDefine.SHOP_APPEAR_WAVE_NUM)
+            if (_currentWaveNumber % BloodLuckDefine.SHOP_APPEAR_WAVE_NUM == 0)
             {
                 _updateLoopManager.AddAsyncTask(new BloodLuckAsyncTask.WaveFinishedAndVisitingShop());
             }

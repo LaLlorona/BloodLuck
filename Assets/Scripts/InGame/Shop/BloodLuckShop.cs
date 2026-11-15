@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,8 +23,11 @@ namespace BloodLuck
         [SerializeField] private Button diceReturnButton;
 
         [Header("Shop Data")]
+        [Tooltip("Only for the standalone Shop_Prototype scene. In-game the wallet is passed to OpenShopAsync.")]
         [SerializeField] private SlotPullWallet wallet;
         [SerializeField] private List<InfusionDefinition> infusionPool = new List<InfusionDefinition>();
+
+        private IShopWallet _wallet;
 
         // Future combat/visual systems can listen without changing shop logic.
         public event Action<InfusionDefinition> Purchased;
@@ -37,10 +42,10 @@ namespace BloodLuck
 
         private void Awake()
         {
-            if (shopPanel == null || wallet == null || diceButton == null ||
+            if (shopPanel == null || diceButton == null ||
                 cardButtons == null || cardButtons.Length != 3)
             {
-                Debug.LogError("BloodLuckShop: Assign the shop panel, wallet, dice button, and exactly three card buttons.", this);
+                Debug.LogError("BloodLuckShop: Assign the shop panel, dice button, and exactly three card buttons.", this);
                 enabled = false;
                 return;
             }
@@ -63,13 +68,38 @@ namespace BloodLuck
             if (leaveButton != null) leaveButton.onClick.AddListener(CloseShop);
             if (diceRollButton != null) diceRollButton.onClick.AddListener(RollPreparedDice);
             if (diceReturnButton != null) diceReturnButton.onClick.AddListener(ReturnFromDice);
-            if (walletView != null) walletView.Bind(wallet);
+            if (wallet != null) BindWallet(wallet);
             if (diceOverlay != null) diceOverlay.SetActive(false);
+        }
+
+        private void BindWallet(IShopWallet source)
+        {
+            _wallet = source;
+            if (walletView != null) walletView.Bind(source);
+        }
+
+        /// <summary>Opens the shop against the given wallet and completes when the player leaves it.</summary>
+        public async UniTask OpenShopAsync(IShopWallet source, CancellationToken ct)
+        {
+            BindWallet(source);
+            var closed = new UniTaskCompletionSource();
+            void OnClosed() => closed.TrySetResult();
+            Closed += OnClosed;
+            try
+            {
+                OpenShop();
+                if (!shopPanel.activeSelf) return; // failed to open (disabled)
+                await closed.Task.AttachExternalCancellation(ct);
+            }
+            finally
+            {
+                Closed -= OnClosed;
+            }
         }
 
         public void OpenShop()
         {
-            if (!enabled || shopPanel.activeSelf || diceRolling) return;
+            if (!enabled || _wallet == null || shopPanel.activeSelf || diceRolling) return;
             offers.Clear();
             pendingDiceReward = null;
             diceRolling = false;
@@ -136,7 +166,7 @@ namespace BloodLuck
         {
             if (diceRolling || !shopPanel.activeSelf || slot < 0 || slot >= offers.Count || offers[slot] == null) return;
             var infusion = offers[slot];
-            if (!wallet.TrySpend(infusion.Cost)) return;
+            if (!_wallet.TrySpend(infusion.Cost)) return;
             Grant(infusion);
             offers[slot] = null;
             RefreshButtons();
@@ -144,9 +174,9 @@ namespace BloodLuck
 
         public void BuyDice()
         {
-            if (diceRolling || !shopPanel.activeSelf || wallet.Pulls < 2) return;
+            if (diceRolling || !shopPanel.activeSelf || _wallet.Pulls < 2) return;
             var mythics = AvailableInfusions().FindAll(x => x.rarity == InfusionRarity.Bloodwrought);
-            if (mythics.Count == 0 || !wallet.TrySpend(2)) return;
+            if (mythics.Count == 0 || !_wallet.TrySpend(2)) return;
 
             var reward = mythics[UnityEngine.Random.Range(0, mythics.Count)];
             diceRolling = true;
@@ -211,11 +241,11 @@ namespace BloodLuck
             for (int i = 0; i < cardButtons.Length; i++)
             {
                 var item = i < offers.Count ? offers[i] : null;
-                cardButtons[i].interactable = !diceRolling && item != null && wallet.Pulls >= item.Cost;
+                cardButtons[i].interactable = !diceRolling && item != null && _wallet.Pulls >= item.Cost;
                 if (cardViews != null && i < cardViews.Length && cardViews[i] != null)
                     cardViews[i].SetInfusion(item);
             }
-            diceButton.interactable = !diceRolling && wallet.Pulls >= 2 &&
+            diceButton.interactable = !diceRolling && _wallet.Pulls >= 2 &&
                 AvailableInfusions().Exists(x => x.rarity == InfusionRarity.Bloodwrought);
             if (leaveButton != null) leaveButton.interactable = !diceRolling;
         }

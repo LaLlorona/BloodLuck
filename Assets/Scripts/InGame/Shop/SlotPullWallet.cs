@@ -3,7 +3,8 @@ using System;
 
 namespace BloodLuck
 {
-    public class SlotPullWallet : MonoBehaviour
+    /// <summary>Standalone wallet for the Shop_Prototype scene only. In-game the player state manager is the wallet.</summary>
+    public class SlotPullWallet : MonoBehaviour, IShopWallet
     {
         [SerializeField] private int startingPulls = 6;
         public int Pulls { get; private set; }

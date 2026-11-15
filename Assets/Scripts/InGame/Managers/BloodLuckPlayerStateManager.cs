@@ -1,16 +1,18 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using BloodLuck;
+using Cysharp.Threading.Tasks;
 using InGame.System;
 using Player;
 using UnityEngine;
 
 namespace InGame.Managers
 {
-    public class BloodLuckPlayerStateManager : IBloodLuckContext
+    public class BloodLuckPlayerStateManager : IBloodLuckContext, IShopWallet
     {
         public float MaxHp => _passiveContainer.GetMaxHp(_parameter.PlayerMaxHp);
         public float CurrentHp { get; private set; }
         public int MaxPulls { get; }
         public int CurrentPulls { get; private set; }
+        public event global::System.Action<int> PullsChanged;
         public float Attack => _passiveContainer.GetDamage(_parameter.PlayerAttack);
         public float AttackSpeed => _passiveContainer.GetAttackSpeed(_parameter.PlayerAttackSpeed);
 
@@ -90,7 +92,23 @@ namespace InGame.Managers
 
             CurrentPulls = clamped;
             _uiManager.RefreshHud();
+            PullsChanged?.Invoke(CurrentPulls);
         }
+
+        public bool TrySpendPulls(int cost)
+        {
+            if (cost < 0 || CurrentPulls < cost)
+            {
+                return false;
+            }
+
+            SetCurrentPulls(CurrentPulls - cost);
+            return true;
+        }
+
+        int IShopWallet.Pulls => CurrentPulls;
+
+        bool IShopWallet.TrySpend(int cost) => TrySpendPulls(cost);
 
         private void SetCurrentHp(float hp)
         {

@@ -16,3 +16,6 @@ MonoBehaviour:
   description: Modify the three-hit combo. (Test infusion)
   icon: {fileID: 0}
   rarity: 1
+  passiveKind: 2
+  operationMethod: 0
+  passiveValue: 1.2

@@ -51,7 +51,8 @@ namespace InGame.Managers
                     _playerStateManager.SetCurrentPulls(_playerStateManager.CurrentPulls - 1);
                     view.SetPulls(_playerStateManager.CurrentPulls, _playerStateManager.MaxPulls);
 
-                    bool isJackpot = UnityEngine.Random.value < _parameter.SlotJackpotChance;
+                    bool isLastPull = _playerStateManager.CurrentPulls == 0;
+                    bool isJackpot = isLastPull || UnityEngine.Random.value < _parameter.SlotJackpotChance;
                     int[] result = BuildResult(view.ReelCount, view.SymbolCount, isJackpot);
                     await view.PlaySpinAsync(result, ct);
 
