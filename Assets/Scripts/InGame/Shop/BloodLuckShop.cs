@@ -32,6 +32,7 @@ namespace BloodLuck
         private readonly HashSet<InfusionDefinition> owned = new HashSet<InfusionDefinition>();
         private bool diceRolling;
         private bool diceHasRolled;
+        private bool diceRewardGranted;
         private InfusionDefinition pendingDiceReward;
 
         private void Awake()
@@ -73,6 +74,7 @@ namespace BloodLuck
             pendingDiceReward = null;
             diceRolling = false;
             diceHasRolled = false;
+            diceRewardGranted = false;
             var available = AvailableInfusions();
             while (offers.Count < cardButtons.Length && available.Count > 0)
             {
@@ -98,6 +100,7 @@ namespace BloodLuck
             pendingDiceReward = null;
             diceRolling = false;
             diceHasRolled = false;
+            diceRewardGranted = false;
             if (diceOverlay != null) diceOverlay.SetActive(false);
             shopPanel.SetActive(false);
         }
@@ -148,6 +151,7 @@ namespace BloodLuck
             var reward = mythics[UnityEngine.Random.Range(0, mythics.Count)];
             diceRolling = true;
             diceHasRolled = false;
+            diceRewardGranted = false;
             pendingDiceReward = reward;
             RefreshButtons();
             if (diceOverlay != null)
@@ -175,7 +179,8 @@ namespace BloodLuck
 
         private void CompleteDicePurchase()
         {
-            if (pendingDiceReward == null) return;
+            if (pendingDiceReward == null || diceRewardGranted) return;
+            diceRewardGranted = true;
             Grant(pendingDiceReward);
             for (int i = 0; i < offers.Count; i++)
                 if (offers[i] == pendingDiceReward) offers[i] = null;
@@ -185,12 +190,13 @@ namespace BloodLuck
 
         private void ReturnFromDice()
         {
-            if (!diceHasRolled || pendingDiceReward == null) return;
+            if (!diceRewardGranted || pendingDiceReward == null) return;
             if (diceOverlay != null) diceOverlay.SetActive(false);
             if (diceRoll != null) diceRoll.HideDice();
             pendingDiceReward = null;
             diceRolling = false;
             diceHasRolled = false;
+            diceRewardGranted = false;
             RefreshButtons();
         }
 
