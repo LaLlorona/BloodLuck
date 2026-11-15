@@ -78,7 +78,8 @@ namespace InGame.Managers
                     target,
                     _playerStateManager,
                     _effectManager,
-                    _monsterProjectileManager));
+                    _monsterProjectileManager,
+                    this));
             }
         }
 

@@ -9,6 +9,7 @@ namespace InGame.System
         [SerializeField, Min(1)] private int _monsterSpawnCount = 10;
         [SerializeField] private float _monsterSpawnRadius = 5;
         [SerializeField, Min(0f)] private float _monsterMoveSpeed = 2f;
+        [SerializeField, Min(1f)] private float _monsterMaxHp = 10f;
 
         [Header("Monster Attack (sector)")]
         [Tooltip("When the monster gets this close to the player, it stops and starts charging its attack.")]
@@ -38,6 +39,10 @@ namespace InGame.System
         [SerializeField, Min(0f)] private float _playerAttack = 10f;
         [SerializeField, Min(0f)] private float _playerAttackSpeed = 1f;
 
+        [Header("Slot Machine")]
+        [Range(0f, 1f)] [SerializeField] private float _slotJackpotChance = 0.2f;
+
+        public float SlotJackpotChance => _slotJackpotChance;
         public float RangedMonsterRatio => _rangedMonsterRatio;
         public float MonsterRangedAttackRange => _monsterRangedAttackRange;
         public float MonsterRangedStopSeconds => _monsterRangedStopSeconds;
@@ -54,6 +59,7 @@ namespace InGame.System
         public int MonsterSpawnCount => _monsterSpawnCount;
         public float MonsterSpawnRadius => _monsterSpawnRadius;
         public float MonsterMoveSpeed => _monsterMoveSpeed;
+        public float MonsterMaxHp => _monsterMaxHp;
         public float MonsterAttackTriggerDistance => _monsterAttackTriggerDistance;
         public float MonsterAttackChargeSeconds => _monsterAttackChargeSeconds;
         public float MonsterAttackWaitSeconds => _monsterAttackWaitSeconds;

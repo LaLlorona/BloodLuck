@@ -9,6 +9,12 @@ namespace InGame.UI
         [SerializeField] private RectTransform _hpFill;
         [SerializeField] private TMP_Text _hpText;
         [SerializeField] private TMP_Text _pullsText;
+        [SerializeField] private TMP_Text _waveText;
+
+        public void SetWave(int waveNumber)
+        {
+            _waveText.text = $"WAVE {waveNumber}";
+        }
 
         public void SetHp(float currentHp, float maxHp)
         {

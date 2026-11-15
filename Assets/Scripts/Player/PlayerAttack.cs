@@ -97,7 +97,9 @@ public class PlayerAttack : MonoBehaviour
             if (col.TryGetComponent(out BloodLuckMonsterComponent enemy))
             {
                 // TODO: DEAL DAMAGE TO enemy HERE (DEAL KNOCKBACK, FLASH, ETC)
-                Debug.Log(enemy);
+                //ToDO: calculatePlayerDamage
+                enemy.OnMonsterDamage(5.0f);
+                
             }
         }
 
