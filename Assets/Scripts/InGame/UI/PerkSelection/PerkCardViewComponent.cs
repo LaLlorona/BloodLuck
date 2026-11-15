@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace InGame.UI
 {
     /// <summary>선택창의 카드 1개. 왼쪽 스프라이트 / 오른쪽 텍스트, 클릭 가능한 Button.</summary>
-    public class PerkCardView : MonoBehaviour
+    public class PerkCardViewComponent : MonoBehaviour
     {
         [SerializeField] private Button _button;
         [SerializeField] private Image _icon;
@@ -19,8 +19,8 @@ namespace InGame.UI
         {
             _icon.sprite = data.Icon;
             _icon.enabled = data.Icon != null;
-            _title.text = data.Title;
-            _description.text = data.Description;
+            _title.text = data.Passive.GetTitle();
+            _description.text = data.Passive.GetDescription();
 
             _button.onClick.RemoveAllListeners();
             _button.onClick.AddListener(() => onClick?.Invoke());

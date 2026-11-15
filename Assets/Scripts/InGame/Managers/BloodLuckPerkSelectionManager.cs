@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using InGame.System;
 using InGame.UI;
+using Player;
 using UnityEngine;
 
 namespace InGame.Managers
@@ -9,10 +10,14 @@ namespace InGame.Managers
     public class BloodLuckPerkSelectionManager : IBloodLuckContext
     {
         private readonly BloodLuckAssetHolder _assetHolder;
+        private readonly BloodLuckInGameParameter _inGameParameter;
+        private readonly global::System.Random _random = new();
+        private BloodLuckPlayerStateManager _playerStateManager;
 
-        public BloodLuckPerkSelectionManager(BloodLuckAssetHolder assetHolder)
+        public BloodLuckPerkSelectionManager(BloodLuckAssetHolder assetHolder, BloodLuckInGameParameter inGameParameter)
         {
             _assetHolder = assetHolder;
+            _inGameParameter = inGameParameter;
         }
 
         public UniTask InitAsync()
@@ -22,37 +27,38 @@ namespace InGame.Managers
 
         public void WireContextAfterInit(BloodLuckContextMap contextMap)
         {
+            _playerStateManager = contextMap.GetRegisteredInstance<BloodLuckPlayerStateManager>();
         }
         
         public async UniTask<PerkData> ShowPerkSelectionAsync()
         {
             var completionSource = new UniTaskCompletionSource<PerkData>();
 
-            // The prefab root has its own Canvas, so it does not need a parent.
             var view = Object.Instantiate(_assetHolder.PerkSelectionViewPrefab);
             try
             {
-                view.Show(GetPerkChoices(), perk => completionSource.TrySetResult(perk));
+                view.Show(GetPerkChoices(), perk =>
+                {
+                    _playerStateManager.AddPassive(perk.Passive);
+                    completionSource.TrySetResult(perk);
+                });
                 return await completionSource.Task;
             }
             finally
             {
-                // Destroy the view even if the task is cancelled or throws.
-                if (view != null)
-                {
-                    Object.Destroy(view.gameObject);
-                }
+                Object.Destroy(view.gameObject);
             }
         }
 
-        private static IReadOnlyList<PerkData> GetPerkChoices()
+        private IReadOnlyList<PerkData> GetPerkChoices()
         {
-            return new List<PerkData>
+            var perks = new List<PerkData>();
+            for (int i = 0; i < 3; i++)
             {
-                new(null, "Dummy Perk 1", "Dummy description 1"),
-                new(null, "Dummy Perk 2", "Dummy description 2"),
-                new(null, "Dummy Perk 3", "Dummy description 3"),
-            };
+                perks.Add(new PerkData(null, PlayerPassiveGenerator.GetRandomPlayerPassive(_random)));
+            }
+
+            return perks;
         }
     }
 }

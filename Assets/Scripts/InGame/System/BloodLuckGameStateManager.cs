@@ -28,7 +28,6 @@ namespace InGame.System
 
         public void PauseGame()
         {
-            // Never override a finished game with a paused state.
             if (CurrentGameState is GameState.GameFinished)
             {
                 return;
@@ -39,7 +38,6 @@ namespace InGame.System
 
         public void ResumeGame()
         {
-            // Never resume a game that has already finished.
             if (CurrentGameState is GameState.GameFinished)
             {
                 return;

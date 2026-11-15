@@ -7,11 +7,13 @@ namespace InGame.System
     {
         [SerializeField] private BloodLuckAssetHolder assetHolder;
 
+        [SerializeField] private BloodLuckInGameParameter inGameParameter = new();
+
         private BloodLuckGameController _controller;
 
         private void Start()
         {
-            var controller = new BloodLuckGameController(assetHolder);
+            var controller = new BloodLuckGameController(assetHolder, inGameParameter);
             _controller = controller;
             _controller.InitializeGameController().Forget();
         }

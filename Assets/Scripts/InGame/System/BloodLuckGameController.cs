@@ -10,7 +10,7 @@ namespace InGame.System
         private readonly BloodLuckAssetHolder _assetHolder;
         private bool _isControllerInitializationFinished = false;
 
-        public BloodLuckGameController(BloodLuckAssetHolder assetHolder)
+        public BloodLuckGameController(BloodLuckAssetHolder assetHolder, BloodLuckInGameParameter inGameParameter)
         {
             _assetHolder = assetHolder;
             _bloodLuckContext = new BloodLuckContextMap();
@@ -18,9 +18,13 @@ namespace InGame.System
 
             _bloodLuckContext.Register(_bloodLuckGameUpdateManager);
             _bloodLuckContext.Register(new BloodLuckGameStateManager());
-            _bloodLuckContext.Register(new BloodLuckMonsterManager(assetHolder));
+            _bloodLuckContext.Register(new BloodLuckMonsterManager(assetHolder, inGameParameter));
             _bloodLuckContext.Register(new BloodLuckWaveManager());
-            _bloodLuckContext.Register(new BloodLuckPerkSelectionManager(assetHolder));
+            _bloodLuckContext.Register(new BloodLuckPerkSelectionManager(assetHolder, inGameParameter));
+            _bloodLuckContext.Register(new BloodLuckEffectManager(assetHolder));
+            _bloodLuckContext.Register(new BloodLuckMonsterProjectileManager(assetHolder));
+            _bloodLuckContext.Register(new BloodLuckPlayerStateManager(inGameParameter));
+            _bloodLuckContext.Register(new BloodLuckUIManager(assetHolder));
             _bloodLuckContext.Register(new BloodLuckCheatManager());
             // Register new systems (IBloodLuckContext) here.
         }
