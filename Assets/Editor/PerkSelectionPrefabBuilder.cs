@@ -24,7 +24,7 @@ namespace InGame.EditorTools
             Sprite box = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/UISprite.psd");
 
             var root = new GameObject("PerkSelectionUI", typeof(RectTransform), typeof(Canvas),
-                typeof(CanvasScaler), typeof(GraphicRaycaster), typeof(CanvasGroup), typeof(PerkSelectionView));
+                typeof(CanvasScaler), typeof(GraphicRaycaster), typeof(CanvasGroup), typeof(PerkSelectionViewComponent));
             var canvas = root.GetComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvas.sortingOrder = 100;
@@ -64,7 +64,7 @@ namespace InGame.EditorTools
             v.childForceExpandHeight = true;
 
             // 슬롯(레이아웃이 위치를 관리) 안에 카드를 두어, 카드는 Timeline으로 자유롭게 움직일 수 있게 한다.
-            var cards = new PerkCardView[3];
+            var cards = new PerkCardViewComponent[3];
             for (int i = 0; i < 3; i++)
             {
                 RectTransform slot = new GameObject("Slot" + (i + 1), typeof(RectTransform), typeof(LayoutElement))
@@ -84,7 +84,7 @@ namespace InGame.EditorTools
             BuildIntroTimeline(director, root.GetComponent<Animator>());
 
             // 참조 연결
-            var view = root.GetComponent<PerkSelectionView>();
+            var view = root.GetComponent<PerkSelectionViewComponent>();
             var so = new SerializedObject(view);
             so.FindProperty("_introDirector").objectReferenceValue = director;
             var arr = so.FindProperty("_cards");
@@ -169,7 +169,7 @@ namespace InGame.EditorTools
             director.SetGenericBinding(track, animator);
         }
 
-        private static PerkCardView BuildCard(RectTransform parent, int index, Sprite box)
+        private static PerkCardViewComponent BuildCard(RectTransform parent, int index, Sprite box)
         {
             RectTransform card = Img("Card" + (index + 1), parent, CardColor, box, true);
             Stretch(card);
@@ -227,7 +227,7 @@ namespace InGame.EditorTools
             RectTransform t = Txt("Title", texts, "Perk Title", 40, Gold, TextAlignmentOptions.Left, FontStyles.Bold);
             RectTransform d = Txt("Description", texts, "Perk description goes here.", 30, Color.white, TextAlignmentOptions.TopLeft, FontStyles.Normal);
 
-            var view = card.gameObject.AddComponent<PerkCardView>();
+            var view = card.gameObject.AddComponent<PerkCardViewComponent>();
             var so = new SerializedObject(view);
             so.FindProperty("_button").objectReferenceValue = button;
             so.FindProperty("_icon").objectReferenceValue = iconImg;

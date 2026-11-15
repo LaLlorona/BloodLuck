@@ -115,7 +115,6 @@ namespace InGame.System
             _gameStateManager.PauseGame();
 
             var selectedPerk = await _perkSelectionManager.ShowPerkSelectionAsync();
-            // ToDo: add the selected perk to the player once the player system exists.
 
             _gameStateManager.ResumeGame();
             _waveManager.OnWaveStarted();

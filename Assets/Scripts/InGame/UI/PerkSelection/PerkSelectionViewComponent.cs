@@ -5,10 +5,10 @@ using UnityEngine.Playables;
 
 namespace InGame.UI
 {
-    public class PerkSelectionView : MonoBehaviour
+    public class PerkSelectionViewComponent : MonoBehaviour
     {
         [SerializeField] private PlayableDirector _introDirector;
-        [SerializeField] private PerkCardView[] _cards;
+        [SerializeField] private PerkCardViewComponent[] _cards;
    
 
         private bool _selected;

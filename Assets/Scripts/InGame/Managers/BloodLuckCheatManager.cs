@@ -23,14 +23,7 @@ namespace InGame.Managers
         public BloodLuckUpdatePriority UpdatePriority => BloodLuckUpdatePriority.InputUpdate;
         public void GameUpdate(float deltaTime)
         {
-            // The project uses the Input System package, so the legacy UnityEngine.Input class cannot be used.
-            var keyboard = Keyboard.current;
-            if (keyboard == null)
-            {
-                return;
-            }
-
-            if (keyboard.digit0Key.wasPressedThisFrame)
+            if (Keyboard.current.digit0Key.wasPressedThisFrame)
             {
                 _monsterManager.CheatKillAllMonsters();
             }
