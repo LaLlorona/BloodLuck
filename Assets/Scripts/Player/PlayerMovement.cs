@@ -9,11 +9,15 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Movement Config")]
     [SerializeField] private float moveSpeed;
-    private Vector2 lastMoveDir;
+    public Vector2 lastMoveDir;
 
     [Header("Dash Config")]
     [SerializeField] private float maxDashDistance;
     private bool isDashing;
+
+    [Header("Rotation Settings")]
+    [SerializeField] private float spriteAngleOffset;
+    [SerializeField] private int facingIndex; // 0-7 for the 8 directions
 
     void Awake()
     {
@@ -31,9 +35,10 @@ public class PlayerMovement : MonoBehaviour
         playerInput.Dash -= HandleDash;
     }
 
-
-    void FixedUpdate()
+    public void GameUpdate(float deltaTime)
     {
+        UpdateRotation();
+
         if (isDashing)
         {
             Vector3 lastMoveDirVec3 = new(lastMoveDir.x, lastMoveDir.y, 0);
@@ -47,9 +52,29 @@ public class PlayerMovement : MonoBehaviour
             {
                 lastMoveDir = playerInput.MoveDir;
                 Vector3 moveDirVec3 = new(playerInput.MoveDir.x, playerInput.MoveDir.y, 0);
-                transform.position = Vector3.MoveTowards(transform.position, transform.position + moveDirVec3, moveSpeed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, transform.position + moveDirVec3, moveSpeed * deltaTime);
             }
         }
+    }
+
+    private void UpdateRotation()
+    {
+        Vector2 dir = playerInput.MoveDir;
+
+        if (dir.sqrMagnitude < 0.0001f) return;
+
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+        int step = Mathf.RoundToInt(angle / 45f);
+        facingIndex = (step % 8 + 8) % 8;
+        float snappedAngle = facingIndex * 45f + spriteAngleOffset;
+
+        /*
+            TODO: REPLACE THIS CODE WITH ONLY ROTATING THE WEAPON COLLIDER
+            INSTEAD OF ROTATING THE WHOLE PLAYER. ALSO CHANGE THE SPRITE
+            OF THE PLAYER DEPENDING ON WHICH DIRECTION IT IS FACING.
+        */
+        transform.rotation = Quaternion.Euler(0f, 0f, snappedAngle);
     }
 
     private void HandleDash()

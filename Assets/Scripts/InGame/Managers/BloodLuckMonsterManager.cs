@@ -81,7 +81,7 @@ namespace InGame.Managers
                     _monsterProjectileManager));
             }
         }
-        
+
         private BloodLuckMonsterType GetRandomMonsterType()
         {
             return Random.value < _inGameParameter.RangedMonsterRatio
