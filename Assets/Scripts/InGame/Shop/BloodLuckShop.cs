@@ -1,0 +1,176 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace BloodLuck
+{
+    // The wave manager decides when to open the shop.
+    public class BloodLuckShop : MonoBehaviour
+    {
+        [Header("UI")]
+        [SerializeField] private GameObject shopPanel;
+        [SerializeField] private Button[] cardButtons = new Button[3];
+        [SerializeField] private Button diceButton;
+        [SerializeField] private Button leaveButton;
+        [SerializeField] private InfusionCardView[] cardViews = new InfusionCardView[3];
+        [SerializeField] private ShopWalletView walletView;
+        [SerializeField] private BloodyDiceRoll diceRoll;
+
+        [Header("Shop Data")]
+        [SerializeField] private SlotPullWallet wallet;
+        [SerializeField] private List<InfusionDefinition> infusionPool = new List<InfusionDefinition>();
+
+        // Future combat/visual systems can listen without changing shop logic.
+        public event Action<InfusionDefinition> Purchased;
+        public event Action Closed;
+
+        private readonly List<InfusionDefinition> offers = new List<InfusionDefinition>();
+        private readonly HashSet<InfusionDefinition> owned = new HashSet<InfusionDefinition>();
+        private bool diceRolling;
+
+        private void Awake()
+        {
+            if (shopPanel == null || wallet == null || diceButton == null ||
+                cardButtons == null || cardButtons.Length != 3)
+            {
+                Debug.LogError("BloodLuckShop: Assign the shop panel, wallet, dice button, and exactly three card buttons.", this);
+                enabled = false;
+                return;
+            }
+
+            foreach (var button in cardButtons)
+            {
+                if (button != null) continue;
+                Debug.LogError("BloodLuckShop: A card button is missing.", this);
+                enabled = false;
+                return;
+            }
+
+            shopPanel.SetActive(false);
+            for (int i = 0; i < cardButtons.Length; i++)
+            {
+                int slot = i;
+                cardButtons[i].onClick.AddListener(() => Buy(slot));
+            }
+            diceButton.onClick.AddListener(BuyDice);
+            if (leaveButton != null) leaveButton.onClick.AddListener(CloseShop);
+            if (walletView != null) walletView.Bind(wallet);
+        }
+
+        public void OpenShop()
+        {
+            if (!enabled || shopPanel.activeSelf || diceRolling) return;
+            offers.Clear();
+            var available = AvailableInfusions();
+            while (offers.Count < cardButtons.Length && available.Count > 0)
+            {
+                int selected = WeightedPick(available);
+                offers.Add(available[selected]);
+                available.RemoveAt(selected);
+            }
+            shopPanel.SetActive(true);
+            RefreshButtons();
+        }
+
+        public void CloseShop()
+        {
+            if (!enabled || !shopPanel.activeSelf || diceRolling) return;
+            shopPanel.SetActive(false);
+            Closed?.Invoke();
+        }
+
+        public void ResetForRun()
+        {
+            owned.Clear();
+            offers.Clear();
+            shopPanel.SetActive(false);
+        }
+
+        private List<InfusionDefinition> AvailableInfusions()
+        {
+            var result = new List<InfusionDefinition>();
+            foreach (var infusion in infusionPool)
+                if (infusion != null && (infusion.Stackable || !owned.Contains(infusion)) && !result.Contains(infusion))
+                    result.Add(infusion);
+            return result;
+        }
+
+        // Simple rarity weighting: Common 5, Epic 2, Mythic 1.
+        private int WeightedPick(List<InfusionDefinition> pool)
+        {
+            int total = 0;
+            foreach (var item in pool) total += Weight(item.rarity);
+            int roll = UnityEngine.Random.Range(0, total);
+            for (int i = 0; i < pool.Count; i++)
+            {
+                roll -= Weight(pool[i].rarity);
+                if (roll < 0) return i;
+            }
+            return pool.Count - 1;
+        }
+
+        private int Weight(InfusionRarity rarity) =>
+            rarity == InfusionRarity.Bloodstained ? 5 :
+            rarity == InfusionRarity.Bloodbound ? 2 : 1;
+
+        public void Buy(int slot)
+        {
+            if (diceRolling || !shopPanel.activeSelf || slot < 0 || slot >= offers.Count || offers[slot] == null) return;
+            var infusion = offers[slot];
+            if (!wallet.TrySpend(infusion.Cost)) return;
+            Grant(infusion);
+            offers[slot] = null;
+            RefreshButtons();
+        }
+
+        public void BuyDice()
+        {
+            if (diceRolling || !shopPanel.activeSelf || wallet.Pulls < 2) return;
+            var mythics = AvailableInfusions().FindAll(x => x.rarity == InfusionRarity.Bloodwrought);
+            if (mythics.Count == 0 || !wallet.TrySpend(2)) return;
+
+            var reward = mythics[UnityEngine.Random.Range(0, mythics.Count)];
+            diceRolling = true;
+            RefreshButtons();
+            if (diceRoll == null)
+            {
+                CompleteDicePurchase(reward);
+                return;
+            }
+            diceRoll.Roll(reward, () => CompleteDicePurchase(reward));
+        }
+
+        private void CompleteDicePurchase(InfusionDefinition reward)
+        {
+            Grant(reward);
+            for (int i = 0; i < offers.Count; i++)
+                if (offers[i] == reward) offers[i] = null;
+            diceRolling = false;
+            RefreshButtons();
+        }
+
+        private void Grant(InfusionDefinition infusion)
+        {
+            if (!infusion.Stackable) owned.Add(infusion);
+            Purchased?.Invoke(infusion);
+        }
+
+        private void RefreshButtons()
+        {
+            for (int i = 0; i < cardButtons.Length; i++)
+            {
+                var item = i < offers.Count ? offers[i] : null;
+                cardButtons[i].interactable = !diceRolling && item != null && wallet.Pulls >= item.Cost;
+                if (cardViews != null && i < cardViews.Length && cardViews[i] != null)
+                    cardViews[i].SetInfusion(item);
+            }
+            diceButton.interactable = !diceRolling && wallet.Pulls >= 2 &&
+                AvailableInfusions().Exists(x => x.rarity == InfusionRarity.Bloodwrought);
+            if (leaveButton != null) leaveButton.interactable = !diceRolling;
+        }
+
+        public InfusionDefinition GetOffer(int slot) =>
+            slot >= 0 && slot < offers.Count ? offers[slot] : null;
+    }
+}
