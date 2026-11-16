@@ -116,6 +116,7 @@ namespace InGame.EditorTools
                 var card = FindDescendant(shopView.transform, cardNames[i]);
                 if (card == null) continue;
                 if (i > 0) AddRootDecoration(card);
+                ApplyInfusionTextLayout(card);
                 card.GetComponent<RectTransform>().anchoredPosition = new Vector2(-1.5f * CardSpacing + i * CardSpacing, 30);
             }
 
@@ -213,6 +214,13 @@ namespace InGame.EditorTools
                 if (result != null) return result;
             }
             return null;
+        }
+
+        private static void ApplyInfusionTextLayout(Transform card)
+        {
+            Place(FindDescendant(card, "Name").GetComponent<RectTransform>(), new Vector2(.5f, 1), new Vector2(.5f, 1), new Vector2(0, -90), new Vector2(300, 45));
+            Place(FindDescendant(card, "Rarity").GetComponent<RectTransform>(), new Vector2(.5f, 1), new Vector2(.5f, 1), new Vector2(0, -130), new Vector2(300, 35));
+            Place(FindDescendant(card, "Description").GetComponent<RectTransform>(), new Vector2(.5f, .5f), new Vector2(.5f, .5f), new Vector2(-15, -40), new Vector2(290, 120));
         }
 
         private static GameObject CreateDiceCard(Transform parent, float xPosition)
