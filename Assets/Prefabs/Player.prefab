@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4823587412862259490}
   - component: {fileID: 6484848593020587523}
+  - component: {fileID: 4607543092968894099}
   m_Layer: 0
   m_Name: shadow
   m_TagString: Untagged
@@ -26,8 +27,8 @@ Transform:
   m_GameObject: {fileID: 4950147713271229432}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.404, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.3, z: 1}
+  m_LocalPosition: {x: 0, y: -0.45, z: 0}
+  m_LocalScale: {x: 0.6, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4329741179397214900}
@@ -92,6 +93,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!210 &4607543092968894099
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4950147713271229432}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: -10
+  m_SortAtRoot: 0
+  m_Sort3DAs2D: 0
 --- !u!1 &7623650703919932985
 GameObject:
   m_ObjectHideFlags: 0
@@ -108,6 +122,7 @@ GameObject:
   - component: {fileID: 1840608206852119994}
   - component: {fileID: 4592148282873930511}
   - component: {fileID: 3778012774528434848}
+  - component: {fileID: 7377304948452254898}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -205,6 +220,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   moveSpeed: 5
+  stepInterval: 0.35
   lastMoveDir: {x: 0, y: 0}
   maxDashDistance: 2
   spriteAngleOffset: 0
@@ -266,9 +282,12 @@ MonoBehaviour:
     m_Bits: 128
   slashRadius: 2
   slashAngle: 140
+  isAttacking: 0
   comboTime: 1
   basicAttackCooldown: 0.5
   specialAttackCooldown: 0
+  IsNextAttackQueued: 0
+  IsAttackInterruptable: 0
 --- !u!95 &4592148282873930511
 Animator:
   serializedVersion: 7
@@ -312,7 +331,11 @@ MonoBehaviour:
     - key: 1
       value: run-right
     - key: 2
-      value: 
+      value: attack-right-1
+    - key: 3
+      value: attack-right-2
+    - key: 4
+      value: attack-right-3
   - Direction: 1
     AnimationStateNameDict:
     - key: 0
@@ -320,15 +343,23 @@ MonoBehaviour:
     - key: 1
       value: run-back-right
     - key: 2
-      value: 
+      value: attack-back-right-1
+    - key: 3
+      value: attack-back-right-2
+    - key: 4
+      value: attack-back-right-3
   - Direction: 2
     AnimationStateNameDict:
     - key: 0
       value: idle-back
     - key: 2
-      value: 
+      value: attack-back-1
     - key: 1
       value: run-back
+    - key: 3
+      value: attack-back-2
+    - key: 4
+      value: attack-back-3
   - Direction: 3
     AnimationStateNameDict:
     - key: 0
@@ -336,7 +367,11 @@ MonoBehaviour:
     - key: 1
       value: run-back-left
     - key: 2
-      value: 
+      value: attack-back-left-1
+    - key: 4
+      value: attack-back-left-3
+    - key: 3
+      value: attack-back-left-2
   - Direction: 4
     AnimationStateNameDict:
     - key: 0
@@ -344,7 +379,11 @@ MonoBehaviour:
     - key: 1
       value: run-left
     - key: 2
-      value: 
+      value: attack-left-1
+    - key: 3
+      value: attack-left-2
+    - key: 4
+      value: attack-left-3
   - Direction: 5
     AnimationStateNameDict:
     - key: 0
@@ -352,7 +391,11 @@ MonoBehaviour:
     - key: 1
       value: run-front-left
     - key: 2
-      value: 
+      value: attack-front-left-1
+    - key: 3
+      value: attack-front-left-2
+    - key: 4
+      value: attack-front-left-3
   - Direction: 6
     AnimationStateNameDict:
     - key: 0
@@ -372,9 +415,26 @@ MonoBehaviour:
     - key: 1
       value: run-front-right
     - key: 2
-      value: 
+      value: attack-front-right-1
+    - key: 3
+      value: attack-front-right-2
+    - key: 4
+      value: attack-front-right-3
   CurrDirection: 0
   CurrAnimState: 0
+--- !u!210 &7377304948452254898
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7623650703919932985}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
+  m_Sort3DAs2D: 0
 --- !u!1 &7872883868138150422
 GameObject:
   m_ObjectHideFlags: 0

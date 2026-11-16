@@ -90,7 +90,7 @@ public class PlayerAttack : MonoBehaviour
         playerStateManager = stateManager;
         this.monsterManager = monsterManager;
         playerInput.InitializeInputManager(playerStateManager);
-        
+
     }
 
     public void GameUpdate(float deltaTime)
@@ -138,7 +138,7 @@ public class PlayerAttack : MonoBehaviour
 
     private void HandleAttack()
     {
-        
+
         if (attackState == AttackState.Attack1 || attackState == AttackState.Attack2 || attackState == AttackState.Attack3)
         {
             IsNextAttackQueued = true;
@@ -158,10 +158,10 @@ public class PlayerAttack : MonoBehaviour
         {
             playerAnimation.UpdateAnimState(PlayerAnimationState.Attack3);
         }
-        
-        PlaySlashEffect();
+
+        // note: PlaySlashEffect has been moved to the attack animation itself
         AudioManager.Instance?.PlaySwing();
-        float damage = IsThirdAttack? playerStateManager.ThirdAttack : playerStateManager.Attack;
+        float damage = IsThirdAttack ? playerStateManager.ThirdAttack : playerStateManager.Attack;
 
         // Check if any enemies are in the collider
         results.Clear();
@@ -222,8 +222,13 @@ public class PlayerAttack : MonoBehaviour
             if (currentAttackComboIndex >= 3)
             {
                 currentAttackComboIndex = 0;
+                isAttacking = false;
+                attackState = AttackState.Ready;
             }
-            HandleAttack();
+            else
+            {
+                HandleAttack();
+            }
         }
         else
         {
@@ -232,7 +237,7 @@ public class PlayerAttack : MonoBehaviour
             attackState = AttackState.Ready;
         }
     }
-    
+
 
     public void PlaySlashEffect()
     {
