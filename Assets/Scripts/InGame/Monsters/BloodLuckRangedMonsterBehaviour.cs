@@ -10,6 +10,7 @@ namespace InGame.Monsters
         {
             Chasing,
             Stopped,
+            Hit,
         }
 
         private readonly Transform _monsterTransform;
@@ -17,6 +18,8 @@ namespace InGame.Monsters
         private readonly float _projectileDamage;
         private readonly Transform _player;
         private readonly BloodLuckMonsterProjectileManager _monsterProjectileManager;
+
+        private readonly BloodLuckMonsterHitStun _hitStun;
 
         private State _state = State.Chasing;
         private float _stoppedElapsed;
@@ -33,6 +36,7 @@ namespace InGame.Monsters
             _projectileDamage = projectileDamage;
             _player = player;
             _monsterProjectileManager = monsterProjectileManager;
+            _hitStun = new BloodLuckMonsterHitStun(monsterTransform, player, parameter);
         }
 
         public void UpdateMonsterBehaviour(float deltaTime)
@@ -45,11 +49,28 @@ namespace InGame.Monsters
                 case State.Stopped:
                     UpdateStopped(deltaTime);
                     break;
+                case State.Hit:
+                    UpdateHit(deltaTime);
+                    break;
             }
+        }
+
+        public void ResetMonsterBehaviour()
+        {
+            _hitStun.Start();
+            _state = State.Hit;
         }
 
         public void OnMonsterDied()
         {
+        }
+
+        private void UpdateHit(float deltaTime)
+        {
+            if (_hitStun.Update(deltaTime))
+            {
+                _state = State.Chasing;
+            }
         }
 
         private void UpdateChasing(float deltaTime)

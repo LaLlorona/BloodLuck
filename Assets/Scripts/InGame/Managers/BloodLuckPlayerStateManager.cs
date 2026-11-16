@@ -14,6 +14,7 @@ namespace InGame.Managers
         public int CurrentPulls { get; private set; }
         public event global::System.Action<int> PullsChanged;
         public float Attack => _passiveContainer.GetDamage(_parameter.PlayerAttack);
+        public float ThirdAttack => _passiveContainer.GetDamage(_parameter.PlayerThirdAttackDamage);
         public float AttackSpeed => _passiveContainer.GetAttackSpeed(_parameter.PlayerAttackSpeed);
 
         private readonly BloodLuckInGameParameter _parameter;

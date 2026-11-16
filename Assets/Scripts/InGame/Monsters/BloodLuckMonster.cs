@@ -77,6 +77,7 @@ namespace InGame.Monsters
 
             _monsterComponent.SetHp(_currentHp, _maxHp);
             _monsterComponent.PlayHitFlash();
+            _behaviour.ResetMonsterBehaviour();
         }
 
         public void OnMonsterDied()

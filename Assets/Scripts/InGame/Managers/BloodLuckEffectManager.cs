@@ -63,12 +63,14 @@ namespace InGame.Managers
             Vector2 direction,
             float radius,
             float angleDegrees,
+            Color color,
             bool clockwise = false)
         {
             var effect = Object.Instantiate(
                 _assetHolder.SlashEffectPrefab,
                 position,
                 Quaternion.identity);
+            effect.SetColor(color);
             effect.Setup(radius, angleDegrees);
             effect.SetDirection(direction);
             effect.SetClockwise(clockwise);

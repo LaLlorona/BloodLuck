@@ -85,6 +85,11 @@ namespace InGame.Effects
             transform.rotation = Quaternion.Euler(0f, 0f, angle);
         }
 
+        public void SetColor(Color color)
+        {
+            _color = color;
+        }
+
         // Counter-clockwise by default.
         public void SetClockwise(bool clockwise)
         {

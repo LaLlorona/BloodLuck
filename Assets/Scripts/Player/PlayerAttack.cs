@@ -18,6 +18,9 @@ public class PlayerAttack : MonoBehaviour
         Ready
     }
 
+    // The combo index is incremented after each attack, so it is 2 right before the third hit.
+    private const int ThirdAttackComboIndex = 2;
+
     [Header("References")]
     [SerializeField] private Collider2D weaponCollider;
     [SerializeField] LayerMask enemyLayer;
@@ -104,10 +107,9 @@ public class PlayerAttack : MonoBehaviour
         // TODO: PLAY ANIMATION BASED ON currentAttack`ComboIndex
         if (attackState != AttackState.Ready) return;
 
-        
-        
-        
-        PlaySlashEffect();
+        bool isThirdAttack = currentAttackComboIndex == ThirdAttackComboIndex;
+        PlaySlashEffect(isThirdAttack ? Color.red : Color.white);
+        float damage = isThirdAttack ? playerStateManager.ThirdAttack : playerStateManager.Attack;
 
         // Check if any enemies are in the collider
         results.Clear();
@@ -117,7 +119,7 @@ public class PlayerAttack : MonoBehaviour
             if (col.TryGetComponent(out BloodLuckMonsterComponent enemy))
             {
                 // TODO: DEAL DAMAGE TO enemy HERE (DEAL KNOCKBACK, FLASH, ETC)
-                enemy.OnMonsterDamage(playerStateManager.Attack);
+                enemy.OnMonsterDamage(damage);
             }
         }
 
@@ -140,7 +142,7 @@ public class PlayerAttack : MonoBehaviour
         attackState = AttackState.Cooldown;
     }
 
-    private void PlaySlashEffect()
+    private void PlaySlashEffect(Color color)
     {
         if (effectManager == null) return;
 
@@ -150,7 +152,7 @@ public class PlayerAttack : MonoBehaviour
 
         // Alternate the swing direction every combo hit.
         bool clockwise = currentAttackComboIndex % 2 == 0;
-        effectManager.PlaySlash(transform.position, direction, slashRadius, slashAngle, clockwise);
+        effectManager.PlaySlash(transform.position, direction, slashRadius, slashAngle, color, clockwise);
     }
 
     private void HandleSpecial()

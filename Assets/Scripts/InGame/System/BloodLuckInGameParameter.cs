@@ -36,10 +36,17 @@ namespace InGame.System
         [SerializeField, Min(0.01f)] private float _monsterProjectileHitRadius = 0.4f;
         [SerializeField, Min(0.1f)] private float _monsterProjectileLifetime = 5f;
 
+        [Header("Monster Hit Reaction")]
+        [Tooltip("Seconds the monster stays frozen after being hit.")]
+        [SerializeField, Min(0f)] private float _monsterHitStunSeconds = 1f;
+        [SerializeField, Min(0f)] private float _monsterKnockbackDistance = 0.5f;
+        [SerializeField, Min(0f)] private float _monsterKnockbackSeconds = 0.15f;
+
         [Header("Player")]
         [SerializeField, Min(1f)] private float _playerMaxHp = 100f;
         [SerializeField, Min(0)] private int _playerMaxPulls = 3;
         [SerializeField, Min(0f)] private float _playerAttack = 10f;
+        [SerializeField, Min(0f)] private float _playerThirdAttackDamage = 20f;
         [SerializeField, Min(0f)] private float _playerAttackSpeed = 1f;
 
         [Header("Slot Machine")]
@@ -55,9 +62,14 @@ namespace InGame.System
         public float MonsterProjectileHitRadius => _monsterProjectileHitRadius;
         public float MonsterProjectileLifetime => _monsterProjectileLifetime;
 
+        public float MonsterHitStunSeconds => _monsterHitStunSeconds;
+        public float MonsterKnockbackDistance => _monsterKnockbackDistance;
+        public float MonsterKnockbackSeconds => _monsterKnockbackSeconds;
+
         public float PlayerMaxHp => _playerMaxHp;
         public int PlayerMaxPulls => _playerMaxPulls;
         public float PlayerAttack => _playerAttack;
+        public float PlayerThirdAttackDamage => _playerThirdAttackDamage;
         public float PlayerAttackSpeed => _playerAttackSpeed;
 
         public float MonsterSpawnRadius => _monsterSpawnRadius;

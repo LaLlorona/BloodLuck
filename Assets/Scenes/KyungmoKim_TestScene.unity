@@ -870,6 +870,7 @@ MonoBehaviour:
     _playerMaxHp: 100
     _playerMaxPulls: 6
     _playerAttack: 5
+    _playerThirdAttackDamage: 7.5
     _playerAttackSpeed: 1
     _slotJackpotChance: 0.2
 --- !u!4 &1347295306
