@@ -31,6 +31,8 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private float slashAngle = 140f;
     private BloodLuckEffectManager effectManager;
     private BloodLuckPlayerStateManager playerStateManager;
+    private BloodLuckMonsterManager monsterManager;
+    private readonly List<BloodLuckMonster> hitMonsters = new();
     private PlayerMovement playerMovement;
 
     [Header("Attack Settings")]
@@ -66,10 +68,14 @@ public class PlayerAttack : MonoBehaviour
         playerInput.SpecialAttack -= HandleSpecial;
     }
 
-    public void InitializePlayerAttack(BloodLuckEffectManager manager, BloodLuckPlayerStateManager stateManager)
+    public void InitializePlayerAttack(
+        BloodLuckEffectManager manager,
+        BloodLuckPlayerStateManager stateManager,
+        BloodLuckMonsterManager monsterManager)
     {
         effectManager = manager;
         playerStateManager = stateManager;
+        this.monsterManager = monsterManager;
     }
 
     public void GameUpdate(float deltaTime)
@@ -114,13 +120,20 @@ public class PlayerAttack : MonoBehaviour
         // Check if any enemies are in the collider
         results.Clear();
         weaponCollider.Overlap(filter, results);
+        hitMonsters.Clear();
         foreach (Collider2D col in results)
         {
             if (col.TryGetComponent(out BloodLuckMonsterComponent enemy))
             {
-                // TODO: DEAL DAMAGE TO enemy HERE (DEAL KNOCKBACK, FLASH, ETC)
-                enemy.OnMonsterDamage(damage);
+                hitMonsters.Add(enemy.Monster);
             }
+        }
+
+        monsterManager.ApplyChainLightning(hitMonsters, playerStateManager.ChainLightningDamage);
+
+        foreach (var monster in hitMonsters)
+        {
+            monster.OnMonsterDamage(damage);
         }
 
         // Increment combo

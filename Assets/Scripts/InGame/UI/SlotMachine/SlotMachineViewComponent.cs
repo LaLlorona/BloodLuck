@@ -2,6 +2,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace InGame.UI
@@ -11,7 +12,9 @@ namespace InGame.UI
         [SerializeField] private Sprite[] _symbols;
         [SerializeField] private SlotReelViewComponent[] _reels;
         [SerializeField] private Button _spinButton;
-        [SerializeField] private TMP_Text _pullsText;
+        [FormerlySerializedAs("_pullsText")]
+        [FormerlySerializedAs("_maxHpText")]
+        [SerializeField] private TMP_Text _hpText;
         [SerializeField] private TMP_Text _resultText;
 
         [Header("Spin")]
@@ -32,9 +35,9 @@ namespace InGame.UI
             _resultText.text = string.Empty;
         }
 
-        public void SetPulls(int currentPulls, int maxPulls)
+        public void SetHp(float currentHp)
         {
-            _pullsText.text = $"{currentPulls}/{maxPulls}";
+            _hpText.text = $"HP {Mathf.FloorToInt(currentHp)}";
         }
 
         public void SetSpinInteractable(bool interactable)

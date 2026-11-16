@@ -10,11 +10,10 @@ namespace InGame.Managers
     {
         public float MaxHp => _passiveContainer.GetMaxHp(_parameter.PlayerMaxHp);
         public float CurrentHp { get; private set; }
-        public int MaxPulls { get; }
-        public int CurrentPulls { get; private set; }
-        public event global::System.Action<int> PullsChanged;
+        public event global::System.Action<int> BalanceChanged;
         public float Attack => _passiveContainer.GetDamage(_parameter.PlayerAttack);
         public float ThirdAttack => _passiveContainer.GetDamage(_parameter.PlayerThirdAttackDamage);
+        public float ChainLightningDamage => _passiveContainer.GetChainLightningDamage();
         public float AttackSpeed => _passiveContainer.GetAttackSpeed(_parameter.PlayerAttackSpeed);
 
         private readonly BloodLuckInGameParameter _parameter;
@@ -25,8 +24,6 @@ namespace InGame.Managers
         {
             _parameter = parameter.InGameParameter;
             CurrentHp = MaxHp;
-            MaxPulls = _parameter.PlayerMaxPulls;
-            CurrentPulls = MaxPulls;
         }
 
         public void AddPassive(PlayerPassive passive)
@@ -61,6 +58,23 @@ namespace InGame.Managers
 
             CurrentHp = Mathf.Clamp(hp, 0f, MaxHp);
             _uiManager.RefreshHud();
+            BalanceChanged?.Invoke(Mathf.FloorToInt(CurrentHp));
+        }
+
+        public bool CanSpendHp(float amount)
+        {
+            return amount >= 0f && CurrentHp - amount >= _parameter.MinHpAfterSpend;
+        }
+
+        public bool TrySpendHp(float amount)
+        {
+            if (!CanSpendHp(amount))
+            {
+                return false;
+            }
+
+            SetCurrentHp(CurrentHp - amount);
+            return true;
         }
 
         public UniTask InitAsync()
@@ -83,33 +97,11 @@ namespace InGame.Managers
             SetCurrentHp(CurrentHp + amount);
         }
 
-        public void SetCurrentPulls(int pulls)
-        {
-            int clamped = Mathf.Clamp(pulls, 0, MaxPulls);
-            if (clamped == CurrentPulls)
-            {
-                return;
-            }
+        int IShopWallet.Balance => Mathf.FloorToInt(CurrentHp);
 
-            CurrentPulls = clamped;
-            _uiManager.RefreshHud();
-            PullsChanged?.Invoke(CurrentPulls);
-        }
+        bool IShopWallet.CanSpend(int cost) => CanSpendHp(cost);
 
-        public bool TrySpendPulls(int cost)
-        {
-            if (cost < 0 || CurrentPulls < cost)
-            {
-                return false;
-            }
-
-            SetCurrentPulls(CurrentPulls - cost);
-            return true;
-        }
-
-        int IShopWallet.Pulls => CurrentPulls;
-
-        bool IShopWallet.TrySpend(int cost) => TrySpendPulls(cost);
+        bool IShopWallet.TrySpend(int cost) => TrySpendHp(cost);
 
         private void SetCurrentHp(float hp)
         {
@@ -121,6 +113,7 @@ namespace InGame.Managers
 
             CurrentHp = clamped;
             _uiManager.RefreshHud();
+            BalanceChanged?.Invoke(Mathf.FloorToInt(CurrentHp));
         }
     }
 }

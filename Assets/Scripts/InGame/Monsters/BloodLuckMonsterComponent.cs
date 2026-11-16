@@ -16,6 +16,8 @@ namespace InGame.Monsters
         private BloodLuckMonster _bloodLuckMonster;
         private BloodLuckInGameParameter _parameter;
 
+        public BloodLuckMonster Monster => _bloodLuckMonster;
+
         public void Init(BloodLuckMonster bloodLuckMonster, BloodLuckInGameParameter parameter)
         {
             if (_spriteRenderer == null)

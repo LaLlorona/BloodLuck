@@ -36,7 +36,8 @@ namespace InGame.Managers
             updateLoopManager.RegisterUpdatable(this);
             _playerAttack.InitializePlayerAttack(
                 contextMap.GetRegisteredInstance<BloodLuckEffectManager>(),
-                contextMap.GetRegisteredInstance<BloodLuckPlayerStateManager>());
+                contextMap.GetRegisteredInstance<BloodLuckPlayerStateManager>(),
+                contextMap.GetRegisteredInstance<BloodLuckMonsterManager>());
         }
     }
 }

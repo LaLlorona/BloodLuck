@@ -24,7 +24,7 @@ namespace InGame.Managers
             _playerStateManager = contextMap.GetRegisteredInstance<BloodLuckPlayerStateManager>();
         }
 
-        /// <summary>Opens the shop and completes when the player leaves it. Purchases spend pulls and add passives.</summary>
+        /// <summary>Opens the shop and completes when the player leaves it. Purchases spend HP and add passives.</summary>
         public async UniTask ShowShopAsync()
         {
             var shop = Object.Instantiate(_assetHolder.ShopViewPrefab);

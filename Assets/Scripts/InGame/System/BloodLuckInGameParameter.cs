@@ -44,13 +44,34 @@ namespace InGame.System
 
         [Header("Player")]
         [SerializeField, Min(1f)] private float _playerMaxHp = 100f;
-        [SerializeField, Min(0)] private int _playerMaxPulls = 3;
+        [Tooltip("Current HP can never be spent below this value.")]
+        [SerializeField, Min(1f)] private float _minHpAfterSpend = 1f;
         [SerializeField, Min(0f)] private float _playerAttack = 10f;
         [SerializeField, Min(0f)] private float _playerThirdAttackDamage = 20f;
         [SerializeField, Min(0f)] private float _playerAttackSpeed = 1f;
 
+        [Header("Chain Lightning")]
+        [Tooltip("A monster is chained only when it is within this distance of the previous monster.")]
+        [SerializeField, Min(0f)] private float _chainLightningRange = 3f;
+        [Tooltip("Maximum number of monsters one chain can jump to.")]
+        [SerializeField, Min(1)] private int _chainLightningMaxCount = 3;
+        [SerializeField, Min(0.01f)] private float _chainLightningLineSeconds = 0.2f;
+        [SerializeField, Min(0.01f)] private float _chainLightningLineWidth = 0.1f;
+        [Tooltip("Glow color. The core line is always white.")]
+        [SerializeField] private Color _chainLightningColor = new(0.4f, 0.5f, 1f, 1f);
+        [Tooltip("Glow line width is the line width times this.")]
+        [SerializeField, Min(1f)] private float _chainLightningGlowWidthScale = 3f;
+        [Tooltip("Approximate distance between zigzag points.")]
+        [SerializeField, Min(0.05f)] private float _chainLightningSegmentLength = 0.3f;
+        [Tooltip("Max sideways offset of each zigzag point.")]
+        [SerializeField, Min(0f)] private float _chainLightningJitter = 0.2f;
+        [Tooltip("Seconds between re-randomizing the zigzag, for a flicker.")]
+        [SerializeField, Min(0.01f)] private float _chainLightningFlickerSeconds = 0.04f;
+
         [Header("Slot Machine")]
         [Range(0f, 1f)] [SerializeField] private float _slotJackpotChance = 0.2f;
+        [Tooltip("Current HP spent on each spin.")]
+        [SerializeField, Min(0f)] private float _slotSpinHpCost = 10f;
 
         public float HpTrailHoldSeconds => _hpTrailHoldSeconds;
         public float HpTrailMinSpeed => _hpTrailMinSpeed;
@@ -66,8 +87,19 @@ namespace InGame.System
         public float MonsterKnockbackDistance => _monsterKnockbackDistance;
         public float MonsterKnockbackSeconds => _monsterKnockbackSeconds;
 
+        public float ChainLightningRange => _chainLightningRange;
+        public int ChainLightningMaxCount => _chainLightningMaxCount;
+        public float ChainLightningLineSeconds => _chainLightningLineSeconds;
+        public float ChainLightningLineWidth => _chainLightningLineWidth;
+        public Color ChainLightningColor => _chainLightningColor;
+        public float ChainLightningGlowWidthScale => _chainLightningGlowWidthScale;
+        public float ChainLightningSegmentLength => _chainLightningSegmentLength;
+        public float ChainLightningJitter => _chainLightningJitter;
+        public float ChainLightningFlickerSeconds => _chainLightningFlickerSeconds;
+
         public float PlayerMaxHp => _playerMaxHp;
-        public int PlayerMaxPulls => _playerMaxPulls;
+        public float MinHpAfterSpend => _minHpAfterSpend;
+        public float SlotSpinHpCost => _slotSpinHpCost;
         public float PlayerAttack => _playerAttack;
         public float PlayerThirdAttackDamage => _playerThirdAttackDamage;
         public float PlayerAttackSpeed => _playerAttackSpeed;

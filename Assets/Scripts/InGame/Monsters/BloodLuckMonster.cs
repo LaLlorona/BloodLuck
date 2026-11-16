@@ -54,6 +54,8 @@ namespace InGame.Monsters
             };
         }
 
+        public Vector3 Position => _monsterComponent.transform.position;
+
         public void UpdateMonster(float deltaTime)
         {
             _behaviour.UpdateMonsterBehaviour(deltaTime);

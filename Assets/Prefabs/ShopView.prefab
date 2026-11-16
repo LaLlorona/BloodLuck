@@ -549,7 +549,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 2 PULLS
+  m_text: 20 HP
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1528,7 +1528,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'PULLS: 6'
+  m_text: 'HP: 100'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1613,6 +1613,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BloodLuck.ShopWalletView
   label: {fileID: 5537617446954807529}
+  labelPrefix: 'HP: '
 --- !u!1 &2264824896517021822
 GameObject:
   m_ObjectHideFlags: 0
@@ -2934,13 +2935,15 @@ MonoBehaviour:
   diceOverlay: {fileID: 2264824896517021822}
   diceRollButton: {fileID: 7638656205450499175}
   diceReturnButton: {fileID: 4240255622527994466}
+  diceCostLabel: {fileID: 2891764547694256420}
   wallet: {fileID: 7902867878609679821}
   infusionPool:
-  - {fileID: 11400000, guid: b7ff673a31f93498ea1da86cd1ecc9ee, type: 2}
   - {fileID: 11400000, guid: 649ecfc3a399f453dbc4f414b2fb3576, type: 2}
-  - {fileID: 11400000, guid: 4c4a86b413f4744948b8007f7469cac6, type: 2}
-  - {fileID: 11400000, guid: 7d4dab68a82f54b9aac22379d79c0de8, type: 2}
-  - {fileID: 11400000, guid: 9af8bae7ad5744c65b033254f365ded5, type: 2}
+  - {fileID: 11400000, guid: 9e9c7ea8110c4c45949fa478c375dfbb, type: 2}
+  - {fileID: 11400000, guid: ef1d1bdf8b224599a15176082b939637, type: 2}
+  - {fileID: 11400000, guid: d5b0a272d087409bae2b7427bac916f6, type: 2}
+  - {fileID: 11400000, guid: 169a30235098416abdbeb1ec6e48747b, type: 2}
+  hpPerCostUnit: 10
 --- !u!114 &7508696392024018627
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2994,7 +2997,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
   m_UseReflectionProbes: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 100

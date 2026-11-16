@@ -28,6 +28,7 @@ namespace InGame.System
             _bloodLuckContext.Register(new BloodLuckGameResultManager(parameter));
             _bloodLuckContext.Register(new BloodLuckCheatManager());
             _bloodLuckContext.Register(new BloodLuckPlayerManager(parameter));
+            _bloodLuckContext.Register(new BloodLuckCameraManager(parameter));
             // Register new systems (IBloodLuckContext) here.
         }
 

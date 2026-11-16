@@ -60,6 +60,70 @@ namespace InGame.Managers
             }
         }
 
+        // Must be called before the hit monsters take damage, because dead monsters lose their position.
+        public void ApplyChainLightning(IReadOnlyList<BloodLuckMonster> hitMonsters, float damage)
+        {
+            if (damage <= 0f || hitMonsters.Count == 0)
+            {
+                return;
+            }
+
+            var visited = new HashSet<BloodLuckMonster>(hitMonsters);
+            var chainedMonsters = new List<BloodLuckMonster>();
+
+            foreach (var origin in hitMonsters)
+            {
+                var points = new List<Vector3> { origin.Position };
+                var current = origin.Position;
+
+                for (int i = 0; i < _inGameParameter.ChainLightningMaxCount; i++)
+                {
+                    var next = FindNearestMonster(current, visited, _inGameParameter.ChainLightningRange);
+                    if (next == null)
+                    {
+                        break;
+                    }
+
+                    visited.Add(next);
+                    chainedMonsters.Add(next);
+                    current = next.Position;
+                    points.Add(current);
+                }
+
+                if (points.Count > 1)
+                {
+                    _effectManager.ShowChainLightning(points);
+                }
+            }
+
+            foreach (var monster in chainedMonsters)
+            {
+                monster.OnMonsterDamage(damage);
+            }
+        }
+
+        private BloodLuckMonster FindNearestMonster(Vector3 from, HashSet<BloodLuckMonster> excluded, float maxDistance)
+        {
+            BloodLuckMonster nearest = null;
+            float nearestSqrDistance = maxDistance * maxDistance;
+            foreach (var monster in _monsters)
+            {
+                if (excluded.Contains(monster))
+                {
+                    continue;
+                }
+
+                float sqrDistance = (monster.Position - from).sqrMagnitude;
+                if (sqrDistance <= nearestSqrDistance)
+                {
+                    nearest = monster;
+                    nearestSqrDistance = sqrDistance;
+                }
+            }
+
+            return nearest;
+        }
+
         private void OnAllMonsterDied()
         {
             _bloodLuckWaveManager.OnWaveFinished();

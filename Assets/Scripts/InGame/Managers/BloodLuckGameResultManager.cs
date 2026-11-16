@@ -33,8 +33,7 @@ namespace InGame.Managers
             view.Show(
                 isVictory,
                 _waveManager.CurrentWaveNumber,
-                _playerStateManager.CurrentPulls,
-                _playerStateManager.MaxPulls,
+                _playerStateManager.CurrentHp,
                 RestartGame);
         }
 

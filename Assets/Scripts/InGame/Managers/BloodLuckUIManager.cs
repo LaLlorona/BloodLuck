@@ -34,7 +34,6 @@ namespace InGame.Managers
         {
             _hudView.SetWave(_waveManager.CurrentWaveNumber);
             _hudView.SetHp(_playerStateManager.CurrentHp, _playerStateManager.MaxHp);
-            _hudView.SetPulls(_playerStateManager.CurrentPulls, _playerStateManager.MaxPulls);
         }
     }
 }

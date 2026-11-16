@@ -38,8 +38,8 @@ namespace InGame.Managers
                 view.Init();
                 while (true)
                 {
-                    view.SetPulls(_playerStateManager.CurrentPulls, _playerStateManager.MaxPulls);
-                    if (_playerStateManager.CurrentPulls <= 0)
+                    view.SetHp(_playerStateManager.CurrentHp);
+                    if (!_playerStateManager.CanSpendHp(_parameter.SlotSpinHpCost))
                     {
                         await UniTask.Delay(TimeSpan.FromSeconds(EndDelaySeconds), DelayType.UnscaledDeltaTime, cancellationToken: ct);
                         return false;
@@ -48,11 +48,14 @@ namespace InGame.Managers
                     view.SetSpinInteractable(true);
                     await view.WaitSpinClickAsync(ct);
 
-                    _playerStateManager.SetCurrentPulls(_playerStateManager.CurrentPulls - 1);
-                    view.SetPulls(_playerStateManager.CurrentPulls, _playerStateManager.MaxPulls);
+                    if (!_playerStateManager.TrySpendHp(_parameter.SlotSpinHpCost))
+                    {
+                        continue;
+                    }
 
-                    bool isLastPull = _playerStateManager.CurrentPulls == 0;
-                    bool isJackpot = isLastPull || UnityEngine.Random.value < _parameter.SlotJackpotChance;
+                    view.SetHp(_playerStateManager.CurrentHp);
+
+                    bool isJackpot = UnityEngine.Random.value < _parameter.SlotJackpotChance;
                     int[] result = BuildResult(view.ReelCount, view.SymbolCount, isJackpot);
                     await view.PlaySpinAsync(result, ct);
 

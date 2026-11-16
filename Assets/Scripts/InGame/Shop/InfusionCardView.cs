@@ -14,7 +14,7 @@ namespace BloodLuck
         [SerializeField] private TMP_Text cost;
         [SerializeField] private GameObject contents;
 
-        public void SetInfusion(InfusionDefinition infusion)
+        public void SetInfusion(InfusionDefinition infusion, int hpCost)
         {
             bool hasInfusion = infusion != null;
             if (contents != null) contents.SetActive(hasInfusion);
@@ -28,7 +28,7 @@ namespace BloodLuck
             if (title != null) title.text = infusion.displayName;
             if (rarity != null) rarity.text = RarityLabel(infusion.rarity);
             if (description != null) description.text = infusion.description;
-            if (cost != null) cost.text = infusion.Cost + " PULL" + (infusion.Cost == 1 ? "" : "S");
+            if (cost != null) cost.text = hpCost + " HP";
         }
 
         private static string RarityLabel(InfusionRarity value) => value switch

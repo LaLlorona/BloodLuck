@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,11 +22,16 @@ namespace BloodLuck
         [SerializeField] private GameObject diceOverlay;
         [SerializeField] private Button diceRollButton;
         [SerializeField] private Button diceReturnButton;
+        [SerializeField] private TMP_Text diceCostLabel;
 
         [Header("Shop Data")]
         [Tooltip("Only for the standalone Shop_Prototype scene. In-game the wallet is passed to OpenShopAsync.")]
         [SerializeField] private SlotPullWallet wallet;
         [SerializeField] private List<InfusionDefinition> infusionPool = new List<InfusionDefinition>();
+        [Tooltip("HP charged for each cost unit of an infusion.")]
+        [SerializeField, Min(1)] private int hpPerCostUnit = 10;
+
+        private const int DiceCostUnits = 2;
 
         private IShopWallet _wallet;
 
@@ -162,11 +168,15 @@ namespace BloodLuck
             rarity == InfusionRarity.Bloodstained ? 5 :
             rarity == InfusionRarity.Bloodbound ? 2 : 1;
 
+        private int HpCost(InfusionDefinition infusion) => infusion.Cost * hpPerCostUnit;
+
+        private int DiceHpCost => DiceCostUnits * hpPerCostUnit;
+
         public void Buy(int slot)
         {
             if (diceRolling || !shopPanel.activeSelf || slot < 0 || slot >= offers.Count || offers[slot] == null) return;
             var infusion = offers[slot];
-            if (!_wallet.TrySpend(infusion.Cost)) return;
+            if (!_wallet.TrySpend(HpCost(infusion))) return;
             Grant(infusion);
             offers[slot] = null;
             RefreshButtons();
@@ -174,9 +184,9 @@ namespace BloodLuck
 
         public void BuyDice()
         {
-            if (diceRolling || !shopPanel.activeSelf || _wallet.Pulls < 2) return;
+            if (diceRolling || !shopPanel.activeSelf) return;
             var mythics = AvailableInfusions().FindAll(x => x.rarity == InfusionRarity.Bloodwrought);
-            if (mythics.Count == 0 || !_wallet.TrySpend(2)) return;
+            if (mythics.Count == 0 || !_wallet.TrySpend(DiceHpCost)) return;
 
             var reward = mythics[UnityEngine.Random.Range(0, mythics.Count)];
             diceRolling = true;
@@ -241,11 +251,12 @@ namespace BloodLuck
             for (int i = 0; i < cardButtons.Length; i++)
             {
                 var item = i < offers.Count ? offers[i] : null;
-                cardButtons[i].interactable = !diceRolling && item != null && _wallet.Pulls >= item.Cost;
+                cardButtons[i].interactable = !diceRolling && item != null && _wallet.CanSpend(HpCost(item));
                 if (cardViews != null && i < cardViews.Length && cardViews[i] != null)
-                    cardViews[i].SetInfusion(item);
+                    cardViews[i].SetInfusion(item, item != null ? HpCost(item) : 0);
             }
-            diceButton.interactable = !diceRolling && _wallet.Pulls >= 2 &&
+            if (diceCostLabel != null) diceCostLabel.text = DiceHpCost + " HP";
+            diceButton.interactable = !diceRolling && _wallet.CanSpend(DiceHpCost) &&
                 AvailableInfusions().Exists(x => x.rarity == InfusionRarity.Bloodwrought);
             if (leaveButton != null) leaveButton.interactable = !diceRolling;
         }

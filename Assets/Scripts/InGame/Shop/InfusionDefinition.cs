@@ -5,7 +5,11 @@ namespace BloodLuck
 {
     public enum InfusionRarity { Bloodstained, Bloodbound, Bloodwrought }
 
-    public enum InfusionPassiveKind { Special, MaxHp, Damage, AttackSpeed }
+    public enum InfusionPassiveKind
+    {
+        Special, MaxHp, Damage, AttackSpeed,
+        DoubleDash, DashDamage, ChainLightning, ThirdAttackBonus, LifeSteal
+    }
 
     [CreateAssetMenu(menuName = "BloodLuck/Infusion")]
     public class InfusionDefinition : ScriptableObject
@@ -29,6 +33,11 @@ namespace BloodLuck
             InfusionPassiveKind.MaxHp => new PlayerPassive.IncreaseMaxHp(passiveValue, operationMethod),
             InfusionPassiveKind.Damage => new PlayerPassive.IncreasePlayerDamage(passiveValue, operationMethod),
             InfusionPassiveKind.AttackSpeed => new PlayerPassive.AttackSpeedUp(passiveValue, operationMethod),
+            InfusionPassiveKind.DoubleDash => new PlayerPassive.DoubleDash(),
+            InfusionPassiveKind.DashDamage => new PlayerPassive.DashDamage(passiveValue, operationMethod),
+            InfusionPassiveKind.ChainLightning => new PlayerPassive.ChainLightning(passiveValue),
+            InfusionPassiveKind.ThirdAttackBonus => new PlayerPassive.ThirdAttackBonus(passiveValue, operationMethod),
+            InfusionPassiveKind.LifeSteal => new PlayerPassive.LifeSteal(passiveValue),
             _ => new PlayerPassive.SPECIAL_ABILITIES_HAHA()
         };
     }

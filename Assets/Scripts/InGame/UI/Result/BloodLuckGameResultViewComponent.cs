@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace InGame.UI
@@ -11,16 +12,18 @@ namespace InGame.UI
         [SerializeField] private GameObject _defeatRoot;
         [SerializeField] private TMP_Text _titleText;
         [SerializeField] private TMP_Text _waveText;
-        [SerializeField] private TMP_Text _pullsText;
+        [FormerlySerializedAs("_pullsText")]
+        [FormerlySerializedAs("_maxHpText")]
+        [SerializeField] private TMP_Text _hpText;
         [SerializeField] private Button _restartButton;
 
-        public void Show(bool isVictory, int reachedWave, int remainingPulls, int maxPulls, Action onRestart)
+        public void Show(bool isVictory, int reachedWave, float finalHp, Action onRestart)
         {
             _victoryRoot.SetActive(isVictory);
             _defeatRoot.SetActive(!isVictory);
             _titleText.text = isVictory ? "VICTORY" : "DEFEAT";
             _waveText.text = $"WAVE {reachedWave}";
-            _pullsText.text = $"{remainingPulls}/{maxPulls}";
+            _hpText.text = $"HP {Mathf.FloorToInt(finalHp)}";
 
             _restartButton.onClick.RemoveAllListeners();
             _restartButton.onClick.AddListener(() => onRestart?.Invoke());

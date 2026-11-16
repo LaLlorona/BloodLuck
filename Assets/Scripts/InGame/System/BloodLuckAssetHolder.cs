@@ -2,6 +2,7 @@ using InGame.Effects;
 using InGame.Monsters;
 using InGame.Projectiles;
 using InGame.UI;
+using Unity.Cinemachine;
 using UnityEngine;
 
 namespace InGame.System
@@ -15,6 +16,8 @@ namespace InGame.System
         [SerializeField] private BloodLuckSectorAreaEffectComponent _sectorAreaEffectPrefab;
 
         [SerializeField] private BloodLuckSlashEffectComponent _slashEffectPrefab;
+
+        [SerializeField] private Material _lightningLineMaterial;
 
         [SerializeField] private BloodLuckHudViewComponent _hudViewPrefab;
 
@@ -32,8 +35,12 @@ namespace InGame.System
 
         [SerializeField] private PlayerMovement _playerMovementComponent;
 
+        [SerializeField] private CinemachineCamera _inGameCamera;
+
+        public CinemachineCamera InGameCamera => _inGameCamera;
         public BloodLuckMonsterComponent GetBloodLuckMonsterComponent => _monsterComponent;
         public BloodLuckProjectileComponent ProjectilePrefab => _projectilePrefab;
+        public Material LightningLineMaterial => _lightningLineMaterial;
         public BloodLuckHudViewComponent HudViewPrefab => _hudViewPrefab;
         public BloodLuckSectorAreaEffectComponent SectorAreaEffectPrefab => _sectorAreaEffectPrefab;
         public BloodLuckSlashEffectComponent SlashEffectPrefab => _slashEffectPrefab;
