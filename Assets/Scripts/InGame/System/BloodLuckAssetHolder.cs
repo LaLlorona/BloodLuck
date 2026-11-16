@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using InGame.Effects;
 using InGame.Monsters;
 using InGame.Projectiles;
@@ -36,6 +38,16 @@ namespace InGame.System
         [SerializeField] private PlayerMovement _playerMovementComponent;
 
         [SerializeField] private CinemachineCamera _inGameCamera;
+
+        [SerializeField] private Sprite[] _perkIcons;
+
+        private Dictionary<string, Sprite> _perkIconsByName;
+
+        public Sprite GetPerkIcon(string iconName)
+        {
+            _perkIconsByName ??= _perkIcons.ToDictionary(icon => icon.name);
+            return _perkIconsByName.GetValueOrDefault(iconName);
+        }
 
         public CinemachineCamera InGameCamera => _inGameCamera;
         public BloodLuckMonsterComponent GetBloodLuckMonsterComponent => _monsterComponent;
