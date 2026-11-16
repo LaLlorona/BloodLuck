@@ -153,11 +153,10 @@ public class PlayerAttack : MonoBehaviour
         {
             playerAnimation.UpdateAnimState(PlayerAnimationState.Attack3);
         }
-
-        bool isThirdAttack = currentAttackComboIndex == ThirdAttackComboIndex;
-        PlaySlashEffect(isThirdAttack ? Color.red : Color.white);
+        
+        PlaySlashEffect();
         AudioManager.Instance?.PlaySwing();
-        float damage = isThirdAttack ? playerStateManager.ThirdAttack : playerStateManager.Attack;
+        float damage = attackState == AttackState.Attack3 ? playerStateManager.ThirdAttack : playerStateManager.Attack;
 
         // Check if any enemies are in the collider
         results.Clear();
