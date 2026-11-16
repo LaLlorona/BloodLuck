@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace InGame.System
 {
@@ -33,6 +34,7 @@ namespace InGame.System
                 return;
             }
 
+            Time.timeScale = 0f;
             CurrentGameState = new GameState.Paused();
         }
 
@@ -43,6 +45,7 @@ namespace InGame.System
                 return;
             }
 
+            Time.timeScale = 1f;
             CurrentGameState = new GameState.GameProceeding();
         }
 

@@ -19,6 +19,8 @@ namespace InGame.Managers
         private readonly BloodLuckInGameParameter _parameter;
         private readonly PlayerPassiveContainer _passiveContainer = new();
         private BloodLuckUIManager _uiManager;
+        private BloodLuckGameStateManager _gameStateManager;
+        private BloodLuckGameResultManager _gameResultManager;
 
         public BloodLuckPlayerStateManager(BloodLuckManagerParameter parameter)
         {
@@ -41,7 +43,7 @@ namespace InGame.Managers
                 ApplyMaxHpChange(previousMaxHp);
             }
         }
-        
+
         private void ApplyMaxHpChange(float previousMaxHp)
         {
             float delta = MaxHp - previousMaxHp;
@@ -85,11 +87,17 @@ namespace InGame.Managers
         public void WireContextAfterInit(BloodLuckContextMap contextMap)
         {
             _uiManager = contextMap.GetRegisteredInstance<BloodLuckUIManager>();
+            _gameStateManager = contextMap.GetRegisteredInstance<BloodLuckGameStateManager>();
+            _gameResultManager = contextMap.GetRegisteredInstance<BloodLuckGameResultManager>();
         }
 
         public void TakeDamage(float amount)
         {
             SetCurrentHp(CurrentHp - amount);
+            if (CurrentHp <= 0)
+            {
+                HandlePlayerDeath();
+            }
         }
 
         public void Heal(float amount)
@@ -114,6 +122,12 @@ namespace InGame.Managers
             CurrentHp = clamped;
             _uiManager.RefreshHud();
             BalanceChanged?.Invoke(Mathf.FloorToInt(CurrentHp));
+        }
+
+        private void HandlePlayerDeath()
+        {
+            _gameStateManager.FinishGame();
+            _gameResultManager.ShowResult(false);
         }
     }
 }

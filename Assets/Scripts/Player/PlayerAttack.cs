@@ -22,7 +22,7 @@ public class PlayerAttack : MonoBehaviour
     private const int ThirdAttackComboIndex = 2;
 
     [Header("References")]
-    [SerializeField] private Collider2D weaponCollider;
+    public Collider2D WeaponCollider;
     [SerializeField] LayerMask enemyLayer;
     private PlayerInputManager playerInput;
 
@@ -119,7 +119,7 @@ public class PlayerAttack : MonoBehaviour
 
         // Check if any enemies are in the collider
         results.Clear();
-        weaponCollider.Overlap(filter, results);
+        WeaponCollider.Overlap(filter, results);
         hitMonsters.Clear();
         foreach (Collider2D col in results)
         {
@@ -173,7 +173,7 @@ public class PlayerAttack : MonoBehaviour
         if (attackState != AttackState.Ready) return;
 
         results.Clear();
-        weaponCollider.Overlap(filter, results);
+        WeaponCollider.Overlap(filter, results);
         foreach (Collider2D col in results)
         {
             if (col.TryGetComponent(out BloodLuckMonsterComponent enemy))

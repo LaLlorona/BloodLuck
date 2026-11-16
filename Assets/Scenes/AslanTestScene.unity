@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 42476099}
   - component: {fileID: 42476100}
   - component: {fileID: 42476101}
+  - component: {fileID: 42476102}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -195,7 +196,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.0003105, y: 1.5727539}
+  m_Size: {x: 1.0007107, y: 1.1785713}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -232,7 +233,7 @@ MonoBehaviour:
   moveSpeed: 5
   lastMoveDir: {x: 0, y: 0}
   maxDashDistance: 2
-  spriteAngleOffset: -90
+  spriteAngleOffset: 0
   facingIndex: 0
 --- !u!114 &42476098
 MonoBehaviour:
@@ -285,10 +286,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d57e66a6265342b4c8423d5360847201, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
-  weaponCollider: {fileID: 73635954}
+  WeaponCollider: {fileID: 73635954}
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 128
+  slashRadius: 2
+  slashAngle: 140
   comboTime: 1
   basicAttackCooldown: 0.5
   specialAttackCooldown: 0
@@ -314,6 +317,86 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &42476102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 42476094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 707cc405cb350b84ba33f06bbf9c8519, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimationController
+  Animator: {fileID: 42476101}
+  playerAnimations:
+  - Direction: 0
+    AnimationStateNameDict:
+    - key: 0
+      value: idle-right
+    - key: 1
+      value: run-right
+    - key: 2
+      value: 
+  - Direction: 1
+    AnimationStateNameDict:
+    - key: 0
+      value: idle-back-right
+    - key: 1
+      value: run-back-right
+    - key: 2
+      value: 
+  - Direction: 2
+    AnimationStateNameDict:
+    - key: 0
+      value: idle-back
+    - key: 2
+      value: 
+    - key: 1
+      value: run-back
+  - Direction: 3
+    AnimationStateNameDict:
+    - key: 0
+      value: idle-back-left
+    - key: 1
+      value: run-back-left
+    - key: 2
+      value: 
+  - Direction: 4
+    AnimationStateNameDict:
+    - key: 0
+      value: idle-left
+    - key: 1
+      value: run-left
+    - key: 2
+      value: 
+  - Direction: 5
+    AnimationStateNameDict:
+    - key: 0
+      value: idle-front-left
+    - key: 1
+      value: run-front-left
+    - key: 2
+      value: 
+  - Direction: 6
+    AnimationStateNameDict:
+    - key: 0
+      value: idle-front
+    - key: 1
+      value: run-front
+    - key: 2
+      value: 
+  - Direction: 7
+    AnimationStateNameDict:
+    - key: 0
+      value: idle-front-right
+    - key: 1
+      value: run-front-right
+    - key: 2
+      value: 
+  CurrDirection: 0
+  CurrAnimState: 0
 --- !u!1 &73635952
 GameObject:
   m_ObjectHideFlags: 0
@@ -466,7 +549,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 3625043607559282579, guid: 19fb86013d8c24d6cb8410c0aadf30fa, type: 3}
-  m_Color: {r: 0.14306249, g: 0.14150941, b: 0.18867922, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -849,10 +932,12 @@ MonoBehaviour:
   _monsterComponent: {fileID: 4306148354156657894, guid: 5e4a0159e15a0c94fb646ae50f3c950f, type: 3}
   _perkSelectionViewPrefab: {fileID: 3061619782537870256, guid: d1b4909d79e98714a962489e91294eee, type: 3}
   _sectorAreaEffectPrefab: {fileID: 1836139258916495295, guid: e2fd02bc4c99772499611302a48700d6, type: 3}
+  _slashEffectPrefab: {fileID: 6100000000000000005, guid: 9e3f5b7d1a2c4e6f8b0d2a4c6e8f1b3d, type: 3}
   _hudViewPrefab: {fileID: 2902138760569334641, guid: 2cfd6a99aac1e064f9b2af9a099c0bc8, type: 3}
   _projectilePrefab: {fileID: 841274627952102469, guid: 3c5431626b9d0a3428bb22373ce7dd36, type: 3}
   _slotMachineViewPrefab: {fileID: 7302083884087231852, guid: a6830c08dc29dc044bfbb0c1077ce4f3, type: 3}
   _gameResultViewPrefab: {fileID: 8882517846003980211, guid: 2b1b927274022af4db82215e0587231c, type: 3}
+  _shopViewPrefab: {fileID: 6421780111985712353, guid: 22a5738c87106ee44ad81d20960d9461, type: 3}
   _playerAttackComponent: {fileID: 42476100}
   _playerInputManagerComponent: {fileID: 42476098}
   _playerMovementComponent: {fileID: 42476097}
@@ -871,41 +956,30 @@ MonoBehaviour:
   assetHolder: {fileID: 2114054402}
   dataHolder: {fileID: 2114054499}
   inGameParameter:
-    _monsterSpawnCount: 1
     _monsterSpawnRadius: 5
     _monsterMoveSpeed: 2
-    _monsterMaxHp: 10
+    _hpTrailHoldSeconds: 0.4
+    _hpTrailMinSpeed: 0.3
+    _hpTrailSpeedPerGap: 2
     _monsterAttackTriggerDistance: 2
     _monsterAttackChargeSeconds: 1.5
     _monsterAttackWaitSeconds: 1
     _monsterAttackRadius: 3
     _monsterAttackAngle: 90
-    _monsterAttackDamage: 10
-    _rangedMonsterRatio: 0.3
     _monsterRangedAttackRange: 6
     _monsterRangedStopSeconds: 1.5
     _monsterProjectileSpeed: 6
-    _monsterProjectileDamage: 5
     _monsterProjectileHitRadius: 0.4
     _monsterProjectileLifetime: 5
+    _monsterHitStunSeconds: 1
+    _monsterKnockbackDistance: 0.5
+    _monsterKnockbackSeconds: 0.15
     _playerMaxHp: 100
     _playerMaxPulls: 3
     _playerAttack: 10
+    _playerThirdAttackDamage: 20
     _playerAttackSpeed: 1
     _slotJackpotChance: 0.2
---- !u!114 &2114054499
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2114054401}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23f2c6b73d8f4043ab47ae694ae73c1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InGame.System.BloodLuckDataHolder
-  _waveTable: {fileID: 11400000, guid: 78c6abdb62a14f1abfebf84b7069b6a0, type: 2}
 --- !u!4 &2114054404
 Transform:
   m_ObjectHideFlags: 0
@@ -921,6 +995,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2114054499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2114054401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23f2c6b73d8f4043ab47ae694ae73c1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InGame.System.BloodLuckDataHolder
+  _waveTable: {fileID: 11400000, guid: 78c6abdb62a14f1abfebf84b7069b6a0, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
