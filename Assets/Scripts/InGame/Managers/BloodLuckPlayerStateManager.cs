@@ -20,11 +20,11 @@ namespace InGame.Managers
         private readonly PlayerPassiveContainer _passiveContainer = new();
         private BloodLuckUIManager _uiManager;
 
-        public BloodLuckPlayerStateManager(BloodLuckInGameParameter parameter)
+        public BloodLuckPlayerStateManager(BloodLuckManagerParameter parameter)
         {
-            _parameter = parameter;
+            _parameter = parameter.InGameParameter;
             CurrentHp = MaxHp;
-            MaxPulls = parameter.PlayerMaxPulls;
+            MaxPulls = _parameter.PlayerMaxPulls;
             CurrentPulls = MaxPulls;
         }
 

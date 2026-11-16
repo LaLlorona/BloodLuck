@@ -11,9 +11,9 @@ namespace InGame.Managers
         private BloodLuckPlayerStateManager _playerStateManager;
         private BloodLuckWaveManager _waveManager;
 
-        public BloodLuckGameResultManager(BloodLuckAssetHolder assetHolder)
+        public BloodLuckGameResultManager(BloodLuckManagerParameter parameter)
         {
-            _assetHolder = assetHolder;
+            _assetHolder = parameter.AssetHolder;
         }
 
         public UniTask InitAsync()

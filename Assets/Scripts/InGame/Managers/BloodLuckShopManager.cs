@@ -9,9 +9,9 @@ namespace InGame.Managers
         private readonly BloodLuckAssetHolder _assetHolder;
         private BloodLuckPlayerStateManager _playerStateManager;
 
-        public BloodLuckShopManager(BloodLuckAssetHolder assetHolder)
+        public BloodLuckShopManager(BloodLuckManagerParameter parameter)
         {
-            _assetHolder = assetHolder;
+            _assetHolder = parameter.AssetHolder;
         }
 
         public UniTask InitAsync()

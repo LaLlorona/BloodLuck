@@ -11,11 +11,11 @@ namespace InGame.Managers
 
         public BloodLuckUpdatePriority UpdatePriority => BloodLuckUpdatePriority.InputUpdate;
 
-        public BloodLuckPlayerManager(BloodLuckAssetHolder assetHolder)
+        public BloodLuckPlayerManager(BloodLuckManagerParameter parameter)
         {
-            _playerAttack = assetHolder.GetPlayerAttackComponent;
-            _playerInputManager = assetHolder.GetPlayerInputManagerComponent;
-            _playerMovement = assetHolder.GetPlayerMovementComponent;
+            _playerAttack = parameter.AssetHolder.GetPlayerAttackComponent;
+            _playerInputManager = parameter.AssetHolder.GetPlayerInputManagerComponent;
+            _playerMovement = parameter.AssetHolder.GetPlayerMovementComponent;
         }
 
         public void GameUpdate(float deltaTime)
@@ -34,6 +34,9 @@ namespace InGame.Managers
         {
             var updateLoopManager = contextMap.GetRegisteredInstance<BloodLuckGameUpdateLoopManager>();
             updateLoopManager.RegisterUpdatable(this);
+            _playerAttack.InitializePlayerAttack(
+                contextMap.GetRegisteredInstance<BloodLuckEffectManager>(),
+                contextMap.GetRegisteredInstance<BloodLuckPlayerStateManager>());
         }
     }
 }

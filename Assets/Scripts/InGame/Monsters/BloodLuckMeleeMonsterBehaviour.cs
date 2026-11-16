@@ -16,6 +16,7 @@ namespace InGame.Monsters
 
         private readonly Transform _monsterTransform;
         private readonly BloodLuckInGameParameter _parameter;
+        private readonly float _attackDamage;
         private readonly Transform _player;
         private readonly BloodLuckPlayerStateManager _playerStateManager;
         private readonly BloodLuckEffectManager _effectManager;
@@ -29,12 +30,14 @@ namespace InGame.Monsters
         public BloodLuckMeleeMonsterBehaviour(
             Transform monsterTransform,
             BloodLuckInGameParameter parameter,
+            float attackDamage,
             Transform player,
             BloodLuckPlayerStateManager playerStateManager,
             BloodLuckEffectManager effectManager)
         {
             _monsterTransform = monsterTransform;
             _parameter = parameter;
+            _attackDamage = attackDamage;
             _player = player;
             _playerStateManager = playerStateManager;
             _effectManager = effectManager;
@@ -110,7 +113,7 @@ namespace InGame.Monsters
         {
             if (IsPlayerInsideSector())
             {
-                BloodLuckDamageLogic.ApplyDamageToPlayer(_playerStateManager, _parameter.MonsterAttackDamage);
+                BloodLuckDamageLogic.ApplyDamageToPlayer(_playerStateManager, _attackDamage);
             }
 
             RemoveSectorEffect();

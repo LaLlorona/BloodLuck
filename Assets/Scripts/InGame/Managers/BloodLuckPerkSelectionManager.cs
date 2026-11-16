@@ -14,10 +14,10 @@ namespace InGame.Managers
         private readonly global::System.Random _random = new();
         private BloodLuckPlayerStateManager _playerStateManager;
 
-        public BloodLuckPerkSelectionManager(BloodLuckAssetHolder assetHolder, BloodLuckInGameParameter inGameParameter)
+        public BloodLuckPerkSelectionManager(BloodLuckManagerParameter parameter)
         {
-            _assetHolder = assetHolder;
-            _inGameParameter = inGameParameter;
+            _assetHolder = parameter.AssetHolder;
+            _inGameParameter = parameter.InGameParameter;
         }
 
         public UniTask InitAsync()

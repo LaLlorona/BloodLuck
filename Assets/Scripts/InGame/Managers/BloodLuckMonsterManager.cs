@@ -18,10 +18,10 @@ namespace InGame.Managers
         private BloodLuckMonsterProjectileManager _monsterProjectileManager;
         private PlayerMovement _player;
 
-        public BloodLuckMonsterManager(BloodLuckAssetHolder assetHolder, BloodLuckInGameParameter inGameParameter)
+        public BloodLuckMonsterManager(BloodLuckManagerParameter parameter)
         {
-            _assetHolder = assetHolder;
-            _inGameParameter = inGameParameter;
+            _assetHolder = parameter.AssetHolder;
+            _inGameParameter = parameter.InGameParameter;
         }
         public UniTask InitAsync()
         {
@@ -65,29 +65,25 @@ namespace InGame.Managers
             _bloodLuckWaveManager.OnWaveFinished();
         }
 
-        public void SpawnMonsters()
+        public void SpawnMonsters(BloodLuckWaveData wave)
         {
             Transform target = _player.transform;
-            for (int i = 0; i < _inGameParameter.MonsterSpawnCount; i++)
+            foreach (var entry in wave.Monsters)
             {
-                _monsters.Add(new BloodLuckMonster(
-                    _assetHolder,
-                    GetRandomSpawnPosition(),
-                    GetRandomMonsterType(),
-                    _inGameParameter,
-                    target,
-                    _playerStateManager,
-                    _effectManager,
-                    _monsterProjectileManager,
-                    this));
+                for (int i = 0; i < entry.Count; i++)
+                {
+                    _monsters.Add(new BloodLuckMonster(
+                        _assetHolder,
+                        GetRandomSpawnPosition(),
+                        entry,
+                        _inGameParameter,
+                        target,
+                        _playerStateManager,
+                        _effectManager,
+                        _monsterProjectileManager,
+                        this));
+                }
             }
-        }
-
-        private BloodLuckMonsterType GetRandomMonsterType()
-        {
-            return Random.value < _inGameParameter.RangedMonsterRatio
-                ? BloodLuckMonsterType.Ranged
-                : BloodLuckMonsterType.Melee;
         }
 
         private Vector3 GetRandomSpawnPosition()

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using InGame.Managers;
 using InGame.Monsters;
 using UnityEngine;
 
@@ -22,6 +23,13 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] LayerMask enemyLayer;
     private PlayerInputManager playerInput;
 
+    [Header("Slash Effect")]
+    [SerializeField] private float slashRadius = 2f;
+    [SerializeField] private float slashAngle = 140f;
+    private BloodLuckEffectManager effectManager;
+    private BloodLuckPlayerStateManager playerStateManager;
+    private PlayerMovement playerMovement;
+
     [Header("Attack Settings")]
     [SerializeField] private float comboTime;
     [SerializeField] private float basicAttackCooldown;
@@ -37,6 +45,7 @@ public class PlayerAttack : MonoBehaviour
     void Awake()
     {
         playerInput = GetComponent<PlayerInputManager>();
+        playerMovement = GetComponent<PlayerMovement>();
 
         filter = new ContactFilter2D();
         filter.SetLayerMask(enemyLayer);
@@ -52,6 +61,12 @@ public class PlayerAttack : MonoBehaviour
     {
         playerInput.BasicAttack -= HandleAttack;
         playerInput.SpecialAttack -= HandleSpecial;
+    }
+
+    public void InitializePlayerAttack(BloodLuckEffectManager manager, BloodLuckPlayerStateManager stateManager)
+    {
+        effectManager = manager;
+        playerStateManager = stateManager;
     }
 
     public void GameUpdate(float deltaTime)
@@ -86,8 +101,13 @@ public class PlayerAttack : MonoBehaviour
 
     private void HandleAttack()
     {
-        // TODO: PLAY ANIMATION BASED ON currentAttackComboIndex
+        // TODO: PLAY ANIMATION BASED ON currentAttack`ComboIndex
         if (attackState != AttackState.Ready) return;
+
+        
+        
+        
+        PlaySlashEffect();
 
         // Check if any enemies are in the collider
         results.Clear();
@@ -97,9 +117,7 @@ public class PlayerAttack : MonoBehaviour
             if (col.TryGetComponent(out BloodLuckMonsterComponent enemy))
             {
                 // TODO: DEAL DAMAGE TO enemy HERE (DEAL KNOCKBACK, FLASH, ETC)
-                //ToDO: calculatePlayerDamage
-                enemy.OnMonsterDamage(5.0f);
-                
+                enemy.OnMonsterDamage(playerStateManager.Attack);
             }
         }
 
@@ -120,6 +138,19 @@ public class PlayerAttack : MonoBehaviour
         lastBasicAttackTime = Time.time;
         attackCooldown = basicAttackCooldown;
         attackState = AttackState.Cooldown;
+    }
+
+    private void PlaySlashEffect()
+    {
+        if (effectManager == null) return;
+
+        Vector2 direction = playerMovement != null && playerMovement.lastMoveDir.sqrMagnitude > 0.0001f
+            ? playerMovement.lastMoveDir
+            : (Vector2)transform.right;
+
+        // Alternate the swing direction every combo hit.
+        bool clockwise = currentAttackComboIndex % 2 == 0;
+        effectManager.PlaySlash(transform.position, direction, slashRadius, slashAngle, clockwise);
     }
 
     private void HandleSpecial()

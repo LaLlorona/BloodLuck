@@ -13,10 +13,10 @@ namespace InGame.Managers
         private readonly BloodLuckInGameParameter _parameter;
         private BloodLuckPlayerStateManager _playerStateManager;
 
-        public BloodLuckSlotMachineManager(BloodLuckAssetHolder assetHolder, BloodLuckInGameParameter parameter)
+        public BloodLuckSlotMachineManager(BloodLuckManagerParameter parameter)
         {
-            _assetHolder = assetHolder;
-            _parameter = parameter;
+            _assetHolder = parameter.AssetHolder;
+            _parameter = parameter.InGameParameter;
         }
 
         public UniTask InitAsync()

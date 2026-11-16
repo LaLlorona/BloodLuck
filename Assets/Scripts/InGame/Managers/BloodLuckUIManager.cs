@@ -12,9 +12,9 @@ namespace InGame.Managers
         private BloodLuckWaveManager _waveManager;
         private BloodLuckHudViewComponent _hudView;
 
-        public BloodLuckUIManager(BloodLuckAssetHolder assetHolder)
+        public BloodLuckUIManager(BloodLuckManagerParameter parameter)
         {
-            _assetHolder = assetHolder;
+            _assetHolder = parameter.AssetHolder;
         }
 
         public UniTask InitAsync()

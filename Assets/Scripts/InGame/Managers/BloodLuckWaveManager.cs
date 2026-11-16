@@ -8,9 +8,15 @@ namespace InGame.Managers
         private BloodLuckGameUpdateLoopManager _updateLoopManager;
         private BloodLuckMonsterManager _monsterManager;
         private BloodLuckUIManager _uiManager;
+        private readonly BloodLuckWaveTable _waveTable;
         private int _currentWaveNumber;
 
         public int CurrentWaveNumber => _currentWaveNumber;
+
+        public BloodLuckWaveManager(BloodLuckManagerParameter parameter)
+        {
+            _waveTable = parameter.DataHolder.WaveTable;
+        }
 
         public UniTask InitAsync()
         {
@@ -47,7 +53,7 @@ namespace InGame.Managers
 
         public void OnWaveStarted()
         {
-            _monsterManager.SpawnMonsters();
+            _monsterManager.SpawnMonsters(_waveTable.GetWave(_currentWaveNumber));
         }
     }
 }

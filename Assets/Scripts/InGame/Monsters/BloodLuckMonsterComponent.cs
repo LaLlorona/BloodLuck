@@ -1,10 +1,12 @@
-﻿using UnityEngine;
+﻿using InGame.System;
+using UnityEngine;
 
 namespace InGame.Monsters
 {
     public class BloodLuckMonsterComponent : MonoBehaviour
     {
         [SerializeField] private SpriteRenderer _spriteRenderer;
+        [SerializeField] private BloodLuckMonsterHPBarComponent _hpBar;
         [SerializeField] private Color _hitFlashColor = Color.white;
         [SerializeField, Min(0.01f)] private float _hitFlashSeconds = 0.15f;
 
@@ -12,8 +14,9 @@ namespace InGame.Monsters
         private float _flashElapsed;
         private bool _isFlashing;
         private BloodLuckMonster _bloodLuckMonster;
+        private BloodLuckInGameParameter _parameter;
 
-        public void Init(BloodLuckMonster bloodLuckMonster)
+        public void Init(BloodLuckMonster bloodLuckMonster, BloodLuckInGameParameter parameter)
         {
             if (_spriteRenderer == null)
             {
@@ -21,8 +24,14 @@ namespace InGame.Monsters
             }
 
             _bloodLuckMonster = bloodLuckMonster;
+            _parameter = parameter;
             _baseColor = _spriteRenderer.color;
             _isFlashing = false;
+        }
+
+        public void SetHp(float currentHp, float maxHp)
+        {
+            _hpBar.SetHp(currentHp, maxHp, _parameter);
         }
 
         public void OnMonsterDamage(float damage)
@@ -39,6 +48,8 @@ namespace InGame.Monsters
 
         public void CustomUpdate(float deltaTime)
         {
+            _hpBar.UpdateTrail(deltaTime);
+
             if (!_isFlashing)
             {
                 return;

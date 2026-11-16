@@ -14,6 +14,7 @@ namespace InGame.Monsters
 
         private readonly Transform _monsterTransform;
         private readonly BloodLuckInGameParameter _parameter;
+        private readonly float _projectileDamage;
         private readonly Transform _player;
         private readonly BloodLuckMonsterProjectileManager _monsterProjectileManager;
 
@@ -23,11 +24,13 @@ namespace InGame.Monsters
         public BloodLuckRangedMonsterBehaviour(
             Transform monsterTransform,
             BloodLuckInGameParameter parameter,
+            float projectileDamage,
             Transform player,
             BloodLuckMonsterProjectileManager monsterProjectileManager)
         {
             _monsterTransform = monsterTransform;
             _parameter = parameter;
+            _projectileDamage = projectileDamage;
             _player = player;
             _monsterProjectileManager = monsterProjectileManager;
         }
@@ -72,7 +75,7 @@ namespace InGame.Monsters
                 monsterPosition,
                 playerPosition - monsterPosition,
                 _parameter.MonsterProjectileSpeed,
-                _parameter.MonsterProjectileDamage,
+                _projectileDamage,
                 _parameter.MonsterProjectileHitRadius,
                 _parameter.MonsterProjectileLifetime);
 

@@ -826,6 +826,7 @@ GameObject:
   - component: {fileID: 2114054404}
   - component: {fileID: 2114054403}
   - component: {fileID: 2114054402}
+  - component: {fileID: 2114054499}
   m_Layer: 0
   m_Name: BlooudLuckBoostrap
   m_TagString: Untagged
@@ -868,6 +869,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InGame.System.BloodLuckGameBootstrap
   assetHolder: {fileID: 2114054402}
+  dataHolder: {fileID: 2114054499}
   inGameParameter:
     _monsterSpawnCount: 1
     _monsterSpawnRadius: 5
@@ -891,6 +893,19 @@ MonoBehaviour:
     _playerAttack: 10
     _playerAttackSpeed: 1
     _slotJackpotChance: 0.2
+--- !u!114 &2114054499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2114054401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23f2c6b73d8f4043ab47ae694ae73c1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InGame.System.BloodLuckDataHolder
+  _waveTable: {fileID: 11400000, guid: 78c6abdb62a14f1abfebf84b7069b6a0, type: 2}
 --- !u!4 &2114054404
 Transform:
   m_ObjectHideFlags: 0
