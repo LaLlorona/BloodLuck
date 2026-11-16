@@ -14,6 +14,13 @@ namespace BloodLuck
         [SerializeField] private AudioClip death;
         [SerializeField] private AudioClip[] shopHovers;
         [SerializeField] private AudioClip shopPurchase;
+        [Header("SFX Volumes")]
+        [SerializeField, Range(0f, 1f)] private float footstepVolume = 1f;
+        [SerializeField, Range(0f, 1f)] private float swingVolume = 1f;
+        [SerializeField, Range(0f, 1f)] private float impactVolume = 1f;
+        [SerializeField, Range(0f, 1f)] private float deathVolume = 1f;
+        [SerializeField, Range(0f, 1f)] private float shopHoverVolume = 1f;
+        [SerializeField, Range(0f, 1f)] private float shopPurchaseVolume = 1f;
         [Header("Optional music clips")]
         [SerializeField] private AudioClip combatMusic;
         [SerializeField] private AudioClip shopMusic;
@@ -48,24 +55,24 @@ namespace BloodLuck
         public void PlayMainMenuMusic() => PlayMusic(mainMenuMusic);
         public void PlayFinalSlotMachineMusic() => PlayMusic(finalSlotMachineMusic);
 
-        private void PlayRandom(AudioClip[] clips)
+        private void PlayRandom(AudioClip[] clips, float volumeScale)
         {
             if (clips == null || clips.Length == 0) return;
             var clip = clips[Random.Range(0, clips.Length)];
-            if (clip != null) sfxSource.PlayOneShot(clip);
+            if (clip != null) sfxSource.PlayOneShot(clip, volumeScale);
         }
 
-        public void PlaySwing() => PlayRandom(swings);
-        public void PlayHit() => PlayRandom(hits);
-        public void PlayFootstep() => PlayRandom(footsteps);
-        public void PlayHover() => PlayRandom(shopHovers);
+        public void PlaySwing() => PlayRandom(swings, swingVolume);
+        public void PlayHit() => PlayRandom(hits, impactVolume);
+        public void PlayFootstep() => PlayRandom(footsteps, footstepVolume);
+        public void PlayHover() => PlayRandom(shopHovers, shopHoverVolume);
         public void PlayPurchase()
         {
-            if (shopPurchase != null) sfxSource.PlayOneShot(shopPurchase);
+            if (shopPurchase != null) sfxSource.PlayOneShot(shopPurchase, shopPurchaseVolume);
         }
         public void PlayDeath()
         {
-            if (death != null) sfxSource.PlayOneShot(death);
+            if (death != null) sfxSource.PlayOneShot(death, deathVolume);
         }
     }
 }
