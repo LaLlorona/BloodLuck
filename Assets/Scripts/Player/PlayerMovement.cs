@@ -49,7 +49,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void GameUpdate(float deltaTime)
     {
-        if (!playerAttack.isAttacking)
+        if (!playerAttack.IsAttacking)
         {
             UpdateRotation();
         }
@@ -63,7 +63,7 @@ public class PlayerMovement : MonoBehaviour
             playerManager.HandlePlayerDash(dashStart, transform.position);
         }
 
-        if (!isDashing && !playerAttack.isAttacking)
+        if (!isDashing && !playerAttack.IsAttacking)
         {
             if (playerInput.MoveDir.magnitude != 0)
             {

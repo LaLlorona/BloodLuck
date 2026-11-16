@@ -23,6 +23,12 @@ namespace Player
             var kind = (Kind)random.Next(3);
             var method = random.Next(2) == 0 ? OperationMethod.Add : OperationMethod.Multiply;
 
+            // ONLY ALLOW MULTIPLY OPERATION ON ATTACK SPEED
+            if (kind == Kind.AttackSpeed)
+            {
+                method = OperationMethod.Multiply;
+            }
+
             var (min, max, step) = GetRange(kind, method);
             int steps = (int)System.Math.Round((max - min) / step);
             float value = min + random.Next(steps + 1) * step;
@@ -32,7 +38,7 @@ namespace Player
             {
                 Kind.Damage      => new PlayerPassive.IncreasePlayerDamage(value, method),
                 Kind.MaxHp       => new PlayerPassive.IncreaseMaxHp(value, method),
-                Kind.AttackSpeed => new PlayerPassive.AttackSpeedUp(value, method),
+                Kind.AttackSpeed => new PlayerPassive.AttackSpeedUp(value, method), 
                 _ => throw new System.ArgumentOutOfRangeException()
             };
         }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using InGame.Managers;
 using InGame.Monsters;
@@ -41,7 +40,7 @@ public class PlayerAttack : MonoBehaviour
     private PlayerMovement playerMovement;
 
     [Header("Attack Settings")]
-    public bool isAttacking;
+    public bool IsAttacking;
     [SerializeField] private float comboTime;
     [SerializeField] private float basicAttackCooldown;
     [SerializeField] private float specialAttackCooldown;
@@ -49,8 +48,6 @@ public class PlayerAttack : MonoBehaviour
     public bool IsAttackInterruptable;
     private float attackCooldown;
     private AttackState attackState;
-    private AttackType lastAttackType;
-    private float lastBasicAttackTime;
     private int currentAttackComboIndex;
     ContactFilter2D filter;
     List<Collider2D> results = new();
@@ -148,15 +145,15 @@ public class PlayerAttack : MonoBehaviour
 
         if (currentAttackComboIndex == 0)
         {
-            playerAnimation.UpdateAnimState(PlayerAnimationState.Attack1);
+            playerAnimation.UpdateAnimState(PlayerAnimationState.Attack1, playerStateManager.AttackSpeed);
         }
         else if (currentAttackComboIndex == 1)
         {
-            playerAnimation.UpdateAnimState(PlayerAnimationState.Attack2);
+            playerAnimation.UpdateAnimState(PlayerAnimationState.Attack2, playerStateManager.AttackSpeed);
         }
         else if (currentAttackComboIndex == 2)
         {
-            playerAnimation.UpdateAnimState(PlayerAnimationState.Attack3);
+            playerAnimation.UpdateAnimState(PlayerAnimationState.Attack3, playerStateManager.AttackSpeed);
         }
 
         // note: PlaySlashEffect has been moved to the attack animation itself
@@ -204,7 +201,7 @@ public class PlayerAttack : MonoBehaviour
     public void StartAttack(AttackState state)
     {
         attackState = state;
-        isAttacking = true;
+        IsAttacking = true;
     }
 
     // This is a function that an animation event can use to indicate the attack in the animation has made "contact"
@@ -222,7 +219,7 @@ public class PlayerAttack : MonoBehaviour
             if (currentAttackComboIndex >= 3)
             {
                 currentAttackComboIndex = 0;
-                isAttacking = false;
+                IsAttacking = false;
                 attackState = AttackState.Ready;
             }
             else
@@ -233,7 +230,7 @@ public class PlayerAttack : MonoBehaviour
         else
         {
             currentAttackComboIndex = 0;
-            isAttacking = false;
+            IsAttacking = false;
             attackState = AttackState.Ready;
         }
     }

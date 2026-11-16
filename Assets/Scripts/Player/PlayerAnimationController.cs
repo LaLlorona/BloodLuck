@@ -14,7 +14,7 @@ public class PlayerAnimationController : MonoBehaviour
         Animator = GetComponent<Animator>();
     }
 
-    public void PlayAnimation(int facingIndex, PlayerAnimationState animState)
+    public void PlayAnimation(int facingIndex, PlayerAnimationState animState, float playbackSpeed = 1f)
     {
         PlayerAnimation anim = playerAnimations.FirstOrDefault(a => a.Direction == facingIndex);
         if (anim == null)
@@ -31,6 +31,7 @@ public class PlayerAnimationController : MonoBehaviour
         CurrDirection = facingIndex;
         CurrAnimState = animState;
 
+        Animator.speed = playbackSpeed;
         Animator.Play(animName);
     }
 
@@ -39,8 +40,8 @@ public class PlayerAnimationController : MonoBehaviour
         PlayAnimation(facingIndex, CurrAnimState);
     }
 
-    public void UpdateAnimState(PlayerAnimationState animState)
+    public void UpdateAnimState(PlayerAnimationState animState, float playbackSpeed = 1f)
     {
-        PlayAnimation(CurrDirection, animState);
+        PlayAnimation(CurrDirection, animState, playbackSpeed);
     }
 }
