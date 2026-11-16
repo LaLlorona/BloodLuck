@@ -16,7 +16,7 @@ namespace InGame.EditorTools
         private const string UpgradeCardPrefabPath = "Assets/Prefabs/UpgradeCard1.prefab";
         private const string RootSpritePath = "Assets/Art/UI_Card/Roots_Final.png";
         private const float CardSpacing = 400f;
-        private const float RootWidth = 300f;
+        private const float RootWidth = 370f;
         private static readonly Color PanelColor = new Color(0.10f, 0.035f, 0.12f, 0.97f);
         private static readonly Color CardColor = new Color(0.22f, 0.06f, 0.18f, 1f);
         private static readonly Color Gold = new Color(0.92f, 0.68f, 0.21f, 1f);
@@ -201,7 +201,7 @@ namespace InGame.EditorTools
             image.raycastTarget = false;
             var rect = decoration.GetComponent<RectTransform>();
             rect.pivot = Vector2.one;
-            Place(rect, Vector2.one, Vector2.one, new Vector2(8, 8), new Vector2(RootWidth, RootWidth * sprite.rect.height / sprite.rect.width));
+            Place(rect, Vector2.one, Vector2.one, new Vector2(0, 55), new Vector2(RootWidth, RootWidth * sprite.rect.height / sprite.rect.width));
         }
 
         private static Transform FindDescendant(Transform root, string name)
