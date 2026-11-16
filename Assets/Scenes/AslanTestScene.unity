@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 42476099}
   - component: {fileID: 42476100}
   - component: {fileID: 42476101}
+  - component: {fileID: 42476102}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -195,7 +196,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.0003105, y: 1.5727539}
+  m_Size: {x: 1.0007107, y: 1.1785713}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -232,7 +233,7 @@ MonoBehaviour:
   moveSpeed: 5
   lastMoveDir: {x: 0, y: 0}
   maxDashDistance: 2
-  spriteAngleOffset: -90
+  spriteAngleOffset: 0
   facingIndex: 0
 --- !u!114 &42476098
 MonoBehaviour:
@@ -285,10 +286,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d57e66a6265342b4c8423d5360847201, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
-  weaponCollider: {fileID: 73635954}
+  WeaponCollider: {fileID: 73635954}
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 128
   comboTime: 1
   basicAttackCooldown: 0.5
   specialAttackCooldown: 0
@@ -314,6 +315,70 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &42476102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 42476094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 707cc405cb350b84ba33f06bbf9c8519, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimationController
+  Animator: {fileID: 42476101}
+  playerAnimations:
+  - Direction: 1
+    AnimationStateNameDict:
+    - key: 0
+      value: idle-back-right
+    - key: 1
+      value: run-back-right
+    - key: 2
+      value: 
+  - Direction: 2
+    AnimationStateNameDict:
+    - key: 0
+      value: idle-back
+    - key: 2
+      value: 
+    - key: 1
+      value: run-back
+  - Direction: 3
+    AnimationStateNameDict:
+    - key: 0
+      value: idle-back-left
+    - key: 1
+      value: run-back-left
+    - key: 2
+      value: 
+  - Direction: 5
+    AnimationStateNameDict:
+    - key: 0
+      value: idle-front-left
+    - key: 1
+      value: run-front-left
+    - key: 2
+      value: 
+  - Direction: 6
+    AnimationStateNameDict:
+    - key: 0
+      value: idle-front
+    - key: 1
+      value: run-front
+    - key: 2
+      value: 
+  - Direction: 7
+    AnimationStateNameDict:
+    - key: 0
+      value: idle-front-right
+    - key: 1
+      value: run-front-right
+    - key: 2
+      value: 
+  CurrDirection: 0
+  CurrAnimState: 0
 --- !u!1 &73635952
 GameObject:
   m_ObjectHideFlags: 0
@@ -466,7 +531,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 3625043607559282579, guid: 19fb86013d8c24d6cb8410c0aadf30fa, type: 3}
-  m_Color: {r: 0.14306249, g: 0.14150941, b: 0.18867922, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
