@@ -20,7 +20,6 @@ namespace InGame.UI
         [Header("Spin")]
         [SerializeField, Min(0.05f)] private float _firstReelSpinSeconds = 0.8f;
         [SerializeField, Min(0f)] private float _reelStopIntervalSeconds = 0.4f;
-        [SerializeField, Min(0.01f)] private float _symbolSwapSeconds = 0.06f;
 
         public int SymbolCount => _symbols.Length;
         public int ReelCount => _reels.Length;
@@ -37,7 +36,7 @@ namespace InGame.UI
 
         public void SetHp(float currentHp)
         {
-            _hpText.text = $"HP {Mathf.FloorToInt(currentHp)}";
+            _hpText.text = Mathf.FloorToInt(currentHp).ToString();
         }
 
         public void SetSpinInteractable(bool interactable)
@@ -64,7 +63,7 @@ namespace InGame.UI
             for (int i = 0; i < _reels.Length; i++)
             {
                 float duration = _firstReelSpinSeconds + _reelStopIntervalSeconds * i;
-                tasks[i] = _reels[i].SpinAsync(resultIndices[i], duration, _symbolSwapSeconds, ct);
+                tasks[i] = _reels[i].SpinAsync(resultIndices[i], duration, ct);
             }
 
             await UniTask.WhenAll(tasks);

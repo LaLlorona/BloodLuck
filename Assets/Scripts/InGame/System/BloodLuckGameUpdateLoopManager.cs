@@ -141,7 +141,10 @@ namespace InGame.System
             _gameStateManager.PauseGame();
             bool isJackpot = await _slotMachineManager.PlaySlotMachineAsync();
             _gameStateManager.FinishGame();
-            _gameResultManager.ShowResult(isJackpot);
+            var resultType = isJackpot
+                ? BloodLuckGameResultType.EscapedCasino
+                : BloodLuckGameResultType.LostAtSlotMachine;
+            _gameResultManager.ShowResult(resultType);
         }
 
 

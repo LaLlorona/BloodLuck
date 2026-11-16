@@ -145,7 +145,7 @@ namespace InGame.Managers
             _deathSoundPlayed = true;
             AudioManager.Instance?.PlayDeath();
             _gameStateManager.FinishGame();
-            _gameResultManager.ShowResult(false);
+            _gameResultManager.ShowResult(BloodLuckGameResultType.EatenByVampires);
         }
     }
 }

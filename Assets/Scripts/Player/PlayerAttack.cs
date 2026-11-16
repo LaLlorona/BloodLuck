@@ -55,7 +55,7 @@ public class PlayerAttack : MonoBehaviour
     ContactFilter2D filter;
     List<Collider2D> results = new();
 
-    private bool IsThirdAttack => currentAttackComboIndex % 3 == 2;
+    private bool IsThirdAttack => attackState == AttackState.Attack3;
 
     void Awake()
     {

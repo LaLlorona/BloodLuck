@@ -8,7 +8,6 @@ namespace InGame.Managers
     public class BloodLuckGameResultManager : IBloodLuckContext
     {
         private readonly BloodLuckAssetHolder _assetHolder;
-        private BloodLuckPlayerStateManager _playerStateManager;
         private BloodLuckWaveManager _waveManager;
 
         public BloodLuckGameResultManager(BloodLuckManagerParameter parameter)
@@ -23,17 +22,15 @@ namespace InGame.Managers
 
         public void WireContextAfterInit(BloodLuckContextMap contextMap)
         {
-            _playerStateManager = contextMap.GetRegisteredInstance<BloodLuckPlayerStateManager>();
             _waveManager = contextMap.GetRegisteredInstance<BloodLuckWaveManager>();
         }
         
-        public void ShowResult(bool isVictory)
+        public void ShowResult(BloodLuckGameResultType resultType)
         {
             var view = Object.Instantiate(_assetHolder.GameResultViewPrefab);
             view.Show(
-                isVictory,
+                resultType,
                 _waveManager.CurrentWaveNumber,
-                _playerStateManager.CurrentHp,
                 RestartGame);
         }
 
