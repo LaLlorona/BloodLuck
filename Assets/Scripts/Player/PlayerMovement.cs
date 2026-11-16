@@ -110,8 +110,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleDash()
     {
-        // TODO: Play SFX
+        if (isDashing) return;
         // TODO: Play Animation
         isDashing = true;
+        AudioManager.Instance?.PlayDash();
     }
 }

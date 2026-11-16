@@ -1909,6 +1909,7 @@ GameObject:
   - component: {fileID: 8361861933764820498}
   - component: {fileID: 8753375816845645818}
   - component: {fileID: 4240255622527994466}
+  - component: {fileID: 6523012764482017219}
   m_Layer: 0
   m_Name: ReturnButton
   m_TagString: Untagged
@@ -2018,6 +2019,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6523012764482017219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3155854566064911862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f30eb623fc29a4c178b6ca418e41732b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BloodLuck.UIButtonAudio
 --- !u!1 &3257734011007329063
 GameObject:
   m_ObjectHideFlags: 0
@@ -2031,6 +2044,7 @@ GameObject:
   - component: {fileID: 6194595315468050350}
   - component: {fileID: 1703437670448803093}
   - component: {fileID: 2690439514800749769}
+  - component: {fileID: 7825392042884586468}
   m_Layer: 0
   m_Name: LeaveShopButton
   m_TagString: Untagged
@@ -2152,6 +2166,18 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &7825392042884586468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3257734011007329063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f30eb623fc29a4c178b6ca418e41732b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BloodLuck.UIButtonAudio
 --- !u!1 &3332830660692024010
 GameObject:
   m_ObjectHideFlags: 0
@@ -4525,6 +4551,7 @@ GameObject:
   - component: {fileID: 2197592325709256186}
   - component: {fileID: 4173430955275402688}
   - component: {fileID: 7638656205450499175}
+  - component: {fileID: 4495366559425644305}
   m_Layer: 0
   m_Name: RollButton
   m_TagString: Untagged
@@ -4634,6 +4661,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4495366559425644305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8386035919692129362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f30eb623fc29a4c178b6ca418e41732b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BloodLuck.UIButtonAudio
 --- !u!1 &8884163748520231801
 GameObject:
   m_ObjectHideFlags: 0
