@@ -226,7 +226,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -919,6 +919,7 @@ GameObject:
   - component: {fileID: 3513865319445419827}
   - component: {fileID: 1667245408497596331}
   - component: {fileID: 5676140630828140446}
+  - component: {fileID: 7892879796977507742}
   m_Layer: 0
   m_Name: UpgradeCard3
   m_TagString: Untagged
@@ -1074,6 +1075,18 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &7892879796977507742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1549519152557408888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41040ef46fabc445c8d994581a713642, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BloodLuck.ShopCardHoverSound
 --- !u!1 &1636375046675143748
 GameObject:
   m_ObjectHideFlags: 0
@@ -3600,6 +3613,7 @@ GameObject:
   - component: {fileID: 1368659023915122367}
   - component: {fileID: 3743047621819262751}
   - component: {fileID: 1287425169394302766}
+  - component: {fileID: 6658860207400565552}
   m_Layer: 0
   m_Name: BloodyDiceButton
   m_TagString: Untagged
@@ -3724,6 +3738,18 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &6658860207400565552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6721454485651106836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41040ef46fabc445c8d994581a713642, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BloodLuck.ShopCardHoverSound
 --- !u!1 &7121954900907437276
 GameObject:
   m_ObjectHideFlags: 0
@@ -3907,6 +3933,7 @@ GameObject:
   - component: {fileID: 1615191073226870209}
   - component: {fileID: 2396498638903523045}
   - component: {fileID: 3094454245337129938}
+  - component: {fileID: 4567021406669186213}
   m_Layer: 0
   m_Name: UpgradeCard2
   m_TagString: Untagged
@@ -4062,6 +4089,18 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &4567021406669186213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7736384455810072630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41040ef46fabc445c8d994581a713642, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BloodLuck.ShopCardHoverSound
 --- !u!1 &8124539446569732318
 GameObject:
   m_ObjectHideFlags: 0
@@ -5233,7 +5272,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5368,8 +5407,28 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2834735579667598261, guid: 3ec82c79e95e18d49a2aab27e3197344, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7869565232298425086}
   m_SourcePrefab: {fileID: 100100000, guid: 3ec82c79e95e18d49a2aab27e3197344, type: 3}
+--- !u!1 &2639970959160331164 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2834735579667598261, guid: 3ec82c79e95e18d49a2aab27e3197344, type: 3}
+  m_PrefabInstance: {fileID: 284869599611502633}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7869565232298425086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2639970959160331164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41040ef46fabc445c8d994581a713642, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BloodLuck.ShopCardHoverSound
 --- !u!224 &4071972064169194518 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4284755446871929919, guid: 3ec82c79e95e18d49a2aab27e3197344, type: 3}
@@ -5380,7 +5439,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7013930460019753267, guid: 3ec82c79e95e18d49a2aab27e3197344, type: 3}
   m_PrefabInstance: {fileID: 284869599611502633}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 2639970959160331164}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d31b72fe5dfd4300b8b9f7d79aa07f5, type: 3}
@@ -5391,7 +5450,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9171501959759138517, guid: 3ec82c79e95e18d49a2aab27e3197344, type: 3}
   m_PrefabInstance: {fileID: 284869599611502633}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 2639970959160331164}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}

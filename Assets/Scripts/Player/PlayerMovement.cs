@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using BloodLuck;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Movement Config")]
     [SerializeField] private float moveSpeed;
+    [SerializeField, Min(0.1f)] private float stepInterval = 0.35f;
+    private float stepTimer;
     [HideInInspector] public Vector2 lastMoveDir;
 
     [Header("Dash Config")]
@@ -52,6 +55,12 @@ public class PlayerMovement : MonoBehaviour
         {
             if (playerInput.MoveDir.magnitude != 0)
             {
+                stepTimer -= deltaTime;
+                if (stepTimer <= 0f)
+                {
+                    AudioManager.Instance?.PlayFootstep();
+                    stepTimer = stepInterval;
+                }
                 lastMoveDir = playerInput.MoveDir;
                 Vector3 moveDirVec3 = new(playerInput.MoveDir.x, playerInput.MoveDir.y, 0);
                 transform.position = Vector3.MoveTowards(transform.position, transform.position + moveDirVec3, moveSpeed * deltaTime);
@@ -59,6 +68,7 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
+                stepTimer = 0f;
                 playerAnimation.UpdateAnimState(PlayerAnimationState.Idle);
             }
 

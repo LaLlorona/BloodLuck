@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using InGame.Managers;
 using InGame.Monsters;
+using BloodLuck;
 using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
@@ -115,6 +116,7 @@ public class PlayerAttack : MonoBehaviour
 
         bool isThirdAttack = currentAttackComboIndex == ThirdAttackComboIndex;
         PlaySlashEffect(isThirdAttack ? Color.red : Color.white);
+        AudioManager.Instance?.PlaySwing();
         float damage = isThirdAttack ? playerStateManager.ThirdAttack : playerStateManager.Attack;
 
         // Check if any enemies are in the collider
@@ -135,6 +137,7 @@ public class PlayerAttack : MonoBehaviour
         {
             monster.OnMonsterDamage(damage);
         }
+        if (hitMonsters.Count > 0) AudioManager.Instance?.PlayHit();
 
         // Increment combo
         if (lastAttackType == AttackType.BasicAttack && Time.time - lastBasicAttackTime <= comboTime)

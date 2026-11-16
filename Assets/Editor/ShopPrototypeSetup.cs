@@ -46,9 +46,11 @@ namespace InGame.EditorTools
             for (int i = 0; i < 3; i++)
             {
                 var card = CreateCard(panel.transform, i, -1.5f * CardSpacing + i * CardSpacing, out cardViews[i]);
+                card.AddComponent<ShopCardHoverSound>();
                 cards[i] = card.GetComponent<Button>();
             }
             var diceButton = CreateDiceCard(panel.transform, 1.5f * CardSpacing);
+            diceButton.AddComponent<ShopCardHoverSound>();
             var leaveButton = CreateButton(panel.transform, "LeaveShopButton", "LEAVE SHOP", new Color(.38f, .13f, .25f, 1));
             Place(leaveButton.GetComponent<RectTransform>(), new Vector2(1, 0), new Vector2(1, 0), new Vector2(-105, 58), new Vector2(190, 62));
 

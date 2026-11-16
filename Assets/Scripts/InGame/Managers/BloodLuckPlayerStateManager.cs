@@ -21,6 +21,7 @@ namespace InGame.Managers
         private BloodLuckUIManager _uiManager;
         private BloodLuckGameStateManager _gameStateManager;
         private BloodLuckGameResultManager _gameResultManager;
+        private bool _deathSoundPlayed;
 
         public BloodLuckPlayerStateManager(BloodLuckManagerParameter parameter)
         {
@@ -126,6 +127,9 @@ namespace InGame.Managers
 
         private void HandlePlayerDeath()
         {
+            if (_deathSoundPlayed) return;
+            _deathSoundPlayed = true;
+            AudioManager.Instance?.PlayDeath();
             _gameStateManager.FinishGame();
             _gameResultManager.ShowResult(false);
         }
