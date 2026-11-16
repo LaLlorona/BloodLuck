@@ -331,6 +331,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimationController
   Animator: {fileID: 42476101}
   playerAnimations:
+  - Direction: 0
+    AnimationStateNameDict:
+    - key: 0
+      value: idle-right
+    - key: 1
+      value: run-right
+    - key: 2
+      value: 
   - Direction: 1
     AnimationStateNameDict:
     - key: 0
@@ -353,6 +361,14 @@ MonoBehaviour:
       value: idle-back-left
     - key: 1
       value: run-back-left
+    - key: 2
+      value: 
+  - Direction: 4
+    AnimationStateNameDict:
+    - key: 0
+      value: idle-left
+    - key: 1
+      value: run-left
     - key: 2
       value: 
   - Direction: 5
@@ -925,7 +941,6 @@ MonoBehaviour:
   _playerAttackComponent: {fileID: 42476100}
   _playerInputManagerComponent: {fileID: 42476098}
   _playerMovementComponent: {fileID: 42476097}
-  _playerAnimationController: {fileID: 42476102}
 --- !u!114 &2114054403
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -63,7 +63,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 2800
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -117,12 +117,12 @@ TextureImporter:
       name: player-run-right_0
       rect:
         serializedVersion: 2
-        x: 27
-        y: 431
-        width: 2721
-        height: 2496
+        x: 0
+        y: 0
+        width: 2820
+        height: 3300
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -139,12 +139,12 @@ TextureImporter:
       name: player-run-right_1
       rect:
         serializedVersion: 2
-        x: 3610
-        y: 77
-        width: 1640
-        height: 3086
+        x: 2820
+        y: 0
+        width: 2820
+        height: 3300
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -161,12 +161,12 @@ TextureImporter:
       name: player-run-right_2
       rect:
         serializedVersion: 2
-        x: 5718
-        y: 502
-        width: 2698
-        height: 2573
+        x: 5640
+        y: 0
+        width: 2820
+        height: 3300
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -183,12 +183,12 @@ TextureImporter:
       name: player-run-right_3
       rect:
         serializedVersion: 2
-        x: 8368
-        y: 1169
-        width: 53
-        height: 32
+        x: 8460
+        y: 0
+        width: 2820
+        height: 3300
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -201,33 +201,11 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
-    - serializedVersion: 2
-      name: player-run-right_4
-      rect:
-        serializedVersion: 2
-        x: 9013
-        y: 103
-        width: 1852
-        height: 3017
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: de1e9b63dab73a9f0800000000000000
-      internalID: -458386753183948307
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 7c7e770c81e624f42baf3a92e3ed04f4
     internalID: 0
     vertices: []
     indices: 
@@ -235,13 +213,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":4.0,"y":1.0},"gridSpriteSize":{"x":2820.0,"y":3300.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       player-run-right_0: -5862956177071425382
       player-run-right_1: -1596595159028623911
       player-run-right_2: -4702070569783208563
       player-run-right_3: 6358989636079609276
-      player-run-right_4: -458386753183948307
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
