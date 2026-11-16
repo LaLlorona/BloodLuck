@@ -172,9 +172,9 @@ namespace InGame.EditorTools
             var go = new GameObject("UpgradeCard" + (index + 1), typeof(RectTransform), typeof(Image), typeof(Button), typeof(InfusionCardView)); go.transform.SetParent(parent, false);
             go.GetComponent<Image>().color = CardColor; Place(go.GetComponent<RectTransform>(), new Vector2(.5f, .5f), new Vector2(.5f, .5f), new Vector2(xPosition, 30), new Vector2(370, 390));
             AddRootDecoration(go.transform);
-            var title = Text(go.transform, "Name", "", 29, Gold); Place(title.rectTransform, new Vector2(.5f,1), new Vector2(.5f,1), new Vector2(0,-130), new Vector2(300,45));
-            var rarity = Text(go.transform, "Rarity", "", 20, Color.white); Place(rarity.rectTransform, new Vector2(.5f,1), new Vector2(.5f,1), new Vector2(0,-170), new Vector2(300,35));
-            var description = Text(go.transform, "Description", "", 19, Color.white); description.alignment = TextAlignmentOptions.TopLeft; description.textWrappingMode = TextWrappingModes.Normal; Place(description.rectTransform, new Vector2(.5f,.5f), new Vector2(.5f,.5f), new Vector2(-15,-70), new Vector2(290,120));
+            var title = Text(go.transform, "Name", "", 29, Gold); Place(title.rectTransform, new Vector2(.5f,1), new Vector2(.5f,1), new Vector2(0,-90), new Vector2(300,45));
+            var rarity = Text(go.transform, "Rarity", "", 20, Color.white); Place(rarity.rectTransform, new Vector2(.5f,1), new Vector2(.5f,1), new Vector2(0,-130), new Vector2(300,35));
+            var description = Text(go.transform, "Description", "", 19, Color.white); description.alignment = TextAlignmentOptions.TopLeft; description.textWrappingMode = TextWrappingModes.Normal; Place(description.rectTransform, new Vector2(.5f,.5f), new Vector2(.5f,.5f), new Vector2(-15,-40), new Vector2(290,120));
             var cost = Text(go.transform, "Cost", "", 24, Gold); Place(cost.rectTransform, new Vector2(.5f,0), new Vector2(.5f,0), new Vector2(0,35), new Vector2(330,45));
             view = go.GetComponent<InfusionCardView>(); Set(view,"title",title); Set(view,"rarity",rarity); Set(view,"description",description); Set(view,"cost",cost); Set(view,"contents",go); return go;
         }
