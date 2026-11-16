@@ -68,6 +68,20 @@ namespace Player
             return (baseDamage + add) * multiply;
         }
 
+        public float GetChainLightningDamage()
+        {
+            float total = 0f;
+            foreach (PlayerPassive passive in _passives)
+            {
+                if (passive is PlayerPassive.ChainLightning p)
+                {
+                    total += p.PassiveValue;
+                }
+            }
+
+            return total;
+        }
+
         private static void Accumulate(float value, OperationMethod method, ref float add, ref float multiply)
         {
             switch (method)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using InGame.Managers;
+using UnityEngine;
 
 namespace InGame.System
 {
@@ -13,6 +14,9 @@ namespace InGame.System
         private BloodLuckGameStateManager _gameStateManager;
         private BloodLuckPerkSelectionManager _perkSelectionManager;
         private BloodLuckWaveManager _waveManager;
+        private BloodLuckSlotMachineManager _slotMachineManager;
+        private BloodLuckGameResultManager _gameResultManager;
+        private BloodLuckShopManager _shopManager;
         private bool _isSorted;
         private bool _isHandlingAsyncTask;
 
@@ -26,6 +30,9 @@ namespace InGame.System
             _gameStateManager = contextMap.GetRegisteredInstance<BloodLuckGameStateManager>();
             _perkSelectionManager = contextMap.GetRegisteredInstance<BloodLuckPerkSelectionManager>();
             _waveManager = contextMap.GetRegisteredInstance<BloodLuckWaveManager>();
+            _slotMachineManager = contextMap.GetRegisteredInstance<BloodLuckSlotMachineManager>();
+            _gameResultManager = contextMap.GetRegisteredInstance<BloodLuckGameResultManager>();
+            _shopManager = contextMap.GetRegisteredInstance<BloodLuckShopManager>();
         }
 
         public void RegisterUpdatable(IBloodLuckPriorityUpdatable updatable)
@@ -101,29 +108,45 @@ namespace InGame.System
         {
             switch (task)
             {
-                case BloodLuckAsyncTask.HandleGameFinish:
+                case BloodLuckAsyncTask.LastWaveSlotMachine:
                     return HandleGameFinish();
                 case BloodLuckAsyncTask.WaveFinishedAndSelectingPerk:
                     return HandleWaveFinishedAndSelectingPerk();
+                case BloodLuckAsyncTask.WaveFinishedAndVisitingShop:
+                    return HandleVisitingShop();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(task), task, "Unhandled BloodLuckAsyncTask.");
             }
         }
 
-        private async UniTask HandleWaveFinishedAndSelectingPerk()
+        private async UniTask HandleVisitingShop()
         {
             _gameStateManager.PauseGame();
-
-            var selectedPerk = await _perkSelectionManager.ShowPerkSelectionAsync();
-
+            await _shopManager.ShowShopAsync();
             _gameStateManager.ResumeGame();
             _waveManager.OnWaveStarted();
         }
 
-        private UniTask HandleGameFinish()
+        private async UniTask HandleWaveFinishedAndSelectingPerk()
+        {
+            _gameStateManager.PauseGame();
+            await _perkSelectionManager.ShowPerkSelectionAsync();
+            _gameStateManager.ResumeGame();
+            _waveManager.OnWaveStarted();
+        }
+
+        private async UniTask HandleGameFinish()
+        {
+            _gameStateManager.PauseGame();
+            bool isJackpot = await _slotMachineManager.PlaySlotMachineAsync();
+            _gameStateManager.FinishGame();
+            _gameResultManager.ShowResult(isJackpot);
+        }
+
+        private async UniTask HandlePlayerDeath()
         {
             _gameStateManager.FinishGame();
-            return UniTask.CompletedTask;
+            _gameResultManager.ShowResult(false);
         }
     }
 }

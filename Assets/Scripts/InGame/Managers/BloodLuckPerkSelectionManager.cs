@@ -14,10 +14,10 @@ namespace InGame.Managers
         private readonly global::System.Random _random = new();
         private BloodLuckPlayerStateManager _playerStateManager;
 
-        public BloodLuckPerkSelectionManager(BloodLuckAssetHolder assetHolder, BloodLuckInGameParameter inGameParameter)
+        public BloodLuckPerkSelectionManager(BloodLuckManagerParameter parameter)
         {
-            _assetHolder = assetHolder;
-            _inGameParameter = inGameParameter;
+            _assetHolder = parameter.AssetHolder;
+            _inGameParameter = parameter.InGameParameter;
         }
 
         public UniTask InitAsync()
@@ -55,7 +55,8 @@ namespace InGame.Managers
             var perks = new List<PerkData>();
             for (int i = 0; i < 3; i++)
             {
-                perks.Add(new PerkData(null, PlayerPassiveGenerator.GetRandomPlayerPassive(_random)));
+                var passive = PlayerPassiveGenerator.GetRandomPlayerPassive(_random);
+                perks.Add(new PerkData(_assetHolder.GetPerkIcon(passive.IconName), passive));
             }
 
             return perks;

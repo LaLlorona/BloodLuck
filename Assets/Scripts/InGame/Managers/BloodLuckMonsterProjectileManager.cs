@@ -23,9 +23,9 @@ namespace InGame.Managers
         private BloodLuckPlayerStateManager _playerStateManager;
         private PlayerMovement _player;
 
-        public BloodLuckMonsterProjectileManager(BloodLuckAssetHolder assetHolder)
+        public BloodLuckMonsterProjectileManager(BloodLuckManagerParameter parameter)
         {
-            _assetHolder = assetHolder;
+            _assetHolder = parameter.AssetHolder;
         }
 
         public UniTask InitAsync()

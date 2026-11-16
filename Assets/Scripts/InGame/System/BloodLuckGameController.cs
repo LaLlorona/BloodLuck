@@ -7,25 +7,28 @@ namespace InGame.System
     {
         private readonly BloodLuckContextMap _bloodLuckContext;
         private readonly BloodLuckGameUpdateLoopManager _bloodLuckGameUpdateManager;
-        private readonly BloodLuckAssetHolder _assetHolder;
         private bool _isControllerInitializationFinished = false;
 
-        public BloodLuckGameController(BloodLuckAssetHolder assetHolder, BloodLuckInGameParameter inGameParameter)
+        public BloodLuckGameController(BloodLuckManagerParameter parameter)
         {
-            _assetHolder = assetHolder;
             _bloodLuckContext = new BloodLuckContextMap();
             _bloodLuckGameUpdateManager = new BloodLuckGameUpdateLoopManager();
 
             _bloodLuckContext.Register(_bloodLuckGameUpdateManager);
             _bloodLuckContext.Register(new BloodLuckGameStateManager());
-            _bloodLuckContext.Register(new BloodLuckMonsterManager(assetHolder, inGameParameter));
-            _bloodLuckContext.Register(new BloodLuckWaveManager());
-            _bloodLuckContext.Register(new BloodLuckPerkSelectionManager(assetHolder, inGameParameter));
-            _bloodLuckContext.Register(new BloodLuckEffectManager(assetHolder));
-            _bloodLuckContext.Register(new BloodLuckMonsterProjectileManager(assetHolder));
-            _bloodLuckContext.Register(new BloodLuckPlayerStateManager(inGameParameter));
-            _bloodLuckContext.Register(new BloodLuckUIManager(assetHolder));
+            _bloodLuckContext.Register(new BloodLuckMonsterManager(parameter));
+            _bloodLuckContext.Register(new BloodLuckWaveManager(parameter));
+            _bloodLuckContext.Register(new BloodLuckPerkSelectionManager(parameter));
+            _bloodLuckContext.Register(new BloodLuckEffectManager(parameter));
+            _bloodLuckContext.Register(new BloodLuckMonsterProjectileManager(parameter));
+            _bloodLuckContext.Register(new BloodLuckPlayerStateManager(parameter));
+            _bloodLuckContext.Register(new BloodLuckUIManager(parameter));
+            _bloodLuckContext.Register(new BloodLuckSlotMachineManager(parameter));
+            _bloodLuckContext.Register(new BloodLuckShopManager(parameter));
+            _bloodLuckContext.Register(new BloodLuckGameResultManager(parameter));
             _bloodLuckContext.Register(new BloodLuckCheatManager());
+            _bloodLuckContext.Register(new BloodLuckPlayerManager(parameter));
+            _bloodLuckContext.Register(new BloodLuckCameraManager(parameter));
             // Register new systems (IBloodLuckContext) here.
         }
 

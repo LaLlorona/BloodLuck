@@ -1,0 +1,159 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 110a7b2a8fb34d63bff7236ce0eefb90, type: 3}
+  m_Name: BloodLuckWaveTable
+  m_EditorClassIdentifier: 
+  _waves:
+  - _monsters:
+    - _monsterType: 0
+      _count: 4
+      _maxHp: 10
+      _baseDamage: 10
+    - _monsterType: 1
+      _count: 2
+      _maxHp: 10
+      _baseDamage: 5
+  - _monsters:
+    - _monsterType: 0
+      _count: 5
+      _maxHp: 16
+      _baseDamage: 10
+    - _monsterType: 1
+      _count: 2
+      _maxHp: 16
+      _baseDamage: 5
+  - _monsters:
+    - _monsterType: 0
+      _count: 6
+      _maxHp: 22
+      _baseDamage: 10
+    - _monsterType: 1
+      _count: 2
+      _maxHp: 22
+      _baseDamage: 5
+  - _monsters:
+    - _monsterType: 0
+      _count: 6
+      _maxHp: 28
+      _baseDamage: 10
+    - _monsterType: 1
+      _count: 3
+      _maxHp: 28
+      _baseDamage: 5
+  - _monsters:
+    - _monsterType: 0
+      _count: 7
+      _maxHp: 34
+      _baseDamage: 10
+    - _monsterType: 1
+      _count: 3
+      _maxHp: 34
+      _baseDamage: 5
+  - _monsters:
+    - _monsterType: 0
+      _count: 8
+      _maxHp: 40
+      _baseDamage: 10
+    - _monsterType: 1
+      _count: 3
+      _maxHp: 40
+      _baseDamage: 5
+  - _monsters:
+    - _monsterType: 0
+      _count: 8
+      _maxHp: 46
+      _baseDamage: 10
+    - _monsterType: 1
+      _count: 4
+      _maxHp: 46
+      _baseDamage: 5
+  - _monsters:
+    - _monsterType: 0
+      _count: 9
+      _maxHp: 52
+      _baseDamage: 10
+    - _monsterType: 1
+      _count: 4
+      _maxHp: 52
+      _baseDamage: 5
+  - _monsters:
+    - _monsterType: 0
+      _count: 9
+      _maxHp: 58
+      _baseDamage: 10
+    - _monsterType: 1
+      _count: 4
+      _maxHp: 58
+      _baseDamage: 5
+  - _monsters:
+    - _monsterType: 0
+      _count: 10
+      _maxHp: 64
+      _baseDamage: 10
+    - _monsterType: 1
+      _count: 4
+      _maxHp: 64
+      _baseDamage: 5
+  - _monsters:
+    - _monsterType: 0
+      _count: 10
+      _maxHp: 70
+      _baseDamage: 10
+    - _monsterType: 1
+      _count: 5
+      _maxHp: 70
+      _baseDamage: 5
+  - _monsters:
+    - _monsterType: 0
+      _count: 11
+      _maxHp: 76
+      _baseDamage: 10
+    - _monsterType: 1
+      _count: 5
+      _maxHp: 76
+      _baseDamage: 5
+  - _monsters:
+    - _monsterType: 0
+      _count: 12
+      _maxHp: 82
+      _baseDamage: 10
+    - _monsterType: 1
+      _count: 5
+      _maxHp: 82
+      _baseDamage: 5
+  - _monsters:
+    - _monsterType: 0
+      _count: 13
+      _maxHp: 88
+      _baseDamage: 10
+    - _monsterType: 1
+      _count: 5
+      _maxHp: 88
+      _baseDamage: 5
+  - _monsters:
+    - _monsterType: 0
+      _count: 13
+      _maxHp: 94
+      _baseDamage: 10
+    - _monsterType: 1
+      _count: 6
+      _maxHp: 94
+      _baseDamage: 5
+  - _monsters:
+    - _monsterType: 0
+      _count: 14
+      _maxHp: 100
+      _baseDamage: 10
+    - _monsterType: 1
+      _count: 6
+      _maxHp: 100
+      _baseDamage: 5

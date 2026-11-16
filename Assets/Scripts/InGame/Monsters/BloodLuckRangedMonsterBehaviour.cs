@@ -10,12 +10,16 @@ namespace InGame.Monsters
         {
             Chasing,
             Stopped,
+            Hit,
         }
 
         private readonly Transform _monsterTransform;
         private readonly BloodLuckInGameParameter _parameter;
+        private readonly float _projectileDamage;
         private readonly Transform _player;
         private readonly BloodLuckMonsterProjectileManager _monsterProjectileManager;
+
+        private readonly BloodLuckMonsterHitStun _hitStun;
 
         private State _state = State.Chasing;
         private float _stoppedElapsed;
@@ -23,13 +27,16 @@ namespace InGame.Monsters
         public BloodLuckRangedMonsterBehaviour(
             Transform monsterTransform,
             BloodLuckInGameParameter parameter,
+            float projectileDamage,
             Transform player,
             BloodLuckMonsterProjectileManager monsterProjectileManager)
         {
             _monsterTransform = monsterTransform;
             _parameter = parameter;
+            _projectileDamage = projectileDamage;
             _player = player;
             _monsterProjectileManager = monsterProjectileManager;
+            _hitStun = new BloodLuckMonsterHitStun(monsterTransform, player, parameter);
         }
 
         public void UpdateMonsterBehaviour(float deltaTime)
@@ -42,11 +49,28 @@ namespace InGame.Monsters
                 case State.Stopped:
                     UpdateStopped(deltaTime);
                     break;
+                case State.Hit:
+                    UpdateHit(deltaTime);
+                    break;
             }
+        }
+
+        public void ResetMonsterBehaviour()
+        {
+            _hitStun.Start();
+            _state = State.Hit;
         }
 
         public void OnMonsterDied()
         {
+        }
+
+        private void UpdateHit(float deltaTime)
+        {
+            if (_hitStun.Update(deltaTime))
+            {
+                _state = State.Chasing;
+            }
         }
 
         private void UpdateChasing(float deltaTime)
@@ -72,7 +96,7 @@ namespace InGame.Monsters
                 monsterPosition,
                 playerPosition - monsterPosition,
                 _parameter.MonsterProjectileSpeed,
-                _parameter.MonsterProjectileDamage,
+                _projectileDamage,
                 _parameter.MonsterProjectileHitRadius,
                 _parameter.MonsterProjectileLifetime);
 

@@ -4,6 +4,8 @@ namespace InGame.Monsters
     {
         void UpdateMonsterBehaviour(float deltaTime);
 
+        void ResetMonsterBehaviour();
+
         void OnMonsterDied();
     }
 }

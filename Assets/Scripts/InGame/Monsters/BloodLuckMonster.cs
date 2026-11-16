@@ -9,42 +9,77 @@ namespace InGame.Monsters
     {
         private readonly BloodLuckMonsterComponent _monsterComponent;
         private readonly IBloodLuckMonsterBehaviour _behaviour;
+        private readonly BloodLuckMonsterManager _monsterManager;
+        private readonly float _maxHp;
+        private float _currentHp;
+        private bool _isDead;
 
         public BloodLuckMonster(
             BloodLuckAssetHolder assetHolder,
             Vector3 spawnPosition,
-            BloodLuckMonsterType monsterType,
+            BloodLuckWaveMonsterEntry spawnData,
             BloodLuckInGameParameter parameter,
             Transform player,
             BloodLuckPlayerStateManager playerStateManager,
             BloodLuckEffectManager effectManager,
-            BloodLuckMonsterProjectileManager monsterProjectileManager)
+            BloodLuckMonsterProjectileManager monsterProjectileManager,
+            BloodLuckMonsterManager monsterManager)
         {
+            _monsterManager = monsterManager;
+            _maxHp = spawnData.MaxHp;
+            _currentHp = _maxHp;
             _monsterComponent = GameObject.Instantiate(
                 assetHolder.GetBloodLuckMonsterComponent,
                 spawnPosition,
                 Quaternion.identity);
+            _monsterComponent.Init(this, parameter);
+            _monsterComponent.SetHp(_currentHp, _maxHp);
 
-            _behaviour = monsterType switch
+            _behaviour = spawnData.MonsterType switch
             {
                 BloodLuckMonsterType.Melee => new BloodLuckMeleeMonsterBehaviour(
                     _monsterComponent.transform,
                     parameter,
+                    spawnData.BaseDamage,
                     player,
                     playerStateManager,
                     effectManager),
                 BloodLuckMonsterType.Ranged => new BloodLuckRangedMonsterBehaviour(
                     _monsterComponent.transform,
                     parameter,
+                    spawnData.BaseDamage,
                     player,
                     monsterProjectileManager),
-                _ => throw new ArgumentOutOfRangeException(nameof(monsterType), monsterType, null),
+                _ => throw new ArgumentOutOfRangeException(nameof(spawnData.MonsterType), spawnData.MonsterType, null),
             };
         }
+
+        public Vector3 Position => _monsterComponent.transform.position;
 
         public void UpdateMonster(float deltaTime)
         {
             _behaviour.UpdateMonsterBehaviour(deltaTime);
+            _monsterComponent.CustomUpdate(deltaTime);
+        }
+
+        public void OnMonsterDamage(float damage)
+        {
+            if (_isDead)
+            {
+                return;
+            }
+
+            _currentHp = Mathf.Max(0f, _currentHp - damage);
+            if (_currentHp <= 0f)
+            {
+                _isDead = true;
+                _monsterManager.OnMonsterDied(this);
+                return;
+            }
+
+            _monsterComponent.SetHp(_currentHp, _maxHp);
+            _monsterComponent.PlayHitFlash();
+            _behaviour.ResetMonsterBehaviour();
         }
 
         public void OnMonsterDied()

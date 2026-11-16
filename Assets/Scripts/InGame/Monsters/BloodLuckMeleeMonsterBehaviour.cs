@@ -12,13 +12,17 @@ namespace InGame.Monsters
             Chasing,
             Charging,
             Waiting,
+            Hit,
         }
 
         private readonly Transform _monsterTransform;
         private readonly BloodLuckInGameParameter _parameter;
+        private readonly float _attackDamage;
         private readonly Transform _player;
         private readonly BloodLuckPlayerStateManager _playerStateManager;
         private readonly BloodLuckEffectManager _effectManager;
+
+        private readonly BloodLuckMonsterHitStun _hitStun;
 
         private State _state = State.Chasing;
         private BloodLuckSectorAreaEffectComponent _sectorEffect;
@@ -29,15 +33,18 @@ namespace InGame.Monsters
         public BloodLuckMeleeMonsterBehaviour(
             Transform monsterTransform,
             BloodLuckInGameParameter parameter,
+            float attackDamage,
             Transform player,
             BloodLuckPlayerStateManager playerStateManager,
             BloodLuckEffectManager effectManager)
         {
             _monsterTransform = monsterTransform;
             _parameter = parameter;
+            _attackDamage = attackDamage;
             _player = player;
             _playerStateManager = playerStateManager;
             _effectManager = effectManager;
+            _hitStun = new BloodLuckMonsterHitStun(monsterTransform, player, parameter);
         }
 
         public void UpdateMonsterBehaviour(float deltaTime)
@@ -53,6 +60,28 @@ namespace InGame.Monsters
                 case State.Waiting:
                     UpdateWaiting(deltaTime);
                     break;
+                case State.Hit:
+                    UpdateHit(deltaTime);
+                    break;
+            }
+        }
+
+        public void ResetMonsterBehaviour()
+        {
+            if (_state == State.Charging)
+            {
+                RemoveSectorEffect();
+            }
+
+            _hitStun.Start();
+            _state = State.Hit;
+        }
+
+        private void UpdateHit(float deltaTime)
+        {
+            if (_hitStun.Update(deltaTime))
+            {
+                _state = State.Chasing;
             }
         }
 
@@ -110,7 +139,7 @@ namespace InGame.Monsters
         {
             if (IsPlayerInsideSector())
             {
-                BloodLuckDamageLogic.ApplyDamageToPlayer(_playerStateManager, _parameter.MonsterAttackDamage);
+                BloodLuckDamageLogic.ApplyDamageToPlayer(_playerStateManager, _attackDamage);
             }
 
             RemoveSectorEffect();

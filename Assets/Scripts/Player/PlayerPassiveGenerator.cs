@@ -8,8 +8,8 @@ namespace Player
         {
             return (kind, method) switch
             {
-                (Kind.Damage,      OperationMethod.Add)      => (10f, 50f, 5f),
-                (Kind.Damage,      OperationMethod.Multiply) => (1.1f, 1.5f, 0.05f),
+                (Kind.Damage,      OperationMethod.Add)      => (2f, 8f, 1f),
+                (Kind.Damage,      OperationMethod.Multiply) => (1.05f, 1.2f, 0.05f),
                 (Kind.MaxHp,       OperationMethod.Add)      => (10f, 40f, 5f),
                 (Kind.MaxHp,       OperationMethod.Multiply) => (1.1f, 1.3f, 0.05f),
                 (Kind.AttackSpeed, OperationMethod.Add)      => (0.1f, 0.3f, 0.05f),

@@ -3,25 +3,28 @@ using System;
 
 namespace BloodLuck
 {
-    public class SlotPullWallet : MonoBehaviour
+    /// <summary>Standalone wallet for the Shop_Prototype scene only. In-game the player state manager is the wallet.</summary>
+    public class SlotPullWallet : MonoBehaviour, IShopWallet
     {
         [SerializeField] private int startingPulls = 6;
-        public int Pulls { get; private set; }
-        public event Action<int> PullsChanged;
+        public int Balance { get; private set; }
+        public event Action<int> BalanceChanged;
 
         private void Awake() => ResetForRun();
 
         public void ResetForRun()
         {
-            Pulls = startingPulls;
-            PullsChanged?.Invoke(Pulls);
+            Balance = startingPulls;
+            BalanceChanged?.Invoke(Balance);
         }
+
+        public bool CanSpend(int cost) => cost >= 0 && Balance >= cost;
 
         public bool TrySpend(int cost)
         {
-            if (cost < 0 || Pulls < cost) return false;
-            Pulls -= cost;
-            PullsChanged?.Invoke(Pulls);
+            if (!CanSpend(cost)) return false;
+            Balance -= cost;
+            BalanceChanged?.Invoke(Balance);
             return true;
         }
     }
