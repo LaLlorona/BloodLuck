@@ -177,6 +177,7 @@ namespace BloodLuck
             if (diceRolling || !shopPanel.activeSelf || slot < 0 || slot >= offers.Count || offers[slot] == null) return;
             var infusion = offers[slot];
             if (!_wallet.TrySpend(HpCost(infusion))) return;
+            AudioManager.Instance?.PlayPurchase();
             Grant(infusion);
             offers[slot] = null;
             RefreshButtons();
@@ -187,6 +188,7 @@ namespace BloodLuck
             if (diceRolling || !shopPanel.activeSelf) return;
             var mythics = AvailableInfusions().FindAll(x => x.rarity == InfusionRarity.Bloodwrought);
             if (mythics.Count == 0 || !_wallet.TrySpend(DiceHpCost)) return;
+            AudioManager.Instance?.PlayPurchase();
 
             var reward = mythics[UnityEngine.Random.Range(0, mythics.Count)];
             diceRolling = true;
