@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using InGame.System;
+using UnityEngine;
 
 namespace InGame.Managers
 {
@@ -8,6 +9,9 @@ namespace InGame.Managers
         private PlayerAttack _playerAttack;
         private PlayerInputManager _playerInputManager;
         private PlayerMovement _playerMovement;
+        private BloodLuckEffectManager _effectManager;
+        private BloodLuckPlayerStateManager _playerStateManager;
+        private BloodLuckMonsterManager _monsterManager;
 
         public BloodLuckUpdatePriority UpdatePriority => BloodLuckUpdatePriority.InputUpdate;
 
@@ -34,10 +38,23 @@ namespace InGame.Managers
         {
             var updateLoopManager = contextMap.GetRegisteredInstance<BloodLuckGameUpdateLoopManager>();
             updateLoopManager.RegisterUpdatable(this);
-            _playerAttack.InitializePlayerAttack(
-                contextMap.GetRegisteredInstance<BloodLuckEffectManager>(),
-                contextMap.GetRegisteredInstance<BloodLuckPlayerStateManager>(),
-                contextMap.GetRegisteredInstance<BloodLuckMonsterManager>());
+            _effectManager = contextMap.GetRegisteredInstance<BloodLuckEffectManager>();
+            _playerStateManager = contextMap.GetRegisteredInstance<BloodLuckPlayerStateManager>();
+            _monsterManager = contextMap.GetRegisteredInstance<BloodLuckMonsterManager>();
+            _playerAttack.InitializePlayerAttack(_effectManager, _playerStateManager, _monsterManager);
+            _playerMovement.InitializePlayerMovement(this);
+        }
+
+        public void HandlePlayerDash(Vector3 start, Vector3 end)
+        {
+            float dashDamage = _playerStateManager.DashDamage;
+            if (dashDamage <= 0f)
+            {
+                return;
+            }
+
+            _effectManager.ShowChainLightning(new[] { start, end });
+            _monsterManager.ApplyDashDamage(start, end, dashDamage);
         }
     }
 }

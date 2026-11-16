@@ -12,8 +12,10 @@ namespace InGame.Managers
         public float CurrentHp { get; private set; }
         public event global::System.Action<int> BalanceChanged;
         public float Attack => _passiveContainer.GetDamage(_parameter.PlayerAttack);
-        public float ThirdAttack => _passiveContainer.GetDamage(_parameter.PlayerThirdAttackDamage);
+        public float ThirdAttack => _passiveContainer.GetThirdAttackDamage(_parameter.PlayerThirdAttackDamage);
         public float ChainLightningDamage => _passiveContainer.GetChainLightningDamage();
+        public float DashDamage => _passiveContainer.GetDashDamage();
+        public float LifeStealRatio => _passiveContainer.GetLifeStealRatio();
         public float AttackSpeed => _passiveContainer.GetAttackSpeed(_parameter.PlayerAttackSpeed);
 
         private readonly BloodLuckInGameParameter _parameter;
@@ -105,6 +107,17 @@ namespace InGame.Managers
         public void Heal(float amount)
         {
             SetCurrentHp(CurrentHp + amount);
+        }
+
+        public void HealFromDamageDealt(float damageDealt)
+        {
+            float healAmount = damageDealt * LifeStealRatio;
+            if (healAmount <= 0f)
+            {
+                return;
+            }
+
+            Heal(healAmount);
         }
 
         int IShopWallet.Balance => Mathf.FloorToInt(CurrentHp);

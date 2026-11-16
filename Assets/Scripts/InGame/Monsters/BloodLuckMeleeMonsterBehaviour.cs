@@ -23,6 +23,7 @@ namespace InGame.Monsters
         private readonly BloodLuckEffectManager _effectManager;
 
         private readonly BloodLuckMonsterHitStun _hitStun;
+        private readonly BloodLuckMonsterAnimator _monsterAnimator;
 
         private State _state = State.Chasing;
         private BloodLuckSectorAreaEffectComponent _sectorEffect;
@@ -36,8 +37,10 @@ namespace InGame.Monsters
             float attackDamage,
             Transform player,
             BloodLuckPlayerStateManager playerStateManager,
-            BloodLuckEffectManager effectManager)
+            BloodLuckEffectManager effectManager,
+            BloodLuckMonsterAnimator monsterAnimator)
         {
+            _monsterAnimator = monsterAnimator;
             _monsterTransform = monsterTransform;
             _parameter = parameter;
             _attackDamage = attackDamage;
@@ -137,6 +140,7 @@ namespace InGame.Monsters
 
         private void Attack()
         {
+            _monsterAnimator.PlayAttack();
             if (IsPlayerInsideSector())
             {
                 BloodLuckDamageLogic.ApplyDamageToPlayer(_playerStateManager, _attackDamage);

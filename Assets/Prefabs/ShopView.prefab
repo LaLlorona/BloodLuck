@@ -2987,11 +2987,12 @@ MonoBehaviour:
   diceCostLabel: {fileID: 2891764547694256420}
   wallet: {fileID: 7902867878609679821}
   infusionPool:
-  - {fileID: 11400000, guid: 649ecfc3a399f453dbc4f414b2fb3576, type: 2}
-  - {fileID: 11400000, guid: 9e9c7ea8110c4c45949fa478c375dfbb, type: 2}
+  - {fileID: 11400000, guid: 4b4d426040174a31a606c65156d488d7, type: 2}
   - {fileID: 11400000, guid: ef1d1bdf8b224599a15176082b939637, type: 2}
   - {fileID: 11400000, guid: d5b0a272d087409bae2b7427bac916f6, type: 2}
   - {fileID: 11400000, guid: 169a30235098416abdbeb1ec6e48747b, type: 2}
+  - {fileID: 11400000, guid: 33d376335ce106d4da63a5e4656ad180, type: 2}
+  - {fileID: 11400000, guid: 239ae40892e1d584c89280c515e5e65d, type: 2}
   hpPerCostUnit: 10
 --- !u!114 &7508696392024018627
 MonoBehaviour:

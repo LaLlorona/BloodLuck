@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using BloodLuck;
+using InGame.Managers;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     private PlayerInputManager playerInput;
     private PlayerAttack playerAttack;
     private PlayerAnimationController playerAnimation;
+    private BloodLuckPlayerManager playerManager;
 
     [Header("Movement Config")]
     [SerializeField] private float moveSpeed;
@@ -30,6 +32,11 @@ public class PlayerMovement : MonoBehaviour
         playerAnimation = GetComponent<PlayerAnimationController>();
     }
 
+    public void InitializePlayerMovement(BloodLuckPlayerManager manager)
+    {
+        playerManager = manager;
+    }
+
     void OnEnable()
     {
         playerInput.Dash += HandleDash;
@@ -50,8 +57,10 @@ public class PlayerMovement : MonoBehaviour
         if (isDashing)
         {
             Vector3 lastMoveDirVec3 = new(lastMoveDir.x, lastMoveDir.y, 0);
+            Vector3 dashStart = transform.position;
             transform.position = Vector3.MoveTowards(transform.position, transform.position + (lastMoveDirVec3 * maxDashDistance), maxDashDistance);
             isDashing = false;
+            playerManager.HandlePlayerDash(dashStart, transform.position);
         }
 
         if (!isDashing && !playerAttack.isAttacking)

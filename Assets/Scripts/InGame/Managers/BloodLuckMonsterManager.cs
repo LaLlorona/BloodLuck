@@ -60,46 +60,68 @@ namespace InGame.Managers
             }
         }
 
-        // Must be called before the hit monsters take damage, because dead monsters lose their position.
-        public void ApplyChainLightning(IReadOnlyList<BloodLuckMonster> hitMonsters, float damage)
+        // Must be called before the origin takes damage, because dead monsters lose their position.
+        public void ApplyChainLightning(BloodLuckMonster origin, float damage)
         {
-            if (damage <= 0f || hitMonsters.Count == 0)
+            if (damage <= 0f)
             {
                 return;
             }
 
-            var visited = new HashSet<BloodLuckMonster>(hitMonsters);
+            var visited = new HashSet<BloodLuckMonster> { origin };
             var chainedMonsters = new List<BloodLuckMonster>();
+            var points = new List<Vector3> { origin.Position };
+            var current = origin.Position;
 
-            foreach (var origin in hitMonsters)
+            for (int i = 0; i < _inGameParameter.ChainLightningMaxCount; i++)
             {
-                var points = new List<Vector3> { origin.Position };
-                var current = origin.Position;
-
-                for (int i = 0; i < _inGameParameter.ChainLightningMaxCount; i++)
+                var next = FindNearestMonster(current, visited, _inGameParameter.ChainLightningRange);
+                if (next == null)
                 {
-                    var next = FindNearestMonster(current, visited, _inGameParameter.ChainLightningRange);
-                    if (next == null)
-                    {
-                        break;
-                    }
-
-                    visited.Add(next);
-                    chainedMonsters.Add(next);
-                    current = next.Position;
-                    points.Add(current);
+                    break;
                 }
 
-                if (points.Count > 1)
-                {
-                    _effectManager.ShowChainLightning(points);
-                }
+                visited.Add(next);
+                chainedMonsters.Add(next);
+                current = next.Position;
+                points.Add(current);
+            }
+
+            if (points.Count > 1)
+            {
+                _effectManager.ShowChainLightning(points);
             }
 
             foreach (var monster in chainedMonsters)
             {
-                monster.OnMonsterDamage(damage);
+                monster.OnMonsterDamage(damage, BloodLuckDamageSource.ChainLightning);
             }
+        }
+
+        public void ApplyDashDamage(Vector3 start, Vector3 end, float damage)
+        {
+            var hitMonsters = new List<BloodLuckMonster>();
+            float sqrHitWidth = _inGameParameter.DashDamageHitWidth * _inGameParameter.DashDamageHitWidth;
+            foreach (var monster in _monsters)
+            {
+                if (GetSqrDistanceToSegment(monster.Position, start, end) <= sqrHitWidth)
+                {
+                    hitMonsters.Add(monster);
+                }
+            }
+
+            foreach (var monster in hitMonsters)
+            {
+                monster.OnMonsterDamage(damage, BloodLuckDamageSource.Dash);
+            }
+        }
+
+        private static float GetSqrDistanceToSegment(Vector3 point, Vector3 start, Vector3 end)
+        {
+            Vector3 segment = end - start;
+            float sqrLength = segment.sqrMagnitude;
+            float t = sqrLength > 0.0001f ? Mathf.Clamp01(Vector3.Dot(point - start, segment) / sqrLength) : 0f;
+            return (point - (start + segment * t)).sqrMagnitude;
         }
 
         private BloodLuckMonster FindNearestMonster(Vector3 from, HashSet<BloodLuckMonster> excluded, float maxDistance)

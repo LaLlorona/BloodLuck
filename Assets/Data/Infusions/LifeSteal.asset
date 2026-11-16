@@ -17,5 +17,5 @@ MonoBehaviour:
   icon: {fileID: 0}
   rarity: 2
   passiveKind: 8
-  operationMethod: 1
-  passiveValue: 1
+  operationMethod: 0
+  passiveValue: 0.1

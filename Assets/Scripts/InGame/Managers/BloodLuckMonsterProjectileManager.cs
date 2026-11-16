@@ -55,6 +55,8 @@ namespace InGame.Managers
                 position,
                 Quaternion.identity);
 
+            component.FaceDirection(direction);
+
             _monsterProjectiles.Add(new MonsterProjectile
             {
                 Component = component,

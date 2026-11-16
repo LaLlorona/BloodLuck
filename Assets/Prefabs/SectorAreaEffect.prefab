@@ -45,9 +45,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InGame.Effects.BloodLuckSectorAreaEffect
   _material: {fileID: 2100000, guid: cedf07d0b27f42142bee1cda3a209634, type: 2}
-  _backgroundColor: {r: 0.2, g: 0.9, b: 1, a: 0.25}
-  _fillColor: {r: 0.2, g: 0.9, b: 1, a: 0.45}
-  _outlineColor: {r: 0.6, g: 1, b: 1, a: 1}
+  _backgroundColor: {r: 1, g: 0.28734285, b: 0.19999999, a: 0.25}
+  _fillColor: {r: 1, g: 0.29962096, b: 0.19999999, a: 0.45}
+  _outlineColor: {r: 1, g: 0.6, b: 0.6, a: 1}
   _outlineWidth: 0.06
   _arcSegments: 60
   _sortingOrder: 10

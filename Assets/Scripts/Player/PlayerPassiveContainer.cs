@@ -68,12 +68,55 @@ namespace Player
             return (baseDamage + add) * multiply;
         }
 
+        public float GetThirdAttackDamage(float baseDamage)
+        {
+            float add = 0f;
+            float multiply = 1f;
+            foreach (PlayerPassive passive in _passives)
+            {
+                if (passive is PlayerPassive.ThirdAttackBonus p)
+                {
+                    Accumulate(p.PassiveValue, p.OperationMethod, ref add, ref multiply);
+                }
+            }
+
+            return (GetDamage(baseDamage) + add) * multiply;
+        }
+
         public float GetChainLightningDamage()
         {
             float total = 0f;
             foreach (PlayerPassive passive in _passives)
             {
                 if (passive is PlayerPassive.ChainLightning p)
+                {
+                    total += p.PassiveValue;
+                }
+            }
+
+            return total;
+        }
+
+        public float GetDashDamage()
+        {
+            float total = 0f;
+            foreach (PlayerPassive passive in _passives)
+            {
+                if (passive is PlayerPassive.DashDamage p)
+                {
+                    total += p.PassiveValue;
+                }
+            }
+
+            return total;
+        }
+
+        public float GetLifeStealRatio()
+        {
+            float total = 0f;
+            foreach (PlayerPassive passive in _passives)
+            {
+                if (passive is PlayerPassive.LifeSteal p)
                 {
                     total += p.PassiveValue;
                 }

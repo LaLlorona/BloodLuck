@@ -50,6 +50,10 @@ namespace InGame.System
         [SerializeField, Min(0f)] private float _playerThirdAttackDamage = 20f;
         [SerializeField, Min(0f)] private float _playerAttackSpeed = 1f;
 
+        [Header("Dash Damage")]
+        [Tooltip("A monster is hit by a dash when it is within this distance of the dash line.")]
+        [SerializeField, Min(0f)] private float _dashDamageHitWidth = 1f;
+
         [Header("Chain Lightning")]
         [Tooltip("A monster is chained only when it is within this distance of the previous monster.")]
         [SerializeField, Min(0f)] private float _chainLightningRange = 3f;
@@ -87,6 +91,7 @@ namespace InGame.System
         public float MonsterKnockbackDistance => _monsterKnockbackDistance;
         public float MonsterKnockbackSeconds => _monsterKnockbackSeconds;
 
+        public float DashDamageHitWidth => _dashDamageHitWidth;
         public float ChainLightningRange => _chainLightningRange;
         public int ChainLightningMaxCount => _chainLightningMaxCount;
         public float ChainLightningLineSeconds => _chainLightningLineSeconds;

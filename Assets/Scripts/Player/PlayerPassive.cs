@@ -89,7 +89,7 @@
 
             public override string GetTitle() => "You steal life from monsters";
 
-            public override string GetDescription() => $"- Heal {PassiveValue:0.##} HP per hit";
+            public override string GetDescription() => $"- Heal {PassiveValue * 100f:0.##}% of damage dealt";
         }
 
         public sealed record SPECIAL_ABILITIES_HAHA() : PlayerPassive

@@ -175,11 +175,9 @@ public class PlayerAttack : MonoBehaviour
             }
         }
 
-        monsterManager.ApplyChainLightning(hitMonsters, playerStateManager.ChainLightningDamage);
-
         foreach (var monster in hitMonsters)
         {
-            monster.OnMonsterDamage(damage);
+            monster.OnMonsterDamage(damage, BloodLuckDamageSource.Attack);
         }
         if (hitMonsters.Count > 0) AudioManager.Instance?.PlayHit();
 

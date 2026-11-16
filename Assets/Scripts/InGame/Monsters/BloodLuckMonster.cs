@@ -8,8 +8,10 @@ namespace InGame.Monsters
     public class BloodLuckMonster
     {
         private readonly BloodLuckMonsterComponent _monsterComponent;
+        private readonly Transform _player;
         private readonly IBloodLuckMonsterBehaviour _behaviour;
         private readonly BloodLuckMonsterManager _monsterManager;
+        private readonly BloodLuckPlayerStateManager _playerStateManager;
         private readonly float _maxHp;
         private float _currentHp;
         private bool _isDead;
@@ -25,7 +27,9 @@ namespace InGame.Monsters
             BloodLuckMonsterProjectileManager monsterProjectileManager,
             BloodLuckMonsterManager monsterManager)
         {
+            _player = player;
             _monsterManager = monsterManager;
+            _playerStateManager = playerStateManager;
             _maxHp = spawnData.MaxHp;
             _currentHp = _maxHp;
             _monsterComponent = GameObject.Instantiate(
@@ -43,7 +47,8 @@ namespace InGame.Monsters
                     spawnData.BaseDamage,
                     player,
                     playerStateManager,
-                    effectManager),
+                    effectManager,
+                    _monsterComponent.MonsterAnimator),
                 BloodLuckMonsterType.Ranged => new BloodLuckRangedMonsterBehaviour(
                     _monsterComponent.transform,
                     parameter,
@@ -59,14 +64,21 @@ namespace InGame.Monsters
         public void UpdateMonster(float deltaTime)
         {
             _behaviour.UpdateMonsterBehaviour(deltaTime);
+            _monsterComponent.FaceHorizontal(_player.position.x - Position.x);
             _monsterComponent.CustomUpdate(deltaTime);
         }
 
-        public void OnMonsterDamage(float damage)
+        public void OnMonsterDamage(float damage, BloodLuckDamageSource source)
         {
             if (_isDead)
             {
                 return;
+            }
+
+            _playerStateManager.HealFromDamageDealt(damage);
+            if (source == BloodLuckDamageSource.Attack)
+            {
+                _monsterManager.ApplyChainLightning(this, _playerStateManager.ChainLightningDamage);
             }
 
             _currentHp = Mathf.Max(0f, _currentHp - damage);
