@@ -790,6 +790,12 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a018707dcda364609a31137e84e7cb02, type: 3}
   - {fileID: 8300000, guid: 781fb13d9d77440a283447174c89cabf, type: 3}
   shopPurchase: {fileID: 8300000, guid: 3a52925c8e7af447395ad91f1fb0f290, type: 3}
+  footstepVolume: 0.395
+  swingVolume: 0.276
+  impactVolume: 0.763
+  deathVolume: 1
+  shopHoverVolume: 1
+  shopPurchaseVolume: 1
   combatMusic: {fileID: 0}
   shopMusic: {fileID: 0}
   mainMenuMusic: {fileID: 0}
