@@ -12,6 +12,13 @@ namespace InGame.EditorTools
     public static class ShopPrototypeSetup
     {
         private const string InfusionFolder = "Assets/Data/Infusions";
+        private const string ShopViewPrefabPath = "Assets/Prefabs/ShopView.prefab";
+        private const string UpgradeCardPrefabPath = "Assets/Prefabs/UpgradeCard1.prefab";
+        private const string RootSpritePath = "Assets/Art/UI_Card/Roots_Final.png";
+        // The art is intentionally just wider than the 370px card. 395px leaves a one-pixel
+        // visual gutter between neighbouring root bounds at the 395px card spacing.
+        private const float CardSpacing = 395f;
+        private const float RootWidth = 394f;
         private static readonly Color PanelColor = new Color(0.10f, 0.035f, 0.12f, 0.97f);
         private static readonly Color CardColor = new Color(0.22f, 0.06f, 0.18f, 1f);
         private static readonly Color Gold = new Color(0.92f, 0.68f, 0.21f, 1f);
@@ -40,10 +47,10 @@ namespace InGame.EditorTools
             var cardViews = new InfusionCardView[3];
             for (int i = 0; i < 3; i++)
             {
-                var card = CreateCard(panel.transform, i, -600 + i * 400, out cardViews[i]);
+                var card = CreateCard(panel.transform, i, -1.5f * CardSpacing + i * CardSpacing, out cardViews[i]);
                 cards[i] = card.GetComponent<Button>();
             }
-            var diceButton = CreateDiceCard(panel.transform, 600);
+            var diceButton = CreateDiceCard(panel.transform, 1.5f * CardSpacing);
             var leaveButton = CreateButton(panel.transform, "LeaveShopButton", "LEAVE SHOP", new Color(.38f, .13f, .25f, 1));
             Place(leaveButton.GetComponent<RectTransform>(), new Vector2(1, 0), new Vector2(1, 0), new Vector2(-105, 58), new Vector2(190, 62));
 
@@ -94,6 +101,36 @@ namespace InGame.EditorTools
             Debug.Log("[ShopPrototypeSetup] Shop UI and dice references are ready.");
         }
 
+        [MenuItem("Tools/BloodLuck/Apply Shop Root Decorations")]
+        public static void ApplyRootDecorationsToExistingShopView()
+        {
+            // UpgradeCard1 is a nested prefab; decorate its source so its ShopView instance keeps
+            // the existing prefab relationship. The other two cards are local ShopView objects.
+            var cardTemplate = PrefabUtility.LoadPrefabContents(UpgradeCardPrefabPath);
+            AddRootDecoration(cardTemplate.transform);
+            PrefabUtility.SaveAsPrefabAsset(cardTemplate, UpgradeCardPrefabPath);
+            PrefabUtility.UnloadPrefabContents(cardTemplate);
+
+            var shopView = PrefabUtility.LoadPrefabContents(ShopViewPrefabPath);
+            var cardNames = new[] { "UpgradeCard1", "UpgradeCard2", "UpgradeCard3" };
+            for (int i = 0; i < cardNames.Length; i++)
+            {
+                var card = FindDescendant(shopView.transform, cardNames[i]);
+                if (card == null) continue;
+                if (i > 0) AddRootDecoration(card);
+                card.GetComponent<RectTransform>().anchoredPosition = new Vector2(-1.5f * CardSpacing + i * CardSpacing, 30);
+            }
+
+            var diceCard = FindDescendant(shopView.transform, "BloodyDiceButton");
+            if (diceCard != null)
+                diceCard.GetComponent<RectTransform>().anchoredPosition = new Vector2(1.5f * CardSpacing, 30);
+
+            PrefabUtility.SaveAsPrefabAsset(shopView, ShopViewPrefabPath);
+            PrefabUtility.UnloadPrefabContents(shopView);
+            AssetDatabase.SaveAssets();
+            Debug.Log("[ShopPrototypeSetup] Applied root decorations and card spacing to ShopView.");
+        }
+
         private static List<InfusionDefinition> CreateSampleInfusions()
         {
             EnsureFolder("Assets/Data"); EnsureFolder(InfusionFolder);
@@ -136,11 +173,46 @@ namespace InGame.EditorTools
         {
             var go = new GameObject("UpgradeCard" + (index + 1), typeof(RectTransform), typeof(Image), typeof(Button), typeof(InfusionCardView)); go.transform.SetParent(parent, false);
             go.GetComponent<Image>().color = CardColor; Place(go.GetComponent<RectTransform>(), new Vector2(.5f, .5f), new Vector2(.5f, .5f), new Vector2(xPosition, 30), new Vector2(370, 390));
+            AddRootDecoration(go.transform);
             var title = Text(go.transform, "Name", "", 29, Gold); Place(title.rectTransform, new Vector2(.5f,1), new Vector2(.5f,1), new Vector2(0,-40), new Vector2(350,45));
             var rarity = Text(go.transform, "Rarity", "", 20, Color.white); Place(rarity.rectTransform, new Vector2(.5f,1), new Vector2(.5f,1), new Vector2(0,-85), new Vector2(350,35));
             var description = Text(go.transform, "Description", "", 19, Color.white); description.alignment = TextAlignmentOptions.TopLeft; description.textWrappingMode = TextWrappingModes.Normal; Place(description.rectTransform, new Vector2(.5f,.5f), new Vector2(.5f,.5f), new Vector2(0,-20), new Vector2(330,150));
             var cost = Text(go.transform, "Cost", "", 24, Gold); Place(cost.rectTransform, new Vector2(.5f,0), new Vector2(.5f,0), new Vector2(0,35), new Vector2(330,45));
             view = go.GetComponent<InfusionCardView>(); Set(view,"title",title); Set(view,"rarity",rarity); Set(view,"description",description); Set(view,"cost",cost); Set(view,"contents",go); return go;
+        }
+
+        private static void AddRootDecoration(Transform card)
+        {
+            var existing = card.Find("RootDecoration");
+            if (existing != null) Object.DestroyImmediate(existing.gameObject);
+
+            var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(RootSpritePath);
+            if (sprite == null)
+            {
+                Debug.LogWarning("[ShopPrototypeSetup] Root decoration sprite was not found at " + RootSpritePath);
+                return;
+            }
+
+            var decoration = new GameObject("RootDecoration", typeof(RectTransform), typeof(Image));
+            decoration.transform.SetParent(card, false);
+            // Create this before text so it sits above the card background and below all existing content.
+            decoration.transform.SetSiblingIndex(0);
+            var image = decoration.GetComponent<Image>();
+            image.sprite = sprite;
+            image.preserveAspect = true;
+            image.raycastTarget = false;
+            Place(decoration.GetComponent<RectTransform>(), new Vector2(.5f, 1), new Vector2(.5f, 1), new Vector2(0, 25), new Vector2(RootWidth, RootWidth * sprite.rect.height / sprite.rect.width));
+        }
+
+        private static Transform FindDescendant(Transform root, string name)
+        {
+            if (root.name == name) return root;
+            foreach (Transform child in root)
+            {
+                var result = FindDescendant(child, name);
+                if (result != null) return result;
+            }
+            return null;
         }
 
         private static GameObject CreateDiceCard(Transform parent, float xPosition)
