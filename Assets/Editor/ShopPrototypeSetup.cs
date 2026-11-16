@@ -15,10 +15,8 @@ namespace InGame.EditorTools
         private const string ShopViewPrefabPath = "Assets/Prefabs/ShopView.prefab";
         private const string UpgradeCardPrefabPath = "Assets/Prefabs/UpgradeCard1.prefab";
         private const string RootSpritePath = "Assets/Art/UI_Card/Roots_Final.png";
-        // The art is intentionally just wider than the 370px card. 395px leaves a one-pixel
-        // visual gutter between neighbouring root bounds at the 395px card spacing.
-        private const float CardSpacing = 395f;
-        private const float RootWidth = 394f;
+        private const float CardSpacing = 400f;
+        private const float RootWidth = 300f;
         private static readonly Color PanelColor = new Color(0.10f, 0.035f, 0.12f, 0.97f);
         private static readonly Color CardColor = new Color(0.22f, 0.06f, 0.18f, 1f);
         private static readonly Color Gold = new Color(0.92f, 0.68f, 0.21f, 1f);
@@ -201,7 +199,9 @@ namespace InGame.EditorTools
             image.sprite = sprite;
             image.preserveAspect = true;
             image.raycastTarget = false;
-            Place(decoration.GetComponent<RectTransform>(), new Vector2(.5f, 1), new Vector2(.5f, 1), new Vector2(0, 25), new Vector2(RootWidth, RootWidth * sprite.rect.height / sprite.rect.width));
+            var rect = decoration.GetComponent<RectTransform>();
+            rect.pivot = Vector2.one;
+            Place(rect, Vector2.one, Vector2.one, new Vector2(8, 8), new Vector2(RootWidth, RootWidth * sprite.rect.height / sprite.rect.width));
         }
 
         private static Transform FindDescendant(Transform root, string name)
