@@ -110,7 +110,7 @@ public class PlayerAttack : MonoBehaviour
 
     private void HandleAttack()
     {
-        // TODO: PLAY ANIMATION BASED ON currentAttack`ComboIndex
+        // TODO: PLAY ANIMATION BASED ON currentAttackComboIndex
         if (attackState != AttackState.Ready) return;
 
         bool isThirdAttack = currentAttackComboIndex == ThirdAttackComboIndex;
@@ -170,19 +170,22 @@ public class PlayerAttack : MonoBehaviour
 
     private void HandleSpecial()
     {
-        if (attackState != AttackState.Ready) return;
+        // if (attackState != AttackState.Ready) return;
 
-        results.Clear();
-        WeaponCollider.Overlap(filter, results);
-        foreach (Collider2D col in results)
-        {
-            if (col.TryGetComponent(out BloodLuckMonsterComponent enemy))
-            {
-                // TODO: DEAL DAMAGE TO enemy HERE (DEAL KNOCKBACK, FLASH, ETC)
-            }
-        }
+        // results.Clear();
+        // WeaponCollider.Overlap(filter, results);
+        // foreach (Collider2D col in results)
+        // {
+        //     if (col.TryGetComponent(out BloodLuckMonsterComponent enemy))
+        //     {
+        //         // TODO: DEAL DAMAGE TO enemy HERE (DEAL KNOCKBACK, FLASH, ETC)
+        //     }
+        // }
 
-        attackCooldown = specialAttackCooldown;
-        attackState = AttackState.Cooldown;
+        // attackCooldown = specialAttackCooldown;
+        // attackState = AttackState.Cooldown;
+
+        // WE DIDN'T HAVE TO IMPLEMENT SPECIALS LOL
+        return;
     }
 }
