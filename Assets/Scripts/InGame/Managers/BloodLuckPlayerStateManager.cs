@@ -22,6 +22,7 @@ namespace InGame.Managers
         private BloodLuckGameStateManager _gameStateManager;
         private BloodLuckGameResultManager _gameResultManager;
         private bool _deathSoundPlayed;
+        public bool IsGameProceeding => _gameStateManager.CurrentGameState == new BloodLuckGameStateManager.GameState.GameProceeding();
 
         public BloodLuckPlayerStateManager(BloodLuckManagerParameter parameter)
         {

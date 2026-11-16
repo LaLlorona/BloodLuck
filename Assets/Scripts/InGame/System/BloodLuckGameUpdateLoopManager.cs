@@ -20,6 +20,7 @@ namespace InGame.System
         private bool _isSorted;
         private bool _isHandlingAsyncTask;
 
+
         public UniTask InitAsync()
         {
             return UniTask.CompletedTask;
@@ -143,10 +144,6 @@ namespace InGame.System
             _gameResultManager.ShowResult(isJackpot);
         }
 
-        private async UniTask HandlePlayerDeath()
-        {
-            _gameStateManager.FinishGame();
-            _gameResultManager.ShowResult(false);
-        }
+
     }
 }

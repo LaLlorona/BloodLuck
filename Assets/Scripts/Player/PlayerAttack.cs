@@ -55,6 +55,8 @@ public class PlayerAttack : MonoBehaviour
     ContactFilter2D filter;
     List<Collider2D> results = new();
 
+    private bool IsThirdAttack => currentAttackComboIndex % 3 == 2;
+
     void Awake()
     {
         playerInput = GetComponent<PlayerInputManager>();
@@ -87,6 +89,8 @@ public class PlayerAttack : MonoBehaviour
         effectManager = manager;
         playerStateManager = stateManager;
         this.monsterManager = monsterManager;
+        playerInput.InitializeInputManager(playerStateManager);
+        
     }
 
     public void GameUpdate(float deltaTime)
@@ -134,6 +138,7 @@ public class PlayerAttack : MonoBehaviour
 
     private void HandleAttack()
     {
+        
         if (attackState == AttackState.Attack1 || attackState == AttackState.Attack2 || attackState == AttackState.Attack3)
         {
             IsNextAttackQueued = true;
@@ -156,7 +161,7 @@ public class PlayerAttack : MonoBehaviour
         
         PlaySlashEffect();
         AudioManager.Instance?.PlaySwing();
-        float damage = attackState == AttackState.Attack3 ? playerStateManager.ThirdAttack : playerStateManager.Attack;
+        float damage = IsThirdAttack? playerStateManager.ThirdAttack : playerStateManager.Attack;
 
         // Check if any enemies are in the collider
         results.Clear();
@@ -229,13 +234,14 @@ public class PlayerAttack : MonoBehaviour
             attackState = AttackState.Ready;
         }
     }
+    
 
     public void PlaySlashEffect()
     {
         if (effectManager == null) return;
 
         Color color = Color.white;
-        if (attackState == AttackState.Attack3)
+        if (IsThirdAttack)
         {
             color = Color.red;
         }
