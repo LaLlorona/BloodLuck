@@ -193,8 +193,8 @@ namespace InGame.EditorTools
 
             var decoration = new GameObject("RootDecoration", typeof(RectTransform), typeof(Image));
             decoration.transform.SetParent(card, false);
-            // Create this before text so it sits above the card background and below all existing content.
-            decoration.transform.SetSiblingIndex(0);
+            // Keep the art over the card's frame, rarity tint, and content without intercepting clicks.
+            decoration.transform.SetAsLastSibling();
             var image = decoration.GetComponent<Image>();
             image.sprite = sprite;
             image.preserveAspect = true;
