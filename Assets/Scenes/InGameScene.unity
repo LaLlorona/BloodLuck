@@ -791,7 +791,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 781fb13d9d77440a283447174c89cabf, type: 3}
   shopPurchase: {fileID: 8300000, guid: 3a52925c8e7af447395ad91f1fb0f290, type: 3}
   footstepVolume: 0.395
-  swingVolume: 0.276
+  swingVolume: 0.124
   impactVolume: 0.763
   deathVolume: 1
   shopHoverVolume: 1
