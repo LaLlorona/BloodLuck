@@ -2,5 +2,7 @@ public enum PlayerAnimationState
 {
     Idle,
     Run,
-    Attack,
+    Attack1,
+    Attack2,
+    Attack3,
 }

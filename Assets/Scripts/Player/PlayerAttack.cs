@@ -12,10 +12,13 @@ public class PlayerAttack : MonoBehaviour
         SpecialAttack
     }
 
-    enum AttackState
+    public enum AttackState
     {
         Cooldown,
-        Ready
+        Ready,
+        Attack1,
+        Attack2,
+        Attack3,
     }
 
     // The combo index is incremented after each attack, so it is 2 right before the third hit.
@@ -25,6 +28,7 @@ public class PlayerAttack : MonoBehaviour
     public Collider2D WeaponCollider;
     [SerializeField] LayerMask enemyLayer;
     private PlayerInputManager playerInput;
+    private PlayerAnimationController playerAnimation;
 
     [Header("Slash Effect")]
     [SerializeField] private float slashRadius = 2f;
@@ -36,9 +40,12 @@ public class PlayerAttack : MonoBehaviour
     private PlayerMovement playerMovement;
 
     [Header("Attack Settings")]
+    public bool isAttacking;
     [SerializeField] private float comboTime;
     [SerializeField] private float basicAttackCooldown;
     [SerializeField] private float specialAttackCooldown;
+    public bool IsNextAttackQueued;
+    public bool IsAttackInterruptable;
     private float attackCooldown;
     private AttackState attackState;
     private AttackType lastAttackType;
@@ -51,9 +58,12 @@ public class PlayerAttack : MonoBehaviour
     {
         playerInput = GetComponent<PlayerInputManager>();
         playerMovement = GetComponent<PlayerMovement>();
+        playerAnimation = GetComponent<PlayerAnimationController>();
 
         filter = new ContactFilter2D();
         filter.SetLayerMask(enemyLayer);
+
+        attackState = AttackState.Ready;
     }
 
     void OnEnable()
@@ -95,12 +105,25 @@ public class PlayerAttack : MonoBehaviour
     {
         switch (attackState)
         {
-            case AttackState.Cooldown:
-                attackCooldown -= deltaTime;
-                if (attackCooldown <= 0f)
+            case AttackState.Attack1:
+                Debug.Log($"Attack Queued: {IsNextAttackQueued} | Attack Interruptable: {IsAttackInterruptable}");
+                if (IsNextAttackQueued && IsAttackInterruptable)
                 {
-                    attackCooldown = 0f;
                     attackState = AttackState.Ready;
+                    IsNextAttackQueued = false;
+                    IsAttackInterruptable = false;
+                    playerMovement.UpdateRotation();
+                    HandleAttack();
+                }
+                break;
+            case AttackState.Attack2:
+                if (IsNextAttackQueued && IsAttackInterruptable)
+                {
+                    attackState = AttackState.Ready;
+                    IsNextAttackQueued = false;
+                    IsAttackInterruptable = false;
+                    playerMovement.UpdateRotation();
+                    HandleAttack();
                 }
                 break;
             default:
@@ -110,11 +133,27 @@ public class PlayerAttack : MonoBehaviour
 
     private void HandleAttack()
     {
-        // TODO: PLAY ANIMATION BASED ON currentAttackComboIndex
+        if (attackState == AttackState.Attack1 || attackState == AttackState.Attack2 || attackState == AttackState.Attack3)
+        {
+            IsNextAttackQueued = true;
+        }
+
         if (attackState != AttackState.Ready) return;
 
+        if (currentAttackComboIndex == 0)
+        {
+            playerAnimation.UpdateAnimState(PlayerAnimationState.Attack1);
+        }
+        else if (currentAttackComboIndex == 1)
+        {
+            playerAnimation.UpdateAnimState(PlayerAnimationState.Attack2);
+        }
+        else if (currentAttackComboIndex == 2)
+        {
+            playerAnimation.UpdateAnimState(PlayerAnimationState.Attack3);
+        }
+
         bool isThirdAttack = currentAttackComboIndex == ThirdAttackComboIndex;
-        PlaySlashEffect(isThirdAttack ? Color.red : Color.white);
         float damage = isThirdAttack ? playerStateManager.ThirdAttack : playerStateManager.Attack;
 
         // Check if any enemies are in the collider
@@ -137,27 +176,66 @@ public class PlayerAttack : MonoBehaviour
         }
 
         // Increment combo
-        if (lastAttackType == AttackType.BasicAttack && Time.time - lastBasicAttackTime <= comboTime)
+        currentAttackComboIndex++;
+        // if (lastAttackType == AttackType.BasicAttack && Time.time - lastBasicAttackTime <= comboTime)
+        // {
+        //     currentAttackComboIndex++;
+        //     if (currentAttackComboIndex >= 3)
+        //     {
+        //         currentAttackComboIndex = 0;
+        //     }
+        // }
+        // else
+        // {
+        //     currentAttackComboIndex = 1;
+        // }
+
+        // lastBasicAttackTime = Time.time;
+        // attackCooldown = basicAttackCooldown;
+        // attackState = AttackState.Cooldown;
+    }
+
+    public void StartAttack(AttackState state)
+    {
+        attackState = state;
+        isAttacking = true;
+    }
+
+    // This is a function that an animation event can use to indicate the attack in the animation has made "contact"
+    public void AttackContact()
+    {
+        IsAttackInterruptable = true;
+    }
+
+    public void FinishAttack()
+    {
+        if (IsNextAttackQueued)
         {
-            currentAttackComboIndex++;
+            attackState = AttackState.Ready;
+            IsNextAttackQueued = false;
             if (currentAttackComboIndex >= 3)
             {
                 currentAttackComboIndex = 0;
             }
+            HandleAttack();
         }
         else
         {
-            currentAttackComboIndex = 1;
+            currentAttackComboIndex = 0;
+            isAttacking = false;
+            attackState = AttackState.Ready;
         }
-
-        lastBasicAttackTime = Time.time;
-        attackCooldown = basicAttackCooldown;
-        attackState = AttackState.Cooldown;
     }
 
-    private void PlaySlashEffect(Color color)
+    public void PlaySlashEffect()
     {
         if (effectManager == null) return;
+
+        Color color = Color.white;
+        if (attackState == AttackState.Attack3)
+        {
+            color = Color.red;
+        }
 
         Vector2 direction = playerMovement != null && playerMovement.lastMoveDir.sqrMagnitude > 0.0001f
             ? playerMovement.lastMoveDir

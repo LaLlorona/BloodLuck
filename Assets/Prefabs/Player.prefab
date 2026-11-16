@@ -360,7 +360,11 @@ MonoBehaviour:
     - key: 1
       value: run-front
     - key: 2
-      value: 
+      value: attack-front-1
+    - key: 3
+      value: attack-front-2
+    - key: 4
+      value: attack-front-3
   - Direction: 7
     AnimationStateNameDict:
     - key: 0

@@ -39,7 +39,10 @@ public class PlayerMovement : MonoBehaviour
 
     public void GameUpdate(float deltaTime)
     {
-        UpdateRotation();
+        if (!playerAttack.isAttacking)
+        {
+            UpdateRotation();
+        }
 
         if (isDashing)
         {
@@ -48,7 +51,7 @@ public class PlayerMovement : MonoBehaviour
             isDashing = false;
         }
 
-        if (!isDashing)
+        if (!isDashing && !playerAttack.isAttacking)
         {
             if (playerInput.MoveDir.magnitude != 0)
             {
@@ -65,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void UpdateRotation()
+    public void UpdateRotation()
     {
         Vector2 dir = playerInput.MoveDir;
 
