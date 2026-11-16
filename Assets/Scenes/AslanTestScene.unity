@@ -290,6 +290,8 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128
+  slashRadius: 2
+  slashAngle: 140
   comboTime: 1
   basicAttackCooldown: 0.5
   specialAttackCooldown: 0
@@ -914,13 +916,16 @@ MonoBehaviour:
   _monsterComponent: {fileID: 4306148354156657894, guid: 5e4a0159e15a0c94fb646ae50f3c950f, type: 3}
   _perkSelectionViewPrefab: {fileID: 3061619782537870256, guid: d1b4909d79e98714a962489e91294eee, type: 3}
   _sectorAreaEffectPrefab: {fileID: 1836139258916495295, guid: e2fd02bc4c99772499611302a48700d6, type: 3}
+  _slashEffectPrefab: {fileID: 6100000000000000005, guid: 9e3f5b7d1a2c4e6f8b0d2a4c6e8f1b3d, type: 3}
   _hudViewPrefab: {fileID: 2902138760569334641, guid: 2cfd6a99aac1e064f9b2af9a099c0bc8, type: 3}
   _projectilePrefab: {fileID: 841274627952102469, guid: 3c5431626b9d0a3428bb22373ce7dd36, type: 3}
   _slotMachineViewPrefab: {fileID: 7302083884087231852, guid: a6830c08dc29dc044bfbb0c1077ce4f3, type: 3}
   _gameResultViewPrefab: {fileID: 8882517846003980211, guid: 2b1b927274022af4db82215e0587231c, type: 3}
+  _shopViewPrefab: {fileID: 6421780111985712353, guid: 22a5738c87106ee44ad81d20960d9461, type: 3}
   _playerAttackComponent: {fileID: 42476100}
   _playerInputManagerComponent: {fileID: 42476098}
   _playerMovementComponent: {fileID: 42476097}
+  _playerAnimationController: {fileID: 42476102}
 --- !u!114 &2114054403
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -936,41 +941,30 @@ MonoBehaviour:
   assetHolder: {fileID: 2114054402}
   dataHolder: {fileID: 2114054499}
   inGameParameter:
-    _monsterSpawnCount: 1
     _monsterSpawnRadius: 5
     _monsterMoveSpeed: 2
-    _monsterMaxHp: 10
+    _hpTrailHoldSeconds: 0.4
+    _hpTrailMinSpeed: 0.3
+    _hpTrailSpeedPerGap: 2
     _monsterAttackTriggerDistance: 2
     _monsterAttackChargeSeconds: 1.5
     _monsterAttackWaitSeconds: 1
     _monsterAttackRadius: 3
     _monsterAttackAngle: 90
-    _monsterAttackDamage: 10
-    _rangedMonsterRatio: 0.3
     _monsterRangedAttackRange: 6
     _monsterRangedStopSeconds: 1.5
     _monsterProjectileSpeed: 6
-    _monsterProjectileDamage: 5
     _monsterProjectileHitRadius: 0.4
     _monsterProjectileLifetime: 5
+    _monsterHitStunSeconds: 1
+    _monsterKnockbackDistance: 0.5
+    _monsterKnockbackSeconds: 0.15
     _playerMaxHp: 100
     _playerMaxPulls: 3
     _playerAttack: 10
+    _playerThirdAttackDamage: 20
     _playerAttackSpeed: 1
     _slotJackpotChance: 0.2
---- !u!114 &2114054499
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2114054401}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23f2c6b73d8f4043ab47ae694ae73c1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InGame.System.BloodLuckDataHolder
-  _waveTable: {fileID: 11400000, guid: 78c6abdb62a14f1abfebf84b7069b6a0, type: 2}
 --- !u!4 &2114054404
 Transform:
   m_ObjectHideFlags: 0
@@ -986,6 +980,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2114054499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2114054401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23f2c6b73d8f4043ab47ae694ae73c1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InGame.System.BloodLuckDataHolder
+  _waveTable: {fileID: 11400000, guid: 78c6abdb62a14f1abfebf84b7069b6a0, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
