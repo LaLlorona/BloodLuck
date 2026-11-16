@@ -142,5 +142,11 @@ namespace InGame.System
             _gameStateManager.FinishGame();
             _gameResultManager.ShowResult(isJackpot);
         }
+
+        private async UniTask HandlePlayerDeath()
+        {
+            _gameStateManager.FinishGame();
+            _gameResultManager.ShowResult(false);
+        }
     }
 }
