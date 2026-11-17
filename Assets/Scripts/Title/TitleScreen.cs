@@ -17,6 +17,7 @@ namespace Title
 
         private void LoadInGameScene()
         {
+            BloodLuck.AudioManager.Instance?.InitializeAudioAfterFirstInteraction(false);
             SceneManager.LoadScene("InGameScene");
         }
     }
