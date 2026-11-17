@@ -78,7 +78,6 @@ namespace InGame.EditorTools
             Set(manager, "footsteps", Clips("Player/Run/Bloodluck_Player_Footstep_", 6));
             Set(manager, "dashes", Clips("Player/Dash/Bloodluck_Player_Dash_", 3));
             Set(manager, "shopHovers", Clips("UI/Shop/Hover/Bloodluck_UI_Shop_Hover_", 4));
-            Set(manager, "death", Clip("Player/Death/Bloodluck_Player_Death.wav"));
             Set(manager, "shopPurchase", Clip("UI/Shop/Select/Bloodluck_UI_Shop_Purchase.wav"));
             Set(manager, "perkSelection", Clip("UI/PerkSelect/Bloodluck_PerkSelection.wav"));
             Set(manager, "uiSelect", Clip("UI/BasicSelect/Bloodluck_UI_BasicSelect.wav"));

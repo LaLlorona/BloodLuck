@@ -16,7 +16,6 @@ namespace BloodLuck
         [SerializeField] private AudioClip[] hits;
         [SerializeField] private AudioClip[] footsteps;
         [SerializeField] private AudioClip[] dashes;
-        [SerializeField] private AudioClip death;
         [SerializeField] private AudioClip[] shopHovers;
         [SerializeField] private AudioClip shopPurchase;
         [SerializeField] private AudioClip perkSelection;
@@ -26,7 +25,6 @@ namespace BloodLuck
         [SerializeField, Range(0f, 1f)] private float swingVolume = 1f;
         [SerializeField, Range(0f, 1f)] private float impactVolume = 1f;
         [SerializeField, Range(0f, 1f)] private float dashVolume = 1f;
-        [SerializeField, Range(0f, 1f)] private float deathVolume = 1f;
         [SerializeField, Range(0f, 1f)] private float shopHoverVolume = 1f;
         [SerializeField, Range(0f, 1f)] private float shopPurchaseVolume = 1f;
         [SerializeField, Range(0f, 1f)] private float perkSelectionVolume = 1f;
@@ -433,14 +431,6 @@ namespace BloodLuck
 
         public void PlayDeath()
         {
-            if (death == null || sfxSource == null) return;
-            sfxSource.PlayOneShot(death, deathVolume);
-            StartCoroutine(PlayDefeatAfterDeathDelay(death.length * 0.75f));
-        }
-
-        private IEnumerator PlayDefeatAfterDeathDelay(float delay)
-        {
-            yield return new WaitForSecondsRealtime(delay);
             PlayDefeatMusic();
         }
     }
