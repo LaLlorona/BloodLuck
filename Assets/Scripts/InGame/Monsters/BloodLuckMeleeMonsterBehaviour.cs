@@ -30,6 +30,7 @@ namespace InGame.Monsters
         private Vector2 _attackDirection;
         private float _chargeElapsed;
         private float _waitElapsed;
+        private float _spawnAttackDelayRemaining;
 
         public BloodLuckMeleeMonsterBehaviour(
             Transform monsterTransform,
@@ -48,10 +49,18 @@ namespace InGame.Monsters
             _playerStateManager = playerStateManager;
             _effectManager = effectManager;
             _hitStun = new BloodLuckMonsterHitStun(monsterTransform, player, parameter);
+            _spawnAttackDelayRemaining = Random.Range(
+                parameter.MonsterAttackStartTimeMin,
+                parameter.MonsterAttackStarTimeMax);
         }
 
         public void UpdateMonsterBehaviour(float deltaTime)
         {
+            if (_spawnAttackDelayRemaining > 0f)
+            {
+                _spawnAttackDelayRemaining -= deltaTime;
+            }
+
             switch (_state)
             {
                 case State.Chasing:
@@ -101,7 +110,7 @@ namespace InGame.Monsters
             Vector3 playerPosition = _player.position;
 
             float distance = Vector2.Distance(_monsterTransform.position, playerPosition);
-            if (distance <= _parameter.MonsterAttackTriggerDistance)
+            if (_spawnAttackDelayRemaining <= 0f && distance <= _parameter.MonsterAttackTriggerDistance)
             {
                 StartCharging(playerPosition);
                 return;

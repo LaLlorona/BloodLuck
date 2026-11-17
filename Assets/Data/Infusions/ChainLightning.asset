@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ChainLightning
   m_EditorClassIdentifier: Assembly-CSharp::BloodLuck.InfusionDefinition
   displayName: Chain Lightning
-  description: Damage chains to nearby monsters.
+  description: Damage chains to nearby monsters. Chained hits deal +5 damage.
   icon: {fileID: 0}
   rarity: 2
   passiveKind: 6

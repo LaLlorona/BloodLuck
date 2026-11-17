@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: DashDamage
   m_EditorClassIdentifier: Assembly-CSharp::BloodLuck.InfusionDefinition
   displayName: Dash Strike
-  description: Your dash damages monsters.
+  description: Dash deals +15 damage.
   icon: {fileID: 0}
   rarity: 2
   passiveKind: 5
   operationMethod: 1
-  passiveValue: 5
+  passiveValue: 15

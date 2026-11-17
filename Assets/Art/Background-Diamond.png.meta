@@ -1,13 +1,16 @@
 fileFormatVersion: 2
-guid: a8ab6c3fe1fc194429b75b66d52080bb
+guid: fdec570c634f5c144bd9474d0eea592f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3594796900883703210
-    second: Untitled_Artwork_64_0
+      213: 4142314540776965623
+    second: Background-Diamond_0
   - first:
-      213: -8239193056475517680
-    second: Untitled_Artwork_64_1
+      213: -1840691720919282254
+    second: Background-Diamond_1
+  - first:
+      213: 5580339139446024727
+    second: Background-Diamond_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -49,7 +52,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -118,13 +121,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Untitled_Artwork_64_0
+      name: Background-Diamond_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 502
-        width: 13
-        height: 10
+        y: 810
+        width: 19
+        height: 14
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -133,20 +136,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: aa529dc3cb843e130800000000000000
-      internalID: 3594796900883703210
+      spriteID: 7f542feb0257c7930800000000000000
+      internalID: 4142314540776965623
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Untitled_Artwork_64_1
+      name: Background-Diamond_1
       rect:
         serializedVersion: 2
-        x: 17
-        y: 0
-        width: 2026
-        height: 1024
+        x: 5
+        y: 814
+        width: 6
+        height: 8
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -155,8 +158,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 01d69e8719188ad80800000000000000
-      internalID: -8239193056475517680
+      spriteID: 2bd8a99d1ac8476e0800000000000000
+      internalID: -1840691720919282254
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Background-Diamond_2
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 0
+        width: 3263
+        height: 1650
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 71aa3e4a1e8517d40800000000000000
+      internalID: 5580339139446024727
       vertices: []
       indices: 
       edges: []
@@ -165,7 +190,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -175,8 +200,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Untitled_Artwork_64_0: 3594796900883703210
-      Untitled_Artwork_64_1: -8239193056475517680
+      Background-Diamond_0: 4142314540776965623
+      Background-Diamond_1: -1840691720919282254
+      Background-Diamond_2: 5580339139446024727
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

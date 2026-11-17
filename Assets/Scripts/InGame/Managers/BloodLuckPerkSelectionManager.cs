@@ -53,9 +53,8 @@ namespace InGame.Managers
         private IReadOnlyList<PerkData> GetPerkChoices()
         {
             var perks = new List<PerkData>();
-            for (int i = 0; i < 3; i++)
+            foreach (var passive in PlayerPassiveGenerator.GetRandomPlayerPassives(_random, 3))
             {
-                var passive = PlayerPassiveGenerator.GetRandomPlayerPassive(_random);
                 perks.Add(new PerkData(_assetHolder.GetPerkIcon(passive.IconName), passive));
             }
 

@@ -18,29 +18,45 @@ namespace Player
             };
         }
 
-        public static PlayerPassive GetRandomPlayerPassive(System.Random random)
+        private static readonly int KindCount = System.Enum.GetValues(typeof(Kind)).Length;
+        
+        public static System.Collections.Generic.List<PlayerPassive> GetRandomPlayerPassives(System.Random random, int count)
         {
-            var kind = (Kind)random.Next(3);
-            var method = random.Next(2) == 0 ? OperationMethod.Add : OperationMethod.Multiply;
+            if (count > KindCount)
+                throw new System.ArgumentOutOfRangeException(nameof(count), $"Only {KindCount} distinct kinds exist.");
 
-            // ONLY ALLOW MULTIPLY OPERATION ON ATTACK SPEED
-            if (kind == Kind.AttackSpeed)
+            var kinds = new System.Collections.Generic.List<Kind>();
+            for (int i = 0; i < KindCount; i++) kinds.Add((Kind)i);
+
+            var result = new System.Collections.Generic.List<PlayerPassive>(count);
+            for (int i = 0; i < count; i++)
             {
-                method = OperationMethod.Multiply;
+                int index = random.Next(kinds.Count);
+                var kind = kinds[index];
+                kinds.RemoveAt(index); // prevents duplicate kinds in one menu
+
+                var method = random.Next(2) == 0 ? OperationMethod.Add : OperationMethod.Multiply;
+
+                // ONLY ALLOW MULTIPLY OPERATION ON ATTACK SPEED
+                if (kind == Kind.AttackSpeed)
+                {
+                    method = OperationMethod.Multiply;
+                }
+
+                var (min, max, step) = GetRange(kind, method);
+                int steps = (int)System.Math.Round((max - min) / step);
+                float value = min + random.Next(steps + 1) * step;
+                value = (float)System.Math.Round(value, 2);
+
+                result.Add(kind switch
+                {
+                    Kind.Damage      => new PlayerPassive.IncreasePlayerDamage(value, method),
+                    Kind.MaxHp       => new PlayerPassive.IncreaseMaxHp(value, method),
+                    Kind.AttackSpeed => new PlayerPassive.AttackSpeedUp(value, method),
+                    _ => throw new System.ArgumentOutOfRangeException()
+                });
             }
-
-            var (min, max, step) = GetRange(kind, method);
-            int steps = (int)System.Math.Round((max - min) / step);
-            float value = min + random.Next(steps + 1) * step;
-            value = (float)System.Math.Round(value, 2);
-
-            return kind switch
-            {
-                Kind.Damage      => new PlayerPassive.IncreasePlayerDamage(value, method),
-                Kind.MaxHp       => new PlayerPassive.IncreaseMaxHp(value, method),
-                Kind.AttackSpeed => new PlayerPassive.AttackSpeedUp(value, method), 
-                _ => throw new System.ArgumentOutOfRangeException()
-            };
+            return result;
         }
     }
 }

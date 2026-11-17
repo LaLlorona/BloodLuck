@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 9024559754542022087}
   - component: {fileID: 4306148354156657894}
   - component: {fileID: 4693589964681935111}
+  - component: {fileID: 6821556221432562383}
   m_Layer: 7
   m_Name: MonsterComponent
   m_TagString: Untagged
@@ -105,6 +106,33 @@ PolygonCollider2D:
       - {x: -0.5, y: -0.28866667}
       - {x: 0.5, y: -0.28866667}
   m_UseDelaunayMesh: 1
+--- !u!50 &6821556221432562383
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1075744802926524378}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 10
+  m_AngularDamping: 10
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1 &3622966412949619573
 GameObject:
   m_ObjectHideFlags: 0
@@ -149,7 +177,7 @@ Animator:
   m_GameObject: {fileID: 3622966412949619573}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: a162969a75201024bbc98a12934932df, type: 2}
+  m_Controller: {fileID: 9100000, guid: 8e2a4d6f1b3c47958d0a6c9e5f1b7d32, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -210,8 +238,8 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -6286954360436444883, guid: d6464d6b4f2d48b4b83e29d4d9ced78d, type: 3}
-  m_Color: {r: 1, g: 0.12535863, b: 0, a: 1}
+  m_Sprite: {fileID: -1959931027137886747, guid: f77db6d0a3472664e8b4ab94f5900b6e, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

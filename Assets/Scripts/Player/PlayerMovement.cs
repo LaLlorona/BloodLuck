@@ -45,6 +45,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float spriteAngleOffset;
     [SerializeField] private int facingIndex; // 0-7 for the 8 directions
 
+    private Vector3 _cachedDashStartPosition;
+
     void Awake()
     {
         playerInput = GetComponent<PlayerInputManager>();
@@ -129,9 +131,10 @@ public class PlayerMovement : MonoBehaviour
         dashElapsed = 0f;
         dashProgress = 0f;
         isDashing = true;
-
+        
         if (dashTrailRenderer != null) dashTrailRenderer.emitting = true;
         AudioManager.Instance?.PlayDash();
+        _cachedDashStartPosition = transform.position;
 
         // TODO: cancel current attack here
         // TODO: Play dash animation
@@ -152,8 +155,8 @@ public class PlayerMovement : MonoBehaviour
         if (t >= 1f || blocked)
         {
             isDashing = false;
-            if (dashTrailRenderer != null) dashTrailRenderer.emitting = false;
-            playerManager.HandlePlayerDash(dashStart, transform.position);
+            dashTrailRenderer.emitting = false;
+            playerManager.HandlePlayerDash(_cachedDashStartPosition, transform.position);
         }
     }
 

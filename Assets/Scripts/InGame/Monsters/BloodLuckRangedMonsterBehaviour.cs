@@ -23,6 +23,7 @@ namespace InGame.Monsters
 
         private State _state = State.Chasing;
         private float _stoppedElapsed;
+        private float _spawnAttackDelayRemaining;
 
         public BloodLuckRangedMonsterBehaviour(
             Transform monsterTransform,
@@ -37,10 +38,18 @@ namespace InGame.Monsters
             _player = player;
             _monsterProjectileManager = monsterProjectileManager;
             _hitStun = new BloodLuckMonsterHitStun(monsterTransform, player, parameter);
+            _spawnAttackDelayRemaining = Random.Range(
+                parameter.MonsterAttackStartTimeMin,
+                parameter.MonsterAttackStarTimeMax);
         }
 
         public void UpdateMonsterBehaviour(float deltaTime)
         {
+            if (_spawnAttackDelayRemaining > 0f)
+            {
+                _spawnAttackDelayRemaining -= deltaTime;
+            }
+
             switch (_state)
             {
                 case State.Chasing:
@@ -77,7 +86,7 @@ namespace InGame.Monsters
         {
             Vector3 playerPosition = _player.position;
             float distance = Vector2.Distance(_monsterTransform.position, playerPosition);
-            if (distance <= _parameter.MonsterRangedAttackRange)
+            if (_spawnAttackDelayRemaining <= 0f && distance <= _parameter.MonsterRangedAttackRange)
             {
                 FireProjectile(playerPosition);
                 return;

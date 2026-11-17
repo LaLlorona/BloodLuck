@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LifeSteal
   m_EditorClassIdentifier: Assembly-CSharp::BloodLuck.InfusionDefinition
   displayName: Life Steal
-  description: Heal on every hit.
+  description: Heal for 10% of damage dealt on every hit
   icon: {fileID: 0}
   rarity: 2
   passiveKind: 8

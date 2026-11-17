@@ -37,7 +37,7 @@ namespace InGame.UI
 
         public void SetHp(float currentHp)
         {
-            _hpText.text = Mathf.FloorToInt(currentHp).ToString();
+            _hpText.text = Mathf.CeilToInt(currentHp).ToString();
         }
 
         public void SetSpinInteractable(bool interactable)

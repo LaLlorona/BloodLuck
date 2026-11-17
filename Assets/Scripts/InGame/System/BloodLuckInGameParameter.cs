@@ -20,6 +20,12 @@ namespace InGame.System
         [Header("Monster Attack (sector)")]
         [Tooltip("When the monster gets this close to the player, it stops and starts charging its attack.")]
         [SerializeField, Min(0f)] private float _monsterAttackTriggerDistance = 2f;
+        [Header("Monster Attack (sector)")]
+        [Tooltip("Minimum timer that triggers monster attack")]
+        [SerializeField, Min(0f)] private float _MonsterAttackStartTimeMin = 2f;
+        
+        [Tooltip("Minimum timer that triggers monster attack")]
+        [SerializeField, Min(0f)] private float _MonsterAttackStartTimeMax = 3f;
         [Tooltip("Seconds the sector is shown before the damage is applied.")]
         [SerializeField, Min(0.01f)] private float _monsterAttackChargeSeconds = 1.5f;
         [Tooltip("Seconds the monster stays idle after its attack before chasing again.")]
@@ -112,6 +118,8 @@ namespace InGame.System
         public float MonsterSpawnRadius => _monsterSpawnRadius;
         public float MonsterMoveSpeed => _monsterMoveSpeed;
         public float MonsterAttackTriggerDistance => _monsterAttackTriggerDistance;
+        public float MonsterAttackStartTimeMin => _MonsterAttackStartTimeMin;
+        public float MonsterAttackStarTimeMax => _MonsterAttackStartTimeMax;
         public float MonsterAttackChargeSeconds => _monsterAttackChargeSeconds;
         public float MonsterAttackWaitSeconds => _monsterAttackWaitSeconds;
         public float MonsterAttackRadius =>_monsterAttackRadius;

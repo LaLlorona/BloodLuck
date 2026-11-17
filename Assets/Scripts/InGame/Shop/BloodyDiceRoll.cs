@@ -16,6 +16,7 @@ namespace BloodLuck
         [SerializeField] private GameObject rollDisplay;
         [SerializeField] private Transform dice;
         [SerializeField] private TMP_Text rewardLabel;
+        [SerializeField] private TMP_Text descriptionLabel;
 
         [Header("Face Orientations (one per visible D6 symbol)")]
         [Tooltip("Euler rotations that present each physical dice face to DiceCamera. Index is selected consistently from the reward asset name.")]
@@ -27,6 +28,7 @@ namespace BloodLuck
         [SerializeField, Min(0.1f)] private float rollDuration = 1.35f;
         [SerializeField, Min(0f)] private float revealDuration = 1.4f;
         [SerializeField, Min(0f)] private float bounceHeight = 0.12f;
+        [SerializeField, Min(0.01f)] private float textFadeDuration = 0.6f;
 
         [Header("Hooks")]
         [SerializeField] private UnityEvent onRollStarted;
@@ -44,6 +46,9 @@ namespace BloodLuck
         {
             if (rollDisplay != null) rollDisplay.SetActive(true);
             if (rewardLabel != null) rewardLabel.text = string.Empty;
+            descriptionLabel.text = string.Empty;
+            if (rewardLabel != null) rewardLabel.alpha = 0f;
+            descriptionLabel.alpha = 0f;
         }
 
         public void HideDice()
@@ -105,7 +110,21 @@ namespace BloodLuck
             dice.localPosition = startPosition;
 
             if (rewardLabel != null) rewardLabel.text = reward.displayName;
+            descriptionLabel.text = reward.description;
             onRewardRevealed?.Invoke();
+
+            float fadeElapsed = 0f;
+            while (fadeElapsed < textFadeDuration)
+            {
+                fadeElapsed += Time.unscaledDeltaTime;
+                float alpha = Mathf.Clamp01(fadeElapsed / textFadeDuration);
+                if (rewardLabel != null) rewardLabel.alpha = alpha;
+                descriptionLabel.alpha = alpha;
+                yield return null;
+            }
+            if (rewardLabel != null) rewardLabel.alpha = 1f;
+            descriptionLabel.alpha = 1f;
+
             yield return new WaitForSecondsRealtime(revealDuration);
             if (hideDisplayAfterReveal && rollDisplay != null) rollDisplay.SetActive(false);
             Finish(completed);
