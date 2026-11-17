@@ -45,6 +45,10 @@ namespace BloodLuck
 
         private AudioSource activeMusicSource;
         private Coroutine musicRoutine;
+        private Coroutine introLoopRoutine;
+        private AudioSource pausedGameplaySource;
+        private int pausedGameplayTimeSamples;
+        private bool pausedGameplayWasIntro;
 
         private void Awake()
         {
@@ -73,16 +77,72 @@ namespace BloodLuck
             if (Instance == this) Instance = null;
         }
 
-        public void PlayMainMenuMusic() => PlayLoopingMusic(mainMenuMusic, false);
-        public void PlayGameplayIntro() => PlayIntroThenLoop(gameplayIntro, gameplayLoop);
-        public void PlayGameplayLoop() => PlayLoopingMusic(gameplayLoop, true);
-        public void PlayShopMusic() => PlayLoopingMusic(shopMusic, false);
-        public void PlayWinMusic() => PlayLoopingMusic(winLoop, false);
-        public void PlayDefeatMusic() => PlayIntroThenLoop(defeatIntro, defeatLoop);
+        public void PlayMainMenuMusic()
+        {
+            DiscardPausedGameplay();
+            PlayLoopingMusic(mainMenuMusic, false);
+        }
+
+        public void PlayGameplayIntro()
+        {
+            DiscardPausedGameplay();
+            PlayIntroThenLoop(gameplayIntro, gameplayLoop);
+        }
+
+        public void PlayGameplayLoop()
+        {
+            if (pausedGameplaySource != null)
+            {
+                ResumePausedGameplay();
+                return;
+            }
+
+            PlayLoopingMusic(gameplayLoop, true);
+        }
+
+        public void PlayShopMusic()
+        {
+            if (pausedGameplaySource != null || shopMusic == null) return;
+            if (activeMusicSource == null || !activeMusicSource.isPlaying || !IsGameplayMusic(activeMusicSource.clip))
+            {
+                PlayLoopingMusic(shopMusic, false);
+                return;
+            }
+
+            StopMusicRoutine();
+            pausedGameplaySource = activeMusicSource;
+            pausedGameplayTimeSamples = pausedGameplaySource.timeSamples;
+            pausedGameplayWasIntro = pausedGameplaySource.clip == gameplayIntro;
+
+            var shopSource = OtherMusicSource(pausedGameplaySource);
+            if (shopSource == null)
+            {
+                pausedGameplaySource.Pause();
+                return;
+            }
+
+            StopSource(shopSource);
+            PlayOnSource(shopSource, shopMusic, true, 0f);
+            activeMusicSource = shopSource;
+            musicRoutine = StartCoroutine(CrossfadeToShop(pausedGameplaySource, shopSource));
+        }
+
+        public void PlayWinMusic()
+        {
+            DiscardPausedGameplay();
+            PlayLoopingMusic(winLoop, false);
+        }
+
+        public void PlayDefeatMusic()
+        {
+            DiscardPausedGameplay();
+            PlayIntroThenLoop(defeatIntro, defeatLoop);
+        }
 
         public void StopMusic()
         {
             StopMusicRoutine();
+            DiscardPausedGameplay();
             StopSource(musicSource);
             StopSource(transitionMusicSource);
         }
@@ -100,7 +160,7 @@ namespace BloodLuck
             StopSource(transitionMusicSource);
             activeMusicSource = musicSource;
             PlayOnSource(activeMusicSource, intro, false, musicVolume);
-            musicRoutine = StartCoroutine(WaitForIntroThenLoop(activeMusicSource, intro, loop));
+            introLoopRoutine = StartCoroutine(WaitForIntroThenLoop(activeMusicSource, intro, loop));
         }
 
         private IEnumerator WaitForIntroThenLoop(AudioSource source, AudioClip intro, AudioClip loop)
@@ -110,7 +170,7 @@ namespace BloodLuck
             {
                 PlayOnSource(source, loop, true, musicVolume);
             }
-            musicRoutine = null;
+            introLoopRoutine = null;
         }
 
         private void PlayLoopingMusic(AudioClip clip, bool restart)
@@ -160,11 +220,94 @@ namespace BloodLuck
             musicRoutine = null;
         }
 
+        private IEnumerator CrossfadeToShop(AudioSource gameplaySource, AudioSource shopSource)
+        {
+            float elapsed = 0f;
+            float gameplayStartVolume = gameplaySource.volume;
+            while (elapsed < crossfadeDuration)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                float t = Mathf.Clamp01(elapsed / crossfadeDuration);
+                gameplaySource.volume = Mathf.Lerp(gameplayStartVolume, 0f, t);
+                shopSource.volume = Mathf.Lerp(0f, musicVolume, t);
+                yield return null;
+            }
+
+            RestorePlaybackPosition(gameplaySource, pausedGameplayTimeSamples);
+            gameplaySource.Pause();
+            shopSource.volume = musicVolume;
+            musicRoutine = null;
+        }
+
+        private void ResumePausedGameplay()
+        {
+            StopMusicRoutine();
+            var gameplaySource = pausedGameplaySource;
+            var shopSource = activeMusicSource;
+            RestorePlaybackPosition(gameplaySource, pausedGameplayTimeSamples);
+            gameplaySource.volume = 0f;
+            gameplaySource.UnPause();
+            if (pausedGameplayWasIntro)
+            {
+                introLoopRoutine = StartCoroutine(WaitForIntroThenLoop(gameplaySource, gameplayIntro, gameplayLoop));
+            }
+
+            musicRoutine = StartCoroutine(CrossfadeFromShop(shopSource, gameplaySource));
+        }
+
+        private IEnumerator CrossfadeFromShop(AudioSource shopSource, AudioSource gameplaySource)
+        {
+            float elapsed = 0f;
+            float shopStartVolume = shopSource != null ? shopSource.volume : 0f;
+            while (elapsed < crossfadeDuration)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                float t = Mathf.Clamp01(elapsed / crossfadeDuration);
+                if (shopSource != null) shopSource.volume = Mathf.Lerp(shopStartVolume, 0f, t);
+                gameplaySource.volume = Mathf.Lerp(0f, musicVolume, t);
+                yield return null;
+            }
+
+            StopSource(shopSource);
+            gameplaySource.volume = musicVolume;
+            activeMusicSource = gameplaySource;
+            pausedGameplaySource = null;
+            pausedGameplayWasIntro = false;
+            musicRoutine = null;
+        }
+
+        private bool IsGameplayMusic(AudioClip clip) => clip == gameplayIntro || clip == gameplayLoop;
+
+        private AudioSource OtherMusicSource(AudioSource source) =>
+            source == musicSource ? transitionMusicSource : musicSource;
+
+        private static void RestorePlaybackPosition(AudioSource source, int timeSamples)
+        {
+            if (source == null || source.clip == null) return;
+            source.timeSamples = Mathf.Clamp(timeSamples, 0, Mathf.Max(0, source.clip.samples - 1));
+        }
+
+        private void DiscardPausedGameplay()
+        {
+            if (pausedGameplaySource == null) return;
+            StopSource(pausedGameplaySource);
+            pausedGameplaySource = null;
+            pausedGameplayWasIntro = false;
+        }
+
         private void StopMusicRoutine()
         {
-            if (musicRoutine == null) return;
-            StopCoroutine(musicRoutine);
-            musicRoutine = null;
+            if (musicRoutine != null)
+            {
+                StopCoroutine(musicRoutine);
+                musicRoutine = null;
+            }
+
+            if (introLoopRoutine != null)
+            {
+                StopCoroutine(introLoopRoutine);
+                introLoopRoutine = null;
+            }
         }
 
         private static void StopSource(AudioSource source)
