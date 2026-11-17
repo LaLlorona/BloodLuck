@@ -2,6 +2,7 @@ using System;
 using InGame.System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Playables;
 using UnityEngine.UI;
 
@@ -32,6 +33,8 @@ namespace InGame.UI
             _restartButton.onClick.AddListener(() => onRestart?.Invoke());
             gameObject.SetActive(true);
             PlayRevealTimeline();
+
+            EventSystem.current.SetSelectedGameObject(_restartButton.gameObject);
         }
 
         private void PlayRevealTimeline()

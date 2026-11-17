@@ -4,6 +4,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace BloodLuck
@@ -197,7 +198,6 @@ namespace BloodLuck
             diceHasRolled = false;
             diceRewardGranted = false;
             pendingDiceReward = reward;
-            RefreshButtons();
             if (diceOverlay != null)
             {
                 diceOverlay.SetActive(true);
@@ -210,6 +210,7 @@ namespace BloodLuck
                 // Safe fallback for scenes that have not yet added the optional overlay UI.
                 RollPreparedDice();
             }
+            RefreshButtons();
         }
 
         private void RollPreparedDice()
@@ -228,8 +229,15 @@ namespace BloodLuck
             Grant(pendingDiceReward);
             for (int i = 0; i < offers.Count; i++)
                 if (offers[i] == pendingDiceReward) offers[i] = null;
-            if (diceOverlay != null && diceReturnButton != null) diceReturnButton.interactable = true;
-            else ReturnFromDice();
+            if (diceOverlay != null && diceReturnButton != null)
+            {
+                diceReturnButton.interactable = true;
+                SetControllerFocus();
+            }
+            else
+            {
+                ReturnFromDice();
+            }
         }
 
         private void ReturnFromDice()
@@ -263,9 +271,49 @@ namespace BloodLuck
             diceButton.interactable = !diceRolling && _wallet.CanSpend(DiceHpCost) &&
                 AvailableInfusions().Exists(x => x.rarity == InfusionRarity.Bloodwrought);
             if (leaveButton != null) leaveButton.interactable = !diceRolling;
+
+            SetControllerFocus();
         }
 
         public InfusionDefinition GetOffer(int slot) =>
             slot >= 0 && slot < offers.Count ? offers[slot] : null;
+
+        private GameObject FindFirstInteractableUiElement()
+        {
+            if (diceOverlay.activeSelf)
+            {
+                if (diceRollButton.IsInteractable())
+                {
+                    return diceRollButton.gameObject;
+                }
+
+                return diceReturnButton.gameObject;
+            }
+            else
+            {
+                for (int i = 0; i < cardButtons.Length; i++)
+                {
+                    if (cardButtons[i].gameObject.activeSelf)
+                    {
+                        return cardButtons[i].gameObject;
+                    }
+                }
+
+                if (diceButton.IsInteractable())
+                {
+                    return diceButton.gameObject;
+                }
+
+                return leaveButton.gameObject;
+            }
+        }
+
+        private void SetControllerFocus()
+        {
+            GameObject uiElement = FindFirstInteractableUiElement();
+            Debug.Log(uiElement);
+            EventSystem.current.SetSelectedGameObject(uiElement);
+        }
+
     }
 }

@@ -3,6 +3,7 @@ using BloodLuck;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
@@ -33,6 +34,8 @@ namespace InGame.UI
             }
 
             _resultText.text = string.Empty;
+
+            EventSystem.current.SetSelectedGameObject(_spinButton.gameObject);
         }
 
         public void SetHp(float currentHp)
@@ -43,6 +46,10 @@ namespace InGame.UI
         public void SetSpinInteractable(bool interactable)
         {
             _spinButton.interactable = interactable;
+            if (interactable)
+            {
+                EventSystem.current.SetSelectedGameObject(_spinButton.gameObject);
+            }
         }
 
         public void SetResultText(string text)

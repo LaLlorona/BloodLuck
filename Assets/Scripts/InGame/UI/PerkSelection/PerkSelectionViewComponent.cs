@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using BloodLuck;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Playables;
 
 namespace InGame.UI
@@ -10,12 +11,12 @@ namespace InGame.UI
     {
         [SerializeField] private PlayableDirector _introDirector;
         [SerializeField] private PerkCardViewComponent[] _cards;
-   
+
 
         private bool _selected;
 
         public event Action<PerkData> _perkSelected;
-        
+
         public void Show(IReadOnlyList<PerkData> perks, Action<PerkData> onPerkSelected)
         {
             _selected = false;
@@ -31,6 +32,8 @@ namespace InGame.UI
                 _cards[i].Setup(perk, () => OnCardClicked(perk));
             }
             gameObject.SetActive(true);
+
+            EventSystem.current.SetSelectedGameObject(_cards[0].gameObject);
         }
 
         public void Hide()
