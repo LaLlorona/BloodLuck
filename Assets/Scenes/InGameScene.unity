@@ -789,22 +789,28 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 1f4cf1c0cbe6f45b18d49fa6369f0f0a, type: 3}
   - {fileID: 8300000, guid: 178e46567ee96434d9999ecc4cb34b74, type: 3}
   - {fileID: 8300000, guid: 19cb9cc76db424403ab59722eb48f9f2, type: 3}
-  death: {fileID: 8300000, guid: 18887f79f34dc492fb145fe5a51629a8, type: 3}
+  playerDamages:
+  - {fileID: 8300000, guid: 2c0b46cb70e434976a2e58536c61d88d, type: 3}
+  - {fileID: 8300000, guid: 6f8e0a0444d674161ac781cf6f706340, type: 3}
+  - {fileID: 8300000, guid: b65729ed064af40c1bacfcbfc7d910a7, type: 3}
+  - {fileID: 8300000, guid: c9b67a52e7e5f4f6ea0455904c24e23e, type: 3}
   shopHovers:
   - {fileID: 8300000, guid: 7338be1bcc3a24bf08c835d7feeac6c2, type: 3}
   - {fileID: 8300000, guid: d68d5eea8f2ef4f33826bd167510678a, type: 3}
   - {fileID: 8300000, guid: a018707dcda364609a31137e84e7cb02, type: 3}
   - {fileID: 8300000, guid: 781fb13d9d77440a283447174c89cabf, type: 3}
   shopPurchase: {fileID: 8300000, guid: 3a52925c8e7af447395ad91f1fb0f290, type: 3}
+  diceRoll: {fileID: 8300000, guid: d1a4d7445b61c45729e66f55632573e6, type: 3}
   perkSelection: {fileID: 8300000, guid: 9644f63aa1c8d4ac99e42f00ccd2e45a, type: 3}
   uiSelect: {fileID: 8300000, guid: f45caab5ca0aa4c2c96fb74fc3aede88, type: 3}
   footstepVolume: 0.395
   swingVolume: 0.124
   impactVolume: 0.763
   dashVolume: 1
-  deathVolume: 1
+  playerDamageVolume: 1
   shopHoverVolume: 1
   shopPurchaseVolume: 1
+  diceRollVolume: 1
   perkSelectionVolume: 1
   uiSelectVolume: 1
   mainMenuMusic: {fileID: 8300000, guid: 134ee7f906fea4fd8b205373c5817b12, type: 3}

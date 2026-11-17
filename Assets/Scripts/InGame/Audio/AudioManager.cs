@@ -16,8 +16,10 @@ namespace BloodLuck
         [SerializeField] private AudioClip[] hits;
         [SerializeField] private AudioClip[] footsteps;
         [SerializeField] private AudioClip[] dashes;
+        [SerializeField] private AudioClip[] playerDamages;
         [SerializeField] private AudioClip[] shopHovers;
         [SerializeField] private AudioClip shopPurchase;
+        [SerializeField] private AudioClip diceRoll;
         [SerializeField] private AudioClip perkSelection;
         [SerializeField] private AudioClip uiSelect;
         [Header("SFX Volumes")]
@@ -25,8 +27,10 @@ namespace BloodLuck
         [SerializeField, Range(0f, 1f)] private float swingVolume = 1f;
         [SerializeField, Range(0f, 1f)] private float impactVolume = 1f;
         [SerializeField, Range(0f, 1f)] private float dashVolume = 1f;
+        [SerializeField, Range(0f, 1f)] private float playerDamageVolume = 1f;
         [SerializeField, Range(0f, 1f)] private float shopHoverVolume = 1f;
         [SerializeField, Range(0f, 1f)] private float shopPurchaseVolume = 1f;
+        [SerializeField, Range(0f, 1f)] private float diceRollVolume = 1f;
         [SerializeField, Range(0f, 1f)] private float perkSelectionVolume = 1f;
         [SerializeField, Range(0f, 1f)] private float uiSelectVolume = 1f;
         [Header("Music Clips")]
@@ -413,6 +417,7 @@ namespace BloodLuck
         public void PlayHit() => PlayRandom(hits, impactVolume);
         public void PlayFootstep() => PlayRandom(footsteps, footstepVolume);
         public void PlayDash() => PlayRandom(dashes, dashVolume);
+        public void PlayPlayerDamage() => PlayRandom(playerDamages, playerDamageVolume);
         public void PlayHover() => PlayRandom(shopHovers, shopHoverVolume);
         public void PlayPurchase()
         {
@@ -422,6 +427,11 @@ namespace BloodLuck
         public void PlayPerkSelection()
         {
             if (perkSelection != null && sfxSource != null) sfxSource.PlayOneShot(perkSelection, perkSelectionVolume);
+        }
+
+        public void PlayDiceRoll()
+        {
+            if (diceRoll != null && sfxSource != null) sfxSource.PlayOneShot(diceRoll, diceRollVolume);
         }
 
         public void PlayUiSelect()
