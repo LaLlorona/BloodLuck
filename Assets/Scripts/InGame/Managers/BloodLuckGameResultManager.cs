@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using BloodLuck;
 using InGame.System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -27,6 +28,16 @@ namespace InGame.Managers
         
         public void ShowResult(BloodLuckGameResultType resultType)
         {
+            if (resultType == BloodLuckGameResultType.EscapedCasino)
+            {
+                AudioManager.Instance?.PlayWinMusic();
+                AudioManager.Instance?.PlayWinSfx();
+            }
+            else if (resultType == BloodLuckGameResultType.LostAtSlotMachine)
+            {
+                AudioManager.Instance?.PlayDefeatMusic();
+            }
+
             var view = Object.Instantiate(_assetHolder.GameResultViewPrefab);
 
             if (resultType == BloodLuckGameResultType.EscapedCasino)

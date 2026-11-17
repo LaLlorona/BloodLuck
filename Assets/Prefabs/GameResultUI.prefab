@@ -1180,6 +1180,7 @@ GameObject:
   - component: {fileID: 7147736404967634054}
   - component: {fileID: 7991642497024511997}
   - component: {fileID: 5902732279230028507}
+  - component: {fileID: 733195149557485246}
   m_Layer: 0
   m_Name: RestartButton
   m_TagString: Untagged
@@ -1302,6 +1303,18 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &733195149557485246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8442351572833543336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f30eb623fc29a4c178b6ca418e41732b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BloodLuck.UIButtonAudio
 --- !u!1 &9093432160231814316
 GameObject:
   m_ObjectHideFlags: 0

@@ -97,7 +97,12 @@ namespace InGame.Managers
 
         public void TakeDamage(float amount)
         {
+            float previousHp = CurrentHp;
             SetCurrentHp(CurrentHp - amount);
+            if (CurrentHp < previousHp)
+            {
+                AudioManager.Instance?.PlayPlayerDamage();
+            }
             if (CurrentHp <= 0)
             {
                 HandlePlayerDeath();

@@ -76,6 +76,7 @@ namespace BloodLuck
             Quaternion startRotation = dice.localRotation;
             Quaternion finalRotation = Quaternion.Euler(faceRotations[face]);
             Vector3 startPosition = dice.localPosition;
+            AudioManager.Instance?.PlayDiceRoll();
             onRollStarted?.Invoke();
 
             float elapsed = 0f;

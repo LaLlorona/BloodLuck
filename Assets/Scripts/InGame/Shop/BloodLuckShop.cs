@@ -119,6 +119,7 @@ namespace BloodLuck
                 available.RemoveAt(selected);
             }
             shopPanel.SetActive(true);
+            AudioManager.Instance?.PlayShopMusic();
             RefreshButtons();
         }
 
@@ -126,6 +127,7 @@ namespace BloodLuck
         {
             if (!enabled || !shopPanel.activeSelf || diceRolling) return;
             shopPanel.SetActive(false);
+            AudioManager.Instance?.PlayGameplayLoop();
             Closed?.Invoke();
         }
 

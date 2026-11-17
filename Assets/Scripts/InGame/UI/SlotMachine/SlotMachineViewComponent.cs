@@ -1,4 +1,5 @@
 using System.Threading;
+using BloodLuck;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -58,6 +59,7 @@ namespace InGame.UI
         {
             SetSpinInteractable(false);
             _resultText.text = string.Empty;
+            AudioManager.Instance?.PlaySlotPull();
 
             var tasks = new UniTask[_reels.Length];
             for (int i = 0; i < _reels.Length; i++)

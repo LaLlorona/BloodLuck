@@ -1,5 +1,6 @@
 using System;
 using TMPro;
+using BloodLuck;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,6 +25,8 @@ namespace InGame.UI
 
             _button.onClick.RemoveAllListeners();
             _button.onClick.AddListener(() => onClick?.Invoke());
+            if (_button.GetComponent<ShopCardHoverSound>() == null)
+                _button.gameObject.AddComponent<ShopCardHoverSound>();
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BloodLuck;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -41,6 +42,7 @@ namespace InGame.UI
         {
             if (_selected) return;
             _selected = true;
+            AudioManager.Instance?.PlayPerkSelection();
             _perkSelected?.Invoke(perk);
         }
     }

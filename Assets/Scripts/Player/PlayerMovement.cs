@@ -130,10 +130,10 @@ public class PlayerMovement : MonoBehaviour
         dashProgress = 0f;
         isDashing = true;
 
-        dashTrailRenderer.emitting = true;
+        if (dashTrailRenderer != null) dashTrailRenderer.emitting = true;
+        AudioManager.Instance?.PlayDash();
 
         // TODO: cancel current attack here
-        // TODO: Play SFX
         // TODO: Play dash animation
     }
 
@@ -152,7 +152,7 @@ public class PlayerMovement : MonoBehaviour
         if (t >= 1f || blocked)
         {
             isDashing = false;
-            dashTrailRenderer.emitting = false;
+            if (dashTrailRenderer != null) dashTrailRenderer.emitting = false;
             playerManager.HandlePlayerDash(dashStart, transform.position);
         }
     }

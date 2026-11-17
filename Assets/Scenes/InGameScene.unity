@@ -1515,6 +1515,7 @@ GameObject:
   - component: {fileID: 1206704541}
   - component: {fileID: 1206704540}
   - component: {fileID: 1206704539}
+  - component: {fileID: 1206704543}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -1729,11 +1730,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BloodLuck.AudioManager
   musicSource: {fileID: 1206704540}
+  transitionMusicSource: {fileID: 1206704543}
   sfxSource: {fileID: 1206704539}
   swings:
-  - {fileID: 8300000, guid: 8d529cfc5927c4cb1b3bf4e3a6355867, type: 3}
-  - {fileID: 8300000, guid: c78c0396515aa45a380989be85adc451, type: 3}
-  - {fileID: 8300000, guid: 8a9ec2fde08854ddbad304bbf4faab02, type: 3}
+  - {fileID: 8300000, guid: 2ca3ee36d622d44a4bf1a864cead937b, type: 3}
+  - {fileID: 8300000, guid: 6921e9a63287649699f8a3ed2be72731, type: 3}
+  - {fileID: 8300000, guid: fff784987352f40d9a1777175ab022cb, type: 3}
   hits:
   - {fileID: 8300000, guid: 9f83321ef05db44aeb461375a8933d3f, type: 3}
   - {fileID: 8300000, guid: 18d61551f91a14c04a58eaa6b7f77bfe, type: 3}
@@ -1746,23 +1748,47 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 071329b03718e4b7bbf122ed3a18f98a, type: 3}
   - {fileID: 8300000, guid: 2b71e96a38e7e454e9b8c461a72fe239, type: 3}
   - {fileID: 8300000, guid: ff51c4d93da3440649e65d58871d4f2e, type: 3}
-  death: {fileID: 8300000, guid: 18887f79f34dc492fb145fe5a51629a8, type: 3}
+  dashes:
+  - {fileID: 8300000, guid: 1f4cf1c0cbe6f45b18d49fa6369f0f0a, type: 3}
+  - {fileID: 8300000, guid: 178e46567ee96434d9999ecc4cb34b74, type: 3}
+  - {fileID: 8300000, guid: 19cb9cc76db424403ab59722eb48f9f2, type: 3}
+  playerDamages:
+  - {fileID: 8300000, guid: 2c0b46cb70e434976a2e58536c61d88d, type: 3}
+  - {fileID: 8300000, guid: 6f8e0a0444d674161ac781cf6f706340, type: 3}
+  - {fileID: 8300000, guid: b65729ed064af40c1bacfcbfc7d910a7, type: 3}
+  - {fileID: 8300000, guid: c9b67a52e7e5f4f6ea0455904c24e23e, type: 3}
   shopHovers:
   - {fileID: 8300000, guid: 7338be1bcc3a24bf08c835d7feeac6c2, type: 3}
   - {fileID: 8300000, guid: d68d5eea8f2ef4f33826bd167510678a, type: 3}
   - {fileID: 8300000, guid: a018707dcda364609a31137e84e7cb02, type: 3}
   - {fileID: 8300000, guid: 781fb13d9d77440a283447174c89cabf, type: 3}
   shopPurchase: {fileID: 8300000, guid: 3a52925c8e7af447395ad91f1fb0f290, type: 3}
+  diceRoll: {fileID: 8300000, guid: d1a4d7445b61c45729e66f55632573e6, type: 3}
+  slotPull: {fileID: 8300000, guid: 16b6d64e7516149bc853913c3f5f77da, type: 3}
+  winSfx: {fileID: 8300000, guid: 14b3375b1d6474f568e1c922ed2b151a, type: 3}
+  perkSelection: {fileID: 8300000, guid: 9644f63aa1c8d4ac99e42f00ccd2e45a, type: 3}
+  uiSelect: {fileID: 8300000, guid: f45caab5ca0aa4c2c96fb74fc3aede88, type: 3}
   footstepVolume: 0.395
-  swingVolume: 0.276
+  swingVolume: 0.124
   impactVolume: 0.763
-  deathVolume: 1
+  dashVolume: 1
+  playerDamageVolume: 1
   shopHoverVolume: 1
   shopPurchaseVolume: 1
-  combatMusic: {fileID: 0}
-  shopMusic: {fileID: 0}
-  mainMenuMusic: {fileID: 0}
-  finalSlotMachineMusic: {fileID: 0}
+  diceRollVolume: 1
+  slotPullVolume: 1
+  winSfxVolume: 1
+  perkSelectionVolume: 1
+  uiSelectVolume: 1
+  mainMenuMusic: {fileID: 8300000, guid: 134ee7f906fea4fd8b205373c5817b12, type: 3}
+  gameplayIntro: {fileID: 8300000, guid: c3d5ed88132d44afc837701ccc40d80f, type: 3}
+  gameplayLoop: {fileID: 8300000, guid: 634adc81f581840f38d28436da4f47a3, type: 3}
+  shopMusic: {fileID: 8300000, guid: e672b5aedaaaa404e9d501befa89c5bd, type: 3}
+  defeatIntro: {fileID: 8300000, guid: 439584532baaa4b4fa80a1cfa333cbf5, type: 3}
+  defeatLoop: {fileID: 8300000, guid: 497c016e8357047659f871bf9f26b5dc, type: 3}
+  winLoop: {fileID: 8300000, guid: 0a101f4755c394c80bc980a80e0e85e7, type: 3}
+  musicVolume: 1
+  crossfadeDuration: 1.25
 --- !u!4 &1206704542
 Transform:
   m_ObjectHideFlags: 0
@@ -1778,6 +1804,103 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &1206704543
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1206704538}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1303091252
 GameObject:
   m_ObjectHideFlags: 0
