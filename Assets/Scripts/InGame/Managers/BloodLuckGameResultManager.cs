@@ -28,15 +28,31 @@ namespace InGame.Managers
         public void ShowResult(BloodLuckGameResultType resultType)
         {
             var view = Object.Instantiate(_assetHolder.GameResultViewPrefab);
-            view.Show(
-                resultType,
-                _waveManager.CurrentWaveNumber,
-                RestartGame);
+
+            if (resultType == BloodLuckGameResultType.EscapedCasino)
+            {
+                view.Show(
+                    resultType,
+                    _waveManager.CurrentWaveNumber,
+                    ReturnToIntro);
+            } else
+            {
+                view.Show(
+                    resultType,
+                    _waveManager.CurrentWaveNumber,
+                    RestartGame);
+            }
         }
 
         private static void RestartGame()
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+        private static void ReturnToIntro()
+        {
+            // Note: Assumes IntroScene has buildIndex 0
+            SceneManager.LoadScene(0);
         }
     }
 }

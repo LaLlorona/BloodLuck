@@ -15,6 +15,7 @@ namespace InGame.UI
         [SerializeField] private TMP_Text _waveText;
         [SerializeField] private TMP_Text _storyText;
         [SerializeField] private Button _restartButton;
+        [SerializeField] private TMP_Text _restartButtonText;
         [SerializeField] private PlayableDirector _revealTimeline;
 
         public void Show(BloodLuckGameResultType resultType, int reachedWave, Action onRestart)
@@ -26,6 +27,7 @@ namespace InGame.UI
             _waveText.text = $"Reached Wave {reachedWave}";
             _storyText.text = GetStory(resultType);
 
+            _restartButtonText.text = isVictory ? "ESCAPE" : "RESTART";
             _restartButton.onClick.RemoveAllListeners();
             _restartButton.onClick.AddListener(() => onRestart?.Invoke());
             gameObject.SetActive(true);
