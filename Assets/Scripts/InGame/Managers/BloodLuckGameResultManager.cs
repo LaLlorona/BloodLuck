@@ -31,6 +31,7 @@ namespace InGame.Managers
             if (resultType == BloodLuckGameResultType.EscapedCasino)
             {
                 AudioManager.Instance?.PlayWinMusic();
+                AudioManager.Instance?.PlayWinSfx();
             }
             else if (resultType == BloodLuckGameResultType.LostAtSlotMachine)
             {

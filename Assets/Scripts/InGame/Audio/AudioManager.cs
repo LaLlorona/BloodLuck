@@ -20,6 +20,8 @@ namespace BloodLuck
         [SerializeField] private AudioClip[] shopHovers;
         [SerializeField] private AudioClip shopPurchase;
         [SerializeField] private AudioClip diceRoll;
+        [SerializeField] private AudioClip slotPull;
+        [SerializeField] private AudioClip winSfx;
         [SerializeField] private AudioClip perkSelection;
         [SerializeField] private AudioClip uiSelect;
         [Header("SFX Volumes")]
@@ -31,6 +33,8 @@ namespace BloodLuck
         [SerializeField, Range(0f, 1f)] private float shopHoverVolume = 1f;
         [SerializeField, Range(0f, 1f)] private float shopPurchaseVolume = 1f;
         [SerializeField, Range(0f, 1f)] private float diceRollVolume = 1f;
+        [SerializeField, Range(0f, 1f)] private float slotPullVolume = 1f;
+        [SerializeField, Range(0f, 1f)] private float winSfxVolume = 1f;
         [SerializeField, Range(0f, 1f)] private float perkSelectionVolume = 1f;
         [SerializeField, Range(0f, 1f)] private float uiSelectVolume = 1f;
         [Header("Music Clips")]
@@ -432,6 +436,16 @@ namespace BloodLuck
         public void PlayDiceRoll()
         {
             if (diceRoll != null && sfxSource != null) sfxSource.PlayOneShot(diceRoll, diceRollVolume);
+        }
+
+        public void PlaySlotPull()
+        {
+            if (slotPull != null && sfxSource != null) sfxSource.PlayOneShot(slotPull, slotPullVolume);
+        }
+
+        public void PlayWinSfx()
+        {
+            if (winSfx != null && sfxSource != null) sfxSource.PlayOneShot(winSfx, winSfxVolume);
         }
 
         public void PlayUiSelect()

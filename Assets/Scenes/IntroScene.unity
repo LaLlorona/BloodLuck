@@ -1549,6 +1549,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 781fb13d9d77440a283447174c89cabf, type: 3}
   shopPurchase: {fileID: 8300000, guid: 3a52925c8e7af447395ad91f1fb0f290, type: 3}
   diceRoll: {fileID: 8300000, guid: d1a4d7445b61c45729e66f55632573e6, type: 3}
+  slotPull: {fileID: 8300000, guid: 16b6d64e7516149bc853913c3f5f77da, type: 3}
+  winSfx: {fileID: 8300000, guid: 14b3375b1d6474f568e1c922ed2b151a, type: 3}
   perkSelection: {fileID: 8300000, guid: 9644f63aa1c8d4ac99e42f00ccd2e45a, type: 3}
   uiSelect: {fileID: 8300000, guid: f45caab5ca0aa4c2c96fb74fc3aede88, type: 3}
   footstepVolume: 0.444
@@ -1559,6 +1561,8 @@ MonoBehaviour:
   shopHoverVolume: 1
   shopPurchaseVolume: 0.878
   diceRollVolume: 1
+  slotPullVolume: 1
+  winSfxVolume: 1
   perkSelectionVolume: 1
   uiSelectVolume: 1
   mainMenuMusic: {fileID: 8300000, guid: 134ee7f906fea4fd8b205373c5817b12, type: 3}
