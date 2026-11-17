@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 namespace BloodLuck
@@ -7,6 +8,7 @@ namespace BloodLuck
     public sealed class AudioManager : MonoBehaviour
     {
         public static AudioManager Instance { get; private set; }
+        private static bool audioUnlocked;
 
         [SerializeField] private AudioSource musicSource;
         [SerializeField] private AudioSource transitionMusicSource;
@@ -57,6 +59,7 @@ namespace BloodLuck
         private AudioSource pausedGameplaySource;
         private int pausedGameplayTimeSamples;
         private bool pausedGameplayWasIntro;
+        private bool initialInteractionPending;
 
         private void Awake()
         {
@@ -69,6 +72,8 @@ namespace BloodLuck
 
         private void Start()
         {
+            if (!audioUnlocked) return;
+
             switch (SceneManager.GetActiveScene().name)
             {
                 case "IntroScene":
@@ -80,6 +85,14 @@ namespace BloodLuck
             }
         }
 
+        private void Update()
+        {
+            if (audioUnlocked || initialInteractionPending || !HasInputThisFrame()) return;
+
+            initialInteractionPending = true;
+            StartCoroutine(InitializeAfterInputFrame());
+        }
+
         private void OnDestroy()
         {
             if (Instance == this) Instance = null;
@@ -89,6 +102,22 @@ namespace BloodLuck
         {
             DiscardPausedGameplay();
             PlayLoopingMusic(mainMenuMusic, false);
+        }
+
+        public void InitializeAudioAfterFirstInteraction(bool playMainMenuMusic)
+        {
+            if (audioUnlocked) return;
+
+            audioUnlocked = true;
+            AudioListener.pause = false;
+            if (playMainMenuMusic && SceneManager.GetActiveScene().name == "IntroScene")
+            {
+                PlayMainMenuMusic();
+            }
+            else if (SceneManager.GetActiveScene().name == "InGameScene")
+            {
+                PlayGameplayIntro();
+            }
         }
 
         public void PlayGameplayIntro()
@@ -169,6 +198,20 @@ namespace BloodLuck
             activeMusicSource = musicSource;
             PlayOnSource(activeMusicSource, intro, false, musicVolume);
             introLoopRoutine = StartCoroutine(WaitForIntroThenLoop(activeMusicSource, intro, loop));
+        }
+
+        private IEnumerator InitializeAfterInputFrame()
+        {
+            yield return null;
+            initialInteractionPending = false;
+            InitializeAudioAfterFirstInteraction(true);
+        }
+
+        private static bool HasInputThisFrame()
+        {
+            return (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame) ||
+                   (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame) ||
+                   (Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame);
         }
 
         private void PlayGameplayIntroThenLoop()
