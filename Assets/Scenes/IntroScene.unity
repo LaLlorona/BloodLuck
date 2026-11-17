@@ -1546,13 +1546,13 @@ MonoBehaviour:
   shopPurchase: {fileID: 8300000, guid: 3a52925c8e7af447395ad91f1fb0f290, type: 3}
   perkSelection: {fileID: 8300000, guid: 9644f63aa1c8d4ac99e42f00ccd2e45a, type: 3}
   uiSelect: {fileID: 8300000, guid: f45caab5ca0aa4c2c96fb74fc3aede88, type: 3}
-  footstepVolume: 1
-  swingVolume: 1
-  impactVolume: 1
-  dashVolume: 1
+  footstepVolume: 0.444
+  swingVolume: 0.779
+  impactVolume: 0.887
+  dashVolume: 0.549
   deathVolume: 1
   shopHoverVolume: 1
-  shopPurchaseVolume: 1
+  shopPurchaseVolume: 0.878
   perkSelectionVolume: 1
   uiSelectVolume: 1
   mainMenuMusic: {fileID: 8300000, guid: 134ee7f906fea4fd8b205373c5817b12, type: 3}
