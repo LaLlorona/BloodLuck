@@ -46,6 +46,8 @@ namespace BloodLuck
         private AudioSource activeMusicSource;
         private Coroutine musicRoutine;
         private Coroutine introLoopRoutine;
+        private AudioSource scheduledGameplayLoopSource;
+        private double scheduledGameplayLoopDspTime;
         private AudioSource pausedGameplaySource;
         private int pausedGameplayTimeSamples;
         private bool pausedGameplayWasIntro;
@@ -86,7 +88,7 @@ namespace BloodLuck
         public void PlayGameplayIntro()
         {
             DiscardPausedGameplay();
-            PlayIntroThenLoop(gameplayIntro, gameplayLoop);
+            PlayGameplayIntroThenLoop();
         }
 
         public void PlayGameplayLoop()
@@ -161,6 +163,59 @@ namespace BloodLuck
             activeMusicSource = musicSource;
             PlayOnSource(activeMusicSource, intro, false, musicVolume);
             introLoopRoutine = StartCoroutine(WaitForIntroThenLoop(activeMusicSource, intro, loop));
+        }
+
+        private void PlayGameplayIntroThenLoop()
+        {
+            if (gameplayIntro == null)
+            {
+                PlayLoopingMusic(gameplayLoop, true);
+                return;
+            }
+
+            StopMusicRoutine();
+            StopSource(musicSource);
+            StopSource(transitionMusicSource);
+            activeMusicSource = musicSource;
+            PlayOnSource(activeMusicSource, gameplayIntro, false, musicVolume);
+            ScheduleGameplayLoop(activeMusicSource);
+        }
+
+        private void ScheduleGameplayLoop(AudioSource introSource)
+        {
+            if (introSource == null || gameplayLoop == null || introSource.clip != gameplayIntro)
+            {
+                return;
+            }
+
+            CancelScheduledGameplayLoop();
+            var loopSource = OtherMusicSource(introSource);
+            if (loopSource == null)
+            {
+                introLoopRoutine = StartCoroutine(WaitForIntroThenLoop(introSource, gameplayIntro, gameplayLoop));
+                return;
+            }
+
+            StopSource(loopSource);
+            loopSource.clip = gameplayLoop;
+            loopSource.loop = true;
+            loopSource.volume = musicVolume;
+            var remainingSamples = Mathf.Max(0, gameplayIntro.samples - introSource.timeSamples);
+            scheduledGameplayLoopDspTime = AudioSettings.dspTime + remainingSamples / (double)gameplayIntro.frequency;
+            scheduledGameplayLoopSource = loopSource;
+            loopSource.PlayScheduled(scheduledGameplayLoopDspTime);
+            introLoopRoutine = StartCoroutine(ActivateScheduledGameplayLoop(loopSource, scheduledGameplayLoopDspTime));
+        }
+
+        private IEnumerator ActivateScheduledGameplayLoop(AudioSource loopSource, double dspTime)
+        {
+            yield return new WaitUntil(() => AudioSettings.dspTime >= dspTime);
+            if (scheduledGameplayLoopSource == loopSource)
+            {
+                activeMusicSource = loopSource;
+                scheduledGameplayLoopSource = null;
+            }
+            introLoopRoutine = null;
         }
 
         private IEnumerator WaitForIntroThenLoop(AudioSource source, AudioClip intro, AudioClip loop)
@@ -247,22 +302,23 @@ namespace BloodLuck
             RestorePlaybackPosition(gameplaySource, pausedGameplayTimeSamples);
             gameplaySource.volume = 0f;
             gameplaySource.UnPause();
+            float fadeDuration = crossfadeDuration;
             if (pausedGameplayWasIntro)
             {
-                introLoopRoutine = StartCoroutine(WaitForIntroThenLoop(gameplaySource, gameplayIntro, gameplayLoop));
+                fadeDuration = Mathf.Min(crossfadeDuration, Mathf.Max(0f, RemainingIntroSeconds(gameplaySource) - 0.1f));
             }
 
-            musicRoutine = StartCoroutine(CrossfadeFromShop(shopSource, gameplaySource));
+            musicRoutine = StartCoroutine(CrossfadeFromShop(shopSource, gameplaySource, fadeDuration, pausedGameplayWasIntro));
         }
 
-        private IEnumerator CrossfadeFromShop(AudioSource shopSource, AudioSource gameplaySource)
+        private IEnumerator CrossfadeFromShop(AudioSource shopSource, AudioSource gameplaySource, float duration, bool scheduleGameplayLoop)
         {
             float elapsed = 0f;
             float shopStartVolume = shopSource != null ? shopSource.volume : 0f;
-            while (elapsed < crossfadeDuration)
+            while (elapsed < duration)
             {
                 elapsed += Time.unscaledDeltaTime;
-                float t = Mathf.Clamp01(elapsed / crossfadeDuration);
+                float t = Mathf.Clamp01(elapsed / duration);
                 if (shopSource != null) shopSource.volume = Mathf.Lerp(shopStartVolume, 0f, t);
                 gameplaySource.volume = Mathf.Lerp(0f, musicVolume, t);
                 yield return null;
@@ -273,6 +329,7 @@ namespace BloodLuck
             activeMusicSource = gameplaySource;
             pausedGameplaySource = null;
             pausedGameplayWasIntro = false;
+            if (scheduleGameplayLoop) ScheduleGameplayLoop(gameplaySource);
             musicRoutine = null;
         }
 
@@ -285,6 +342,12 @@ namespace BloodLuck
         {
             if (source == null || source.clip == null) return;
             source.timeSamples = Mathf.Clamp(timeSamples, 0, Mathf.Max(0, source.clip.samples - 1));
+        }
+
+        private float RemainingIntroSeconds(AudioSource source)
+        {
+            if (source == null || source.clip != gameplayIntro || gameplayIntro.frequency == 0) return 0f;
+            return Mathf.Max(0f, gameplayIntro.samples - source.timeSamples) / (float)gameplayIntro.frequency;
         }
 
         private void DiscardPausedGameplay()
@@ -308,6 +371,15 @@ namespace BloodLuck
                 StopCoroutine(introLoopRoutine);
                 introLoopRoutine = null;
             }
+
+            CancelScheduledGameplayLoop();
+        }
+
+        private void CancelScheduledGameplayLoop()
+        {
+            if (scheduledGameplayLoopSource == null) return;
+            StopSource(scheduledGameplayLoopSource);
+            scheduledGameplayLoopSource = null;
         }
 
         private static void StopSource(AudioSource source)
